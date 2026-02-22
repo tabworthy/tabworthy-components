@@ -1,7 +1,5 @@
 import type { Preview } from "@storybook/web-components-vite";
-import { defineCustomElements } from "../dist/esm/loader";
-
-defineCustomElements();
+import '../dist/tabworthy-components/tabworthy-components.esm.js';
 
 const vars = {
   light: {
