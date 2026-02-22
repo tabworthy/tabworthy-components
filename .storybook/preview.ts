@@ -1,5 +1,7 @@
 import type { Preview } from "@storybook/web-components-vite";
 import '../dist/tabworthy-components/tabworthy-components.esm.js';
+import '../dist/themes/light.css';
+import '../dist/themes/dark.css';
 
 const vars = {
   light: {
