@@ -1,4 +1,4 @@
-import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-zgp3PkTz.js';
+import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-CDFauf_3.js';
 
 const defaultLabels = {
     hours: "Hours",

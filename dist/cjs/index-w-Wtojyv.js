@@ -119,7 +119,6 @@ var loadModule = (cmpMeta, hostRef, hmrVersionId) => {
 
 // src/client/client-style.ts
 var styles = /* @__PURE__ */ new Map();
-var HYDRATED_CSS = "{visibility:hidden}.hydrated{visibility:inherit}";
 var SLOT_FB_CSS = "slot-fb{display:contents}slot-fb[hidden]{display:none}";
 var win = typeof window !== "undefined" ? window : {};
 var plt = {
@@ -2073,9 +2072,6 @@ var bootstrapLazy = (lazyBundles, options = {}) => {
   if (cmpTags.length > 0) {
     if (hasSlotRelocation) {
       dataStyles.textContent += SLOT_FB_CSS;
-    }
-    {
-      dataStyles.textContent += cmpTags.sort() + HYDRATED_CSS;
     }
     if (dataStyles.innerHTML.length) {
       dataStyles.setAttribute("data-styles", "");

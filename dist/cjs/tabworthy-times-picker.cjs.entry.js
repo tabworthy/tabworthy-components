@@ -1,6 +1,6 @@
 'use strict';
 
-var index = require('./index-DlzGiVkc.js');
+var index = require('./index-w-Wtojyv.js');
 
 const defaultLabels = {
     hours: "Hours",

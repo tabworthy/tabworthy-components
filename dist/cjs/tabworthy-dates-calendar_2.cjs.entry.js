@@ -1,6 +1,6 @@
 'use strict';
 
-var index = require('./index-DlzGiVkc.js');
+var index = require('./index-w-Wtojyv.js');
 var utils = require('./utils-y5Vtky2t.js');
 
 const tabworthyDatesCalendarCss = () => `.visually-hidden.sc-tabworthy-dates-calendar{position:absolute;overflow:hidden;width:1px;height:1px;white-space:nowrap;clip:rect(0 0 0 0);-webkit-clip-path:inset(50%);clip-path:inset(50%)}`;

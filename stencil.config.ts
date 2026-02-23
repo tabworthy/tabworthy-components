@@ -6,6 +6,7 @@ import postcssNested from "postcss-nested";
 export const config: Config = {
   namespace: "tabworthy-components",
   tsconfig: "tsconfig.stencil.json",
+  invisiblePrehydration: false,
   testing: {
     browserHeadless: "shell",
     testPathIgnorePatterns: ["/node_modules/", "/dist/", "/www/"],

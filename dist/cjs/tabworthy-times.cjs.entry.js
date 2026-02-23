@@ -1,6 +1,6 @@
 'use strict';
 
-var index = require('./index-DlzGiVkc.js');
+var index = require('./index-w-Wtojyv.js');
 var moment = require('./moment-CdViwxPQ.js');
 var utils = require('./utils-y5Vtky2t.js');
 
