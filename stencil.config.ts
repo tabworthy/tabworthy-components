@@ -35,7 +35,8 @@ export const config: Config = {
     {
       generateTypeDeclarations: true,
       customElementsExportBehavior: "bundle",
-      type: "dist-custom-elements"
+      type: "dist-custom-elements",
+      externalRuntime: false,
     },
     {
       copy: [

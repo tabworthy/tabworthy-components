@@ -1,5 +1,11 @@
 # tabworthy-components
 
+## 0.7.3
+
+### Patch Changes
+
+- externalRuntime: false
+
 ## 0.7.2
 
 ### Patch Changes

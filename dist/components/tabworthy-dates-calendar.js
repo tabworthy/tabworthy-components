@@ -1,1 +1,1 @@
-import{I as a,c as t}from"./tabworthy-dates-calendar2.js";const o=a,r=t;export{o as TabworthyDatesCalendar,r as defineCustomElement}
+import{I as o,c as s}from"./p-DT8TK_a8.js";const a=o,p=s;export{a as TabworthyDatesCalendar,p as defineCustomElement}
