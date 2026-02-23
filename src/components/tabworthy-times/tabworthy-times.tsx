@@ -26,7 +26,7 @@ export interface TimesLabels extends DatesLabels {
 
 const defaultLabels: TimesLabels = {
   selected: "selected",
-  openCalendar: "Open date and time picker",
+  openCalendar: "Choose time",
   calendar: "date and time picker",
   invalidDateError: "We could not find a matching date",
   minDateError: `Please fill in a date after `,
