@@ -1,5 +1,11 @@
 # tabworthy-components
 
+## 0.7.2
+
+### Patch Changes
+
+- css fixes to times component
+
 ## 0.7.1
 
 ### Patch Changes

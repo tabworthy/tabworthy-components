@@ -886,7 +886,7 @@ const InclusiveDatesModal = class {
         }
     }
     render() {
-        return (index.h(index.Host, { key: '773d9edf7cf6598394c1210a1fab91af0bcb951e', showing: this.showing, ref: (r) => r && (this.el = r) }, !this.inline && this.showing && (index.h("div", { key: 'c456932007f7ea9a9c3727d9d08fd8fbea5b8670', part: "body", onKeyDown: this.onKeyDown, role: "dialog", tabindex: -1, "aria-hidden": !this.showing, "aria-label": this.label, "aria-modal": this.showing }, index.h("focus-trap", { key: 'c1355fe48117067d62ede321afd1f90bf9bf4c22' }, index.h("div", { key: 'fbd3ec5e0e7069574f1dbd6c38b40e409b837045', part: "content" }, index.h("slot", { key: 'bad04015cc3945efbb68a52de623ee1f4b584868' }))))), this.inline && (index.h("div", { key: 'b0577b12dd1bec091de967ccd0ac297451576ad8', part: "content" }, index.h("slot", { key: '5457a9bd5d08feac90adb2ee061d60fb5fb94657' })))));
+        return (index.h(index.Host, { key: 'e5e440df97f5b2f51f742892ca591aff3a3e51a9', showing: this.showing, ref: (r) => r && (this.el = r) }, !this.inline && this.showing && (index.h("div", { key: 'f3b5f92b0f3b8eb54f665a14fcaa1616d59b182b', part: "body", onKeyDown: this.onKeyDown, role: "dialog", tabindex: -1, "aria-hidden": !this.showing, "aria-label": this.label, "aria-modal": this.showing }, index.h("focus-trap", { key: 'f94c02a8db391d671adc08ac1742dc6fabca72d3' }, index.h("div", { key: '888259505b6a2416674523d6a6924272b676daad', part: "content" }, index.h("slot", { key: 'e4e141ecae238f68fdde53baca66f478ebb93f88' }))))), this.inline && (index.h("div", { key: 'f2e7fb2614274d5dc7d03f10a0ee760363438435', part: "content" }, index.h("slot", { key: 'f845ef9c46b146ac916c90bb2fcec1f357aee5ee' })))));
     }
 };
 InclusiveDatesModal.style = tabworthyDatesModalCss();
