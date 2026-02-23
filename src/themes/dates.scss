@@ -353,12 +353,20 @@ tabworthy-dates *:focus-visible {
   line-height: 1;
   border: 1px solid var(--tw-dates-border-color);
   font-size: 1rem;
+  flex-grow: 1;
+
   &[aria-invalid] {
     border-color: var(--tw-dates-error-color);
   }
   &:disabled {
     cursor: not-allowed;
     opacity: 0.6;
+  }
+
+  &::placeholder {
+    color: var(--tw-dates-placeholder-color);
+    font-size: 1rem;
+    opacity: var(--tw-dates-placeholder-opacity);
   }
 }
 
@@ -388,10 +396,6 @@ tabworthy-dates *:focus-visible {
   display: inline-block;
   font-family: "Segoe UI", sans-serif;
   color: var(--tw-dates-text-color);
-}
-
-.tabworthy-dates__input {
-  flex-grow: 1;
 }
 
 .tabworthy-dates__input-container {

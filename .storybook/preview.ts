@@ -1,7 +1,6 @@
 import type { Preview } from "@storybook/web-components-vite";
 import '../dist/tabworthy-components/tabworthy-components.esm.js';
 import '../dist/themes/light.css';
-import '../dist/themes/dark.css';
 
 const vars = {
   light: {
@@ -14,7 +13,9 @@ const vars = {
     "--tw-dates-bg2-color": " #f2f3f5",
     "--tw-dates-focus-color": "#0000ff",
     "--tw-dates-error-color": "#d4351c",
-    "--tw-dates-active-color": "#0000ff"
+    "--tw-dates-active-color": "#0000ff",
+    "--tw-dates-placeholder-color": "unset",
+    "--tw-dates-placeholder-opacity": "0.5",
   },
   dark: {
     "--tw-dates-text-color": "#fff",
@@ -26,7 +27,9 @@ const vars = {
     "--tw-dates-bg2-color": " #2b2d37",
     "--tw-dates-focus-color": " #ffbf00",
     "--tw-dates-error-color": " #f16c57",
-    "--tw-dates-active-color": " #ffbf00"
+    "--tw-dates-active-color": " #ffbf00",
+    "--tw-dates-placeholder-color": "#bcbcbcff",
+    "--tw-dates-placeholder-opacity": "0.8",
   }
 };
 

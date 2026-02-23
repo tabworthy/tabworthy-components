@@ -1,13 +1,13 @@
 .tabworthy-times {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
 
   &__label {
     font-weight: 600;
     margin-bottom: 0.5rem;
     display: inline-block;
     font-family: "Segoe UI", sans-serif;
+    color: var(--tw-dates-text-color);
   }
 
   &__input-container {
@@ -39,6 +39,12 @@
     &:disabled {
       cursor: not-allowed;
       opacity: 0.6;
+    }
+
+    &::placeholder {
+      color: var(--tw-dates-placeholder-color);
+      font-size: 1rem;
+      opacity: var(--tw-dates-placeholder-opacity);
     }
   }
 
