@@ -420,6 +420,7 @@ export class InclusiveTimes {
                 slot="after-calendar"
                 class={this.getClassName("time-section")}
               >
+                <hr class={this.getClassName("divider")}></hr>
                 <tabworthy-times-picker
                   hours={this.selectedHours}
                   minutes={this.selectedMinutes}
