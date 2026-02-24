@@ -573,4 +573,54 @@ describe("tabworthy-dates", () => {
     expect(instance.pickerRef.value).toBeNull();
     expect(instance.inputRef.value).toBe("");
   });
+
+  it("renders custom calendar button content when provided", async () => {
+    const page = await createPage(
+      '<tabworthy-dates id="test" calendar-button-content="<span>OPEN</span>"></tabworthy-dates>'
+    );
+
+    const calendarButton = page.root?.querySelector(
+      ".tabworthy-dates__calendar-button"
+    );
+    expect(calendarButton?.innerHTML).toContain("OPEN");
+  });
+
+  it("getClassName returns base class name when no element is provided", async () => {
+    const page = await createPage();
+    const instance = page.rootInstance as any;
+
+    expect(instance.getClassName()).toBe("tabworthy-dates");
+    expect(instance.getClassName("input")).toBe("tabworthy-dates__input");
+  });
+
+  it("formatInput falls back to Date parsing when moment parsing fails for single date", async () => {
+    const page = await createPage();
+    const instance = page.rootInstance as any;
+
+    // Set a value that moment strict parsing won't handle but Date() can
+    instance.internalValue = "2024-03-15";
+    instance.errorState = false;
+    instance.inputShouldFormat = true;
+    instance.inputRef.value = "March 15, 2024"; // This won't parse with moment's strict YYYY-MM-DD format
+
+    instance.formatInput(true, true);
+
+    // Should have formatted the date using Intl.DateTimeFormat
+    expect(instance.inputRef.value).toContain("2024");
+  });
+
+  it("formatInput falls back to Date parsing with internalValue when useInputValue is false", async () => {
+    const page = await createPage();
+    const instance = page.rootInstance as any;
+
+    // Set internalValue to something moment strict parsing won't handle but Date() can
+    instance.internalValue = "March 15, 2024";
+    instance.errorState = false;
+    instance.inputShouldFormat = true;
+
+    instance.formatInput(true, false); // useInputValue = false
+
+    // Should have formatted the date using Intl.DateTimeFormat
+    expect(instance.inputRef.value).toContain("2024");
+  });
 });

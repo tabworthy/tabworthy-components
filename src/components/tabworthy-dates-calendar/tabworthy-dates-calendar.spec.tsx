@@ -20,6 +20,36 @@ describe("tabworthy-dates-calendar", () => {
     expect(Array.isArray(instance.weekdays)).toBe(true);
   });
 
+  it("initializes currentDate from startDate when provided", async () => {
+    const page = await createPage(
+      '<tabworthy-dates-calendar start-date="2024-06-20"></tabworthy-dates-calendar>'
+    );
+    const instance = page.rootInstance as any;
+
+    expect(instance.currentDate).toBeInstanceOf(Date);
+    expect(instance.currentDate.getFullYear()).toBe(2024);
+    expect(instance.currentDate.getMonth()).toBe(5); // June
+    expect(instance.currentDate.getDate()).toBe(20);
+  });
+
+  it("initializes currentDate to today when startDate is not provided", async () => {
+    const page = await newSpecPage({
+      components: [InclusiveDatesCalendar],
+      html: `<tabworthy-dates-calendar></tabworthy-dates-calendar>`,
+      supportsShadowDom: false
+    });
+    const instance = page.rootInstance as any;
+
+    instance.startDate = undefined;
+    instance.init();
+
+    const today = new Date();
+    expect(instance.currentDate).toBeInstanceOf(Date);
+    expect(instance.currentDate.getFullYear()).toBe(today.getFullYear());
+    expect(instance.currentDate.getMonth()).toBe(today.getMonth());
+    expect(instance.currentDate.getDate()).toBe(today.getDate());
+  });
+
   it("watches modal, locale, firstDayOfWeek, range, startDate, and value", async () => {
     const page = await createPage();
     const instance = page.rootInstance as any;
@@ -160,6 +190,27 @@ describe("tabworthy-dates-calendar", () => {
     expect(instance.value[0].getDate()).toBe(18);
     expect(instance.value[1].getDate()).toBe(20);
     expect(emitSpy).toHaveBeenCalled();
+  });
+
+  it("marks dates within a complete range as selected", async () => {
+    const page = await createPage(
+      '<tabworthy-dates-calendar range start-date="2024-03-15"></tabworthy-dates-calendar>'
+    );
+    const instance = page.rootInstance as any;
+
+    // Set a complete range (2 dates)
+    instance.value = [new Date("2024-03-10"), new Date("2024-03-20")];
+    await page.waitForChanges();
+
+    // A date in the middle of the range should be selected
+    const middleDate = page.root?.querySelector('[data-date="2024-03-15"]');
+    expect(middleDate?.getAttribute("aria-selected")).toBe("true");
+
+    // Start and end dates should also be selected
+    const startDate = page.root?.querySelector('[data-date="2024-03-10"]');
+    const endDate = page.root?.querySelector('[data-date="2024-03-20"]');
+    expect(startDate?.getAttribute("aria-selected")).toBe("true");
+    expect(endDate?.getAttribute("aria-selected")).toBe("true");
   });
 
   it("handles next/previous/today/clear operations", async () => {
@@ -316,6 +367,26 @@ describe("tabworthy-dates-calendar", () => {
 
     matchMediaMock.mockReturnValue({ matches: true });
     await page.waitForChanges();
+  });
+
+  it("renders custom year stepper button content when provided", async () => {
+    const page = await createPage(
+      `<tabworthy-dates-calendar 
+        show-year-stepper 
+        previous-year-button-content="<span>PREV</span>" 
+        next-year-button-content="<span>NEXT</span>"
+      ></tabworthy-dates-calendar>`
+    );
+
+    const prevYearButton = page.root?.querySelector(
+      ".tabworthy-dates-calendar__previous-year-button"
+    );
+    const nextYearButton = page.root?.querySelector(
+      ".tabworthy-dates-calendar__next-year-button"
+    );
+
+    expect(prevYearButton?.innerHTML).toContain("PREV");
+    expect(nextYearButton?.innerHTML).toContain("NEXT");
   });
 
   it("renders range prompt text and triggers keyboard hint action", async () => {
