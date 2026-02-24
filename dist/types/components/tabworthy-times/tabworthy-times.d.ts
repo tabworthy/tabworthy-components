@@ -33,6 +33,7 @@ export declare class InclusiveTimes {
     format: string;
     inputShouldFormat?: boolean | string;
     disableFreeformInput: boolean;
+    inputClass: string;
     internalValue?: string | string[] | null;
     selectedDate?: Date;
     selectedHours: number;

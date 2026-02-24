@@ -41,7 +41,7 @@ export declare class TabworthyDates {
     inputShouldFormat?: boolean | string;
     showKeyboardHint: boolean;
     disableDate: HTMLTabworthyDatesCalendarElement["disableDate"];
-    elementClassName?: string;
+    elementClassName: string;
     firstDayOfWeek?: number;
     format: string;
     quickButtons: string[];
@@ -49,6 +49,7 @@ export declare class TabworthyDates {
     calendarButtonContent?: string;
     showQuickButtons: boolean;
     disableFreeformInput: boolean;
+    inputClass: string;
     internalValue?: string | string[] | null;
     errorState: boolean;
     disabledState: boolean;

@@ -10541,6 +10541,7 @@ const TabworthyDates = class {
         // Show or hide the quick buttons
         this.showQuickButtons = true;
         this.disableFreeformInput = false;
+        this.inputClass = "";
         this.errorState = this.hasError;
         this.disabledState = this.disabled;
         this.chronoSupportedLocale = ["en", "ja", "fr", "nl", "ru", "pt"].includes(this.locale.slice(0, 2));
@@ -10893,7 +10894,10 @@ const TabworthyDates = class {
     }
     render() {
         var _a;
-        return (h(Host, { key: '6fd878d7a0073344895525a82533925fcd24c372' }, h("label", { key: '550382a2ea99201b465fa9fd9ee90a917c5ff7e6', htmlFor: this.id ? `${this.id}-input` : undefined, class: this.getClassName("label") }, this.label), h("br", { key: 'fd6fb69543f81bef9a15157b94a25a5fa107ef70' }), h("div", { key: 'fcc9c10276e35f28435829eea17dfed27373f55c', class: this.getClassName("input-container") }, h("input", { key: '24da8c1582dc66f65a0eb6c6ab380b28bbf1c5ca', disabled: this.disabledState || this.disableFreeformInput, id: this.id ? `${this.id}-input` : undefined, type: "text", placeholder: this.placeholder, class: this.getClassName("input"), ref: (r) => (this.inputRef = r), onChange: this.handleChange, onFocus: () => this.formatInput(false), onBlur: () => this.formatInput(true, false), "aria-describedby": this.errorState ? `${this.id}-error` : undefined, "aria-invalid": this.errorState }), !this.inline && (h("button", { key: '54cd337b5ddd3ea6aa6ecd59a8fadf2cb5b61026', type: "button", ref: (r) => (this.calendarButtonRef = r), onClick: this.handleCalendarButtonClick, class: this.getClassName("calendar-button"), disabled: this.disabledState }, this.calendarButtonContent ? (h("span", { innerHTML: this.calendarButtonContent })) : (this.datesLabels.openCalendar)))), h("tabworthy-dates-modal", { key: 'cd8bd92d251d3c2566c9da9f8039ccc2ab74750f', label: this.datesLabels.calendar, ref: (el) => (this.modalRef = el), onOpened: () => {
+        return (h(Host, { key: 'd424c911d4fd2d05222249b401e9b704430e6f29' }, h("label", { key: 'd14130a7b0b02e7124f7c7e9ec0642620da7aab6', htmlFor: this.id ? `${this.id}-input` : undefined, class: this.getClassName("label") }, this.label), h("br", { key: 'c4f5397785326f323772f46a8cfb6d868f5ff230' }), h("div", { key: '9f52005781b9a54426ee3c094727b8890681a4d5', class: this.getClassName("input-container") }, h("input", { key: 'e67af61ef75a592acadcfbd14da4527b84b08417', disabled: this.disabledState || this.disableFreeformInput, id: this.id ? `${this.id}-input` : undefined, type: "text", placeholder: this.placeholder, class: {
+                [this.getClassName("input")]: true,
+                [this.inputClass]: !!this.inputClass
+            }, ref: (r) => (this.inputRef = r), onChange: this.handleChange, onFocus: () => this.formatInput(false), onBlur: () => this.formatInput(true, false), "aria-describedby": this.errorState ? `${this.id}-error` : undefined, "aria-invalid": this.errorState }), !this.inline && (h("button", { key: 'dd9421438de95497d2e7037cfc927bb0f27cd3c0', type: "button", ref: (r) => (this.calendarButtonRef = r), onClick: this.handleCalendarButtonClick, class: this.getClassName("calendar-button"), disabled: this.disabledState }, this.calendarButtonContent ? (h("span", { innerHTML: this.calendarButtonContent })) : (this.datesLabels.openCalendar)))), h("tabworthy-dates-modal", { key: 'b8a3278a07bc1ddc36eac5a0c9808595c4bcdde5', label: this.datesLabels.calendar, ref: (el) => (this.modalRef = el), onOpened: () => {
                 if (!this.pickerRef)
                     return;
                 this.pickerRef.modalIsOpen = true;
@@ -10901,11 +10905,11 @@ const TabworthyDates = class {
                 if (!this.pickerRef)
                     return;
                 this.pickerRef.modalIsOpen = false;
-            }, inline: this.inline }, h("tabworthy-dates-calendar", { key: '929272a053e0109e34d4b2d8456064fc14093912', range: this.range, locale: this.locale, onSelectDate: (event) => this.handlePickerSelection(event.detail), onChangeMonth: (event) => this.handleChangedMonths(event.detail), onChangeYear: (event) => this.handleYearChange(event.detail), labels: this.datesCalendarLabels ? this.datesCalendarLabels : undefined, ref: (el) => (this.pickerRef = el), startDate: this.startDate, firstDayOfWeek: this.firstDayOfWeek, showHiddenTitle: true, disabled: this.disabledState, showMonthStepper: this.showMonthStepper, showYearStepper: this.showYearStepper, showClearButton: this.showClearButton, showKeyboardHint: this.showKeyboardHint, showTodayButton: this.showTodayButton, disableDate: this.disableDate, minDate: this.minDate, maxDate: this.maxDate, inline: this.inline })), this.showQuickButtons &&
+            }, inline: this.inline }, h("tabworthy-dates-calendar", { key: '29dc57f6a1951091476de39c8861b43d83242007', range: this.range, locale: this.locale, onSelectDate: (event) => this.handlePickerSelection(event.detail), onChangeMonth: (event) => this.handleChangedMonths(event.detail), onChangeYear: (event) => this.handleYearChange(event.detail), labels: this.datesCalendarLabels ? this.datesCalendarLabels : undefined, ref: (el) => (this.pickerRef = el), startDate: this.startDate, firstDayOfWeek: this.firstDayOfWeek, showHiddenTitle: true, disabled: this.disabledState, showMonthStepper: this.showMonthStepper, showYearStepper: this.showYearStepper, showClearButton: this.showClearButton, showKeyboardHint: this.showKeyboardHint, showTodayButton: this.showTodayButton, disableDate: this.disableDate, minDate: this.minDate, maxDate: this.maxDate, inline: this.inline })), this.showQuickButtons &&
             ((_a = this.quickButtons) === null || _a === void 0 ? void 0 : _a.length) > 0 &&
-            this.chronoSupportedLocale && (h("div", { key: 'aead258880c9531e3fb72111f1fd47ebfa35931a', class: this.getClassName("quick-group"), role: "group", "aria-label": "Quick selection" }, this.quickButtons.map((buttonText) => {
+            this.chronoSupportedLocale && (h("div", { key: '1bb09b44a219648203d803c76d17a9b41b0278bf', class: this.getClassName("quick-group"), role: "group", "aria-label": "Quick selection" }, this.quickButtons.map((buttonText) => {
             return (h("button", { class: this.getClassName("quick-button"), onClick: this.handleQuickButtonClick, disabled: this.disabledState, type: "button" }, buttonText));
-        }))), this.errorState && (h("div", { key: '193fe31b36da600e9f222f2576c3bee2d4e0a427', class: this.getClassName("input-error"), id: this.id ? `${this.id}-error` : undefined, role: "status" }, this.errorMessage))));
+        }))), this.errorState && (h("div", { key: '92d843bf6d0234568bf41a0fd2fdf281cb48487f', class: this.getClassName("input-error"), id: this.id ? `${this.id}-error` : undefined, role: "status" }, this.errorMessage))));
     }
     get el() { return getElement(this); }
     static get watchers() { return {
