@@ -27,7 +27,7 @@ const meta: Meta<Components.TabworthyTimes> = {
       ?range=${args.range}
       ?disabled=${args.disabled}
       ?inline=${args.inline}
-      .use12HourFormat=${args.use12HourFormat}
+      .useTwelveHourFormat=${args.useTwelveHourFormat}
       ?show-year-stepper=${args.showYearStepper}
       ?show-month-stepper=${args.showMonthStepper}
       ?show-clear-button=${args.showClearButton}
@@ -35,6 +35,7 @@ const meta: Meta<Components.TabworthyTimes> = {
       input-should-format=${args.inputShouldFormat}
       calendar-button-content=${ifDefined(args.calendarButtonContent)}
       ?disable-freeform-input=${args.disableFreeformInput}
+      input-class=${ifDefined(args.inputClass)}
       @selectDateTime=${(e: CustomEvent) => args.selectDateTime?.(e.detail)}
       @changeYear=${(e: CustomEvent) => args.changeYear?.(e.detail)}
       @componentReady=${(e: CustomEvent) => args.componentReady?.(e.detail)}
@@ -52,7 +53,7 @@ export const Default: Story = {
     placeholder: "Select date and time",
     locale: "en-US",
     format: "YYYY-MM-DDTHH:mm:ss",
-    use12HourFormat: true,
+    useTwelveHourFormat: true,
     showMonthStepper: true,
     showYearStepper: false,
     showClearButton: true,
@@ -73,7 +74,7 @@ export const TwentyFourHourFormat: Story = {
   args: {
     ...Default.args,
     id: "datetime-24h",
-    use12HourFormat: false,
+    useTwelveHourFormat: false,
     value: "2024-03-15T14:30:00"
   }
 };

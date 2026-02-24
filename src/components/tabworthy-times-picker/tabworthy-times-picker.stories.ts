@@ -24,7 +24,7 @@ const meta: Meta<Components.TabworthyTimesPicker> = {
     <tabworthy-times-picker
       .hours=${args.hours}
       .minutes=${args.minutes}
-      .use12HourFormat=${args.use12HourFormat}
+      .useTwelveHourFormat=${args.useTwelveHourFormat}
       .labels=${args.labels}
       .labelsSrOnly=${args.labelsSrOnly}
       .disabled=${args.disabled}
@@ -41,7 +41,7 @@ export const Default: Story = {
   args: {
     hours: 12,
     minutes: 0,
-    use12HourFormat: true,
+    useTwelveHourFormat: true,
     disabled: false,
     labels: defaultLabels,
     labelsSrOnly: true,
@@ -52,7 +52,7 @@ export const Default: Story = {
 export const TwentyFourHourFormat: Story = {
   args: {
     ...Default.args,
-    use12HourFormat: false,
+    useTwelveHourFormat: false,
     hours: 14,
     minutes: 30
   }

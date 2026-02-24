@@ -1,5 +1,11 @@
 # tabworthy-components
 
+## 0.8.2
+
+### Patch Changes
+
+- useTwelveHourFormat
+
 ## 0.8.1
 
 ### Patch Changes

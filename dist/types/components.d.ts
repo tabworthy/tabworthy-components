@@ -318,7 +318,7 @@ export namespace Components {
         /**
           * @default true
          */
-        "use12HourFormat": boolean;
+        "useTwelveHourFormat": boolean;
         "value"?: string | string[];
     }
     interface TabworthyTimesPicker {
@@ -349,7 +349,7 @@ export namespace Components {
         /**
           * @default false
          */
-        "use12HourFormat": boolean;
+        "useTwelveHourFormat": boolean;
     }
 }
 export interface TabworthyDatesCustomEvent<T> extends CustomEvent<T> {
@@ -775,7 +775,7 @@ declare namespace LocalJSX {
         /**
           * @default true
          */
-        "use12HourFormat"?: boolean;
+        "useTwelveHourFormat"?: boolean;
         "value"?: string | string[];
     }
     interface TabworthyTimesPicker {
@@ -807,7 +807,7 @@ declare namespace LocalJSX {
         /**
           * @default false
          */
-        "use12HourFormat"?: boolean;
+        "useTwelveHourFormat"?: boolean;
     }
 
     interface TabworthyDatesAttributes {
@@ -882,7 +882,7 @@ declare namespace LocalJSX {
         "maxDate": string;
         "startDate": string;
         "referenceDate": string;
-        "use12HourFormat": boolean;
+        "useTwelveHourFormat": boolean;
         "inline": boolean;
         "hasError": boolean;
         "showYearStepper": boolean;
@@ -900,7 +900,7 @@ declare namespace LocalJSX {
     interface TabworthyTimesPickerAttributes {
         "hours": number;
         "minutes": number;
-        "use12HourFormat": boolean;
+        "useTwelveHourFormat": boolean;
         "labelsSrOnly": boolean;
         "disabled": boolean;
         "elementClassName": string;

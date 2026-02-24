@@ -19,7 +19,7 @@ export declare class InclusiveTimesPicker {
     el: HTMLElement;
     hours: number;
     minutes: number;
-    use12HourFormat: boolean;
+    useTwelveHourFormat: boolean;
     labels: InclusivekTimesPickerLabels;
     labelsSrOnly: boolean;
     disabled: boolean;

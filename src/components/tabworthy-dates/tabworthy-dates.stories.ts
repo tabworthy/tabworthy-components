@@ -37,6 +37,7 @@ const meta: Meta<Components.TabworthyDates> = {
       input-should-format=${args.inputShouldFormat}
       calendar-button-content=${ifDefined(args.calendarButtonContent)}
       ?disable-freeform-input=${args.disableFreeformInput}
+      input-class=${ifDefined(args.inputClass)}
       @selectDate=${(e: CustomEvent) => {
         args.selectDate?.(e.detail);
       }}

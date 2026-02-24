@@ -28,10 +28,10 @@ describe("tabworthy-times-picker", () => {
 
   it("renders 12-hour mode controls", async () => {
     const page = await createPage();
-    page.rootInstance.use12HourFormat = true;
+    page.rootInstance.useTwelveHourFormat = true;
     await page.waitForChanges();
 
-    expect(page.rootInstance.use12HourFormat).toBe(true);
+    expect(page.rootInstance.useTwelveHourFormat).toBe(true);
     expect(
       page.root?.querySelector(".tabworthy-times-picker__period")
     ).toBeTruthy();
@@ -92,7 +92,7 @@ describe("tabworthy-times-picker", () => {
     const page = await createPage(
       `<tabworthy-times-picker hours="11" minutes="30"></tabworthy-times-picker>`
     );
-    page.rootInstance.use12HourFormat = true;
+    page.rootInstance.useTwelveHourFormat = true;
     await page.waitForChanges();
     const handler = jest.fn();
     page.root?.addEventListener("timeChanged", ((
@@ -160,7 +160,7 @@ describe("tabworthy-times-picker", () => {
     const page = await createPage(
       `<tabworthy-times-picker hours="10" minutes="30"></tabworthy-times-picker>`
     );
-    page.rootInstance.use12HourFormat = true;
+    page.rootInstance.useTwelveHourFormat = true;
     await page.waitForChanges();
     const handler = jest.fn();
     page.root?.addEventListener("timeChanged", ((
@@ -200,7 +200,7 @@ describe("tabworthy-times-picker", () => {
     const page = await createPage(
       `<tabworthy-times-picker hours="10" minutes="30"></tabworthy-times-picker>`
     );
-    page.rootInstance.use12HourFormat = true;
+    page.rootInstance.useTwelveHourFormat = true;
     await page.waitForChanges();
     const handler = jest.fn();
     page.root?.addEventListener("timeChanged", ((
@@ -240,7 +240,7 @@ describe("tabworthy-times-picker", () => {
     const page = await createPage(
       `<tabworthy-times-picker hours="0" minutes="0"></tabworthy-times-picker>`
     );
-    page.rootInstance.use12HourFormat = true;
+    page.rootInstance.useTwelveHourFormat = true;
     await page.waitForChanges();
     const handler = jest.fn();
     page.root?.addEventListener("timeChanged", ((
@@ -290,7 +290,7 @@ describe("tabworthy-times-picker", () => {
     const page = await createPage(
       `<tabworthy-times-picker hours="13" minutes="0"></tabworthy-times-picker>`
     );
-    page.rootInstance.use12HourFormat = true;
+    page.rootInstance.useTwelveHourFormat = true;
     await page.waitForChanges();
     const handler = jest.fn();
     page.root?.addEventListener("timeChanged", ((
@@ -371,7 +371,7 @@ describe("tabworthy-times-picker", () => {
     const page = await createPage(
       `<tabworthy-times-picker hours="10" minutes="0"></tabworthy-times-picker>`
     );
-    page.rootInstance.use12HourFormat = true;
+    page.rootInstance.useTwelveHourFormat = true;
     await page.waitForChanges();
 
     page.rootInstance.hours = 15;

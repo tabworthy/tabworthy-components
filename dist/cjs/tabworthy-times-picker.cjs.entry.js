@@ -20,7 +20,7 @@ const InclusiveTimesPicker = class {
         // Current time value (24-hour format)
         this.hours = 12;
         this.minutes = 0;
-        this.use12HourFormat = false;
+        this.useTwelveHourFormat = false;
         // Labels for accessibility and i18n
         this.labels = defaultLabels;
         // Hide labels visually but keep them for screen readers
@@ -32,7 +32,7 @@ const InclusiveTimesPicker = class {
         this.period = this.hours >= 12 ? "PM" : "AM";
         this.handleHourChange = (e) => {
             const value = parseInt(e.target.value, 10);
-            if (this.use12HourFormat) {
+            if (this.useTwelveHourFormat) {
                 // Convert to 24-hour format based on period
                 if (this.period === "AM") {
                     this.internalHours = value === 12 ? 0 : value;
@@ -51,7 +51,7 @@ const InclusiveTimesPicker = class {
             this.emitTimeChange();
         };
         this.handlePeriodChange = (period) => {
-            if (this.period === period || !this.use12HourFormat)
+            if (this.period === period || !this.useTwelveHourFormat)
                 return;
             this.period = period;
             // Convert hours based on new period
@@ -65,7 +65,7 @@ const InclusiveTimesPicker = class {
             this.emitTimeChange();
         };
         this.handleHourIncrement = () => {
-            if (this.use12HourFormat) {
+            if (this.useTwelveHourFormat) {
                 const displayHours = this.getDisplayHours();
                 const newDisplayHours = displayHours === 12 ? 1 : displayHours + 1;
                 if (this.period === "AM") {
@@ -81,7 +81,7 @@ const InclusiveTimesPicker = class {
             this.emitTimeChange();
         };
         this.handleHourDecrement = () => {
-            if (this.use12HourFormat) {
+            if (this.useTwelveHourFormat) {
                 const displayHours = this.getDisplayHours();
                 const newDisplayHours = displayHours === 1 ? 12 : displayHours - 1;
                 if (this.period === "AM") {
@@ -120,7 +120,7 @@ const InclusiveTimesPicker = class {
         this.period = this.hours >= 12 ? "PM" : "AM";
     }
     getDisplayHours() {
-        if (!this.use12HourFormat) {
+        if (!this.useTwelveHourFormat) {
             return this.internalHours;
         }
         if (this.internalHours === 0)
@@ -130,7 +130,7 @@ const InclusiveTimesPicker = class {
         return this.internalHours;
     }
     get24HourValue() {
-        if (!this.use12HourFormat) {
+        if (!this.useTwelveHourFormat) {
             return this.internalHours;
         }
         const displayHours = this.getDisplayHours();
@@ -145,7 +145,7 @@ const InclusiveTimesPicker = class {
         this.timeChanged.emit({
             hours: this.get24HourValue(),
             minutes: this.internalMinutes,
-            period: this.use12HourFormat ? this.period : undefined
+            period: this.useTwelveHourFormat ? this.period : undefined
         });
     }
     padZero(num) {
@@ -153,18 +153,18 @@ const InclusiveTimesPicker = class {
     }
     render() {
         const displayHours = this.getDisplayHours();
-        const maxHours = this.use12HourFormat ? 12 : 23;
-        const minHours = this.use12HourFormat ? 1 : 0;
-        return (index.h(index.Host, { key: '22eb745a93c68e4e4f78c11d2941681897aa73ef', class: this.elementClassName, "aria-label": this.labels.timePicker }, index.h("div", { key: 'ccb05b5d5793442b63aa4c25d5120db8b60bedf3', class: `${this.elementClassName}__container` }, index.h("div", { key: '3fc4ede2d685e43edcfefe8c88de19f705e94478', class: `${this.elementClassName}__field` }, index.h("label", { key: 'fb04e846fc9807155c4390e92722850cdaa4bba2', htmlFor: `${this.elementClassName}-hours`, class: {
+        const maxHours = this.useTwelveHourFormat ? 12 : 23;
+        const minHours = this.useTwelveHourFormat ? 1 : 0;
+        return (index.h(index.Host, { key: '6ccec0415bd1c35275e125355f69e871a2b3dc18', class: this.elementClassName, "aria-label": this.labels.timePicker }, index.h("div", { key: '52849e2d4e8ad6183d3017277f11fbd5bc3643c5', class: `${this.elementClassName}__container` }, index.h("div", { key: '9aa3980e371db20ae4ed4f590a0e9f49aa3d40cd', class: `${this.elementClassName}__field` }, index.h("label", { key: '77ea146e2d05b4bedec83a8d03096a6c51b6fd36', htmlFor: `${this.elementClassName}-hours`, class: {
                 [`${this.elementClassName}__label`]: true,
                 [`${this.elementClassName}__label--sr-only`]: this.labelsSrOnly
-            } }, this.labels.hours), index.h("div", { key: 'd5ed4a06ea4ce2eaaefda2fa316a4789aa4a210a', class: `${this.elementClassName}__control` }, index.h("button", { key: '193c89e3b50934225c05f3241546bc3e7063b1b8', type: "button", class: `${this.elementClassName}__button ${this.elementClassName}__button--increment`, onClick: this.handleHourIncrement, disabled: this.disabled, "aria-label": this.labels.incrementHours }, index.h("svg", { key: 'f6cefeb18839bce2b644d92608f802bc001377b3', fill: "none", height: "16", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", stroke: "currentColor", viewBox: "0 0 24 24", width: "16" }, index.h("polyline", { key: '58519a5d7a8cddfe2273f5c8beec3eab7307b43c', points: "18 15 12 9 6 15" }))), index.h("input", { key: '187ace01f2d83ad59766159d6509e30100b7f812', id: `${this.elementClassName}-hours`, type: "number", class: `${this.elementClassName}__input`, value: this.padZero(displayHours), min: minHours, max: maxHours, onInput: this.handleHourChange, disabled: this.disabled, "aria-label": this.labels.hours }), index.h("button", { key: '3bbe5b73ac8a85c165f0332d3c70d30aede096e6', type: "button", class: `${this.elementClassName}__button ${this.elementClassName}__button--decrement`, onClick: this.handleHourDecrement, disabled: this.disabled, "aria-label": this.labels.decrementHours }, index.h("svg", { key: 'fd7c431618e09d4326c95398f83f22ea2258695e', fill: "none", height: "16", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", stroke: "currentColor", viewBox: "0 0 24 24", width: "16" }, index.h("polyline", { key: '99aab5a584aed4d8fc1b30dcada0c76e42ba6ac7', points: "6 9 12 15 18 9" }))))), index.h("div", { key: 'a8958b60136f6220bbd944beaa6cf73c7660e3fb', class: `${this.elementClassName}__separator` }, ":"), index.h("div", { key: '72b46b517876dc8bc3490afef1860514b46efc46', class: `${this.elementClassName}__field` }, index.h("label", { key: 'e09788653c3873e97e1922fcda3076878f9b1ca7', htmlFor: `${this.elementClassName}-minutes`, class: {
+            } }, this.labels.hours), index.h("div", { key: 'cf88cc85dce2a2e11e5e0ca61ab23d5bcc71b7be', class: `${this.elementClassName}__control` }, index.h("button", { key: 'e2e68d9e5ed00a2a72f4a019a59d7fa683a8d56c', type: "button", class: `${this.elementClassName}__button ${this.elementClassName}__button--increment`, onClick: this.handleHourIncrement, disabled: this.disabled, "aria-label": this.labels.incrementHours }, index.h("svg", { key: '269a5595fd1baf1ace113beb3147542353927c75', fill: "none", height: "16", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", stroke: "currentColor", viewBox: "0 0 24 24", width: "16" }, index.h("polyline", { key: '1d2c3fca6e81b9fdaab6f9b9f2c19f55b1af0ef5', points: "18 15 12 9 6 15" }))), index.h("input", { key: '53a57e4c6e1a40dcb89ecd11cd1cba0f6205c470', id: `${this.elementClassName}-hours`, type: "number", class: `${this.elementClassName}__input`, value: this.padZero(displayHours), min: minHours, max: maxHours, onInput: this.handleHourChange, disabled: this.disabled, "aria-label": this.labels.hours }), index.h("button", { key: 'ab36448a4f79a29592124dee72fa8e96f121f646', type: "button", class: `${this.elementClassName}__button ${this.elementClassName}__button--decrement`, onClick: this.handleHourDecrement, disabled: this.disabled, "aria-label": this.labels.decrementHours }, index.h("svg", { key: '705e207ffc41a38bff7d8739e02605e536e75a92', fill: "none", height: "16", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", stroke: "currentColor", viewBox: "0 0 24 24", width: "16" }, index.h("polyline", { key: 'c8c08acec53576456b330c4f40a7879556704d0f', points: "6 9 12 15 18 9" }))))), index.h("div", { key: '3b8c0125c18518463de020682de4620d918a3463', class: `${this.elementClassName}__separator` }, ":"), index.h("div", { key: 'c54430db728d8f48320f4e4983a1d67a1ec8c78e', class: `${this.elementClassName}__field` }, index.h("label", { key: 'b47c7ae65c0b34b70673a8bd60c3b1496acf9540', htmlFor: `${this.elementClassName}-minutes`, class: {
                 [`${this.elementClassName}__label`]: true,
                 [`${this.elementClassName}__label--sr-only`]: this.labelsSrOnly
-            } }, this.labels.minutes), index.h("div", { key: '7bf9642b58249014b2ad802c3fe30f67e5354f4d', class: `${this.elementClassName}__control` }, index.h("button", { key: '71c889d966bceb4aa9e7b6f78c57e968b207ddda', type: "button", class: `${this.elementClassName}__button ${this.elementClassName}__button--increment`, onClick: this.handleMinuteIncrement, disabled: this.disabled, "aria-label": this.labels.incrementMinutes }, index.h("svg", { key: '3aad10f2b79e5e819277d4566ab7d336449162f9', fill: "none", height: "16", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", stroke: "currentColor", viewBox: "0 0 24 24", width: "16" }, index.h("polyline", { key: '68dfdfc6cd2bd1f8f916dbf60155eb2cc4a8328d', points: "18 15 12 9 6 15" }))), index.h("input", { key: '15eb767d9318c6d3e7aa0075bf9c3362adf75dd3', id: `${this.elementClassName}-minutes`, type: "number", class: `${this.elementClassName}__input`, value: this.padZero(this.internalMinutes), min: 0, max: 59, onInput: this.handleMinuteChange, disabled: this.disabled, "aria-label": this.labels.minutes }), index.h("button", { key: '5c808f40c040e8ff3e4632738f58e9941e69ec03', type: "button", class: `${this.elementClassName}__button ${this.elementClassName}__button--decrement`, onClick: this.handleMinuteDecrement, disabled: this.disabled, "aria-label": this.labels.decrementMinutes }, index.h("svg", { key: 'bad9dba94e622c208cb26823963664ff77fc7799', fill: "none", height: "16", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", stroke: "currentColor", viewBox: "0 0 24 24", width: "16" }, index.h("polyline", { key: '92eb0d63e7be970b2207cc0c47964eef48005baf', points: "6 9 12 15 18 9" }))))), this.use12HourFormat && (index.h("div", { key: '8a3235abb0bf0764993271ff4969ca6aaac83bd7', class: `${this.elementClassName}__period` }, index.h("button", { key: 'd8f0679faadf7f0cf04e2f57bed4e9c202d0a056', type: "button", class: {
+            } }, this.labels.minutes), index.h("div", { key: '9a4434d935f34bfd910e2ab7656fc125c05de9ca', class: `${this.elementClassName}__control` }, index.h("button", { key: 'fcc7800df89c4739c257a5733affdabc8aca1e25', type: "button", class: `${this.elementClassName}__button ${this.elementClassName}__button--increment`, onClick: this.handleMinuteIncrement, disabled: this.disabled, "aria-label": this.labels.incrementMinutes }, index.h("svg", { key: '80b692e16555612a179fec5734c79966d0c5967a', fill: "none", height: "16", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", stroke: "currentColor", viewBox: "0 0 24 24", width: "16" }, index.h("polyline", { key: '086fbe45c600657c2f6bf37e8415b87e8d763c3e', points: "18 15 12 9 6 15" }))), index.h("input", { key: 'dc610011944c2ad1bf3aa68937265bdf835ba009', id: `${this.elementClassName}-minutes`, type: "number", class: `${this.elementClassName}__input`, value: this.padZero(this.internalMinutes), min: 0, max: 59, onInput: this.handleMinuteChange, disabled: this.disabled, "aria-label": this.labels.minutes }), index.h("button", { key: 'd2cabe46d53e0cbd2b58140f6a55217dd69a3c5e', type: "button", class: `${this.elementClassName}__button ${this.elementClassName}__button--decrement`, onClick: this.handleMinuteDecrement, disabled: this.disabled, "aria-label": this.labels.decrementMinutes }, index.h("svg", { key: '2e5e67efccb2a66a0c4a1377d3941d12b4bd7947', fill: "none", height: "16", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", stroke: "currentColor", viewBox: "0 0 24 24", width: "16" }, index.h("polyline", { key: '3da5561fb1f5bf1b07eb48de6e020047c1956158', points: "6 9 12 15 18 9" }))))), this.useTwelveHourFormat && (index.h("div", { key: '24c87e5e371f8a10816afcebb3dc2f7843fa89f5', class: `${this.elementClassName}__period` }, index.h("button", { key: '014126a0d5470d56ae384e12b2e196c3a9132700', type: "button", class: {
                 [`${this.elementClassName}__period-button`]: true,
                 [`${this.elementClassName}__period-button--active`]: this.period === "AM"
-            }, onClick: () => this.handlePeriodChange("AM"), disabled: this.disabled, "aria-label": this.labels.am, "aria-pressed": this.period === "AM" }, this.labels.am), index.h("button", { key: '393802044645d205a71ae593227df550adce2970', type: "button", class: {
+            }, onClick: () => this.handlePeriodChange("AM"), disabled: this.disabled, "aria-label": this.labels.am, "aria-pressed": this.period === "AM" }, this.labels.am), index.h("button", { key: 'cf9f1f261456d7b5f64bf4b7d9ddbbb2e86d4447', type: "button", class: {
                 [`${this.elementClassName}__period-button`]: true,
                 [`${this.elementClassName}__period-button--active`]: this.period === "PM"
             }, onClick: () => this.handlePeriodChange("PM"), disabled: this.disabled, "aria-label": this.labels.pm, "aria-pressed": this.period === "PM" }, this.labels.pm))))));

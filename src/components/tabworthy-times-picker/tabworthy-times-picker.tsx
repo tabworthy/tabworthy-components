@@ -52,7 +52,7 @@ export class InclusiveTimesPicker {
   @Prop({ mutable: true }) hours: number = 12;
   @Prop({ mutable: true }) minutes: number = 0;
 
-  @Prop() use12HourFormat: boolean = false;
+  @Prop() useTwelveHourFormat: boolean = false;
   // Labels for accessibility and i18n
   @Prop() labels: InclusivekTimesPickerLabels = defaultLabels;
   // Hide labels visually but keep them for screen readers
@@ -84,7 +84,7 @@ export class InclusiveTimesPicker {
   }
 
   private getDisplayHours(): number {
-    if (!this.use12HourFormat) {
+    if (!this.useTwelveHourFormat) {
       return this.internalHours;
     }
 
@@ -94,7 +94,7 @@ export class InclusiveTimesPicker {
   }
 
   private get24HourValue(): number {
-    if (!this.use12HourFormat) {
+    if (!this.useTwelveHourFormat) {
       return this.internalHours;
     }
 
@@ -109,7 +109,7 @@ export class InclusiveTimesPicker {
   private handleHourChange = (e: Event) => {
     const value = parseInt((e.target as HTMLInputElement).value, 10);
 
-    if (this.use12HourFormat) {
+    if (this.useTwelveHourFormat) {
       // Convert to 24-hour format based on period
       if (this.period === "AM") {
         this.internalHours = value === 12 ? 0 : value;
@@ -129,7 +129,7 @@ export class InclusiveTimesPicker {
   };
 
   private handlePeriodChange = (period: "AM" | "PM") => {
-    if (this.period === period || !this.use12HourFormat) return;
+    if (this.period === period || !this.useTwelveHourFormat) return;
 
     this.period = period;
 
@@ -145,7 +145,7 @@ export class InclusiveTimesPicker {
   };
 
   private handleHourIncrement = () => {
-    if (this.use12HourFormat) {
+    if (this.useTwelveHourFormat) {
       const displayHours = this.getDisplayHours();
       const newDisplayHours = displayHours === 12 ? 1 : displayHours + 1;
       if (this.period === "AM") {
@@ -160,7 +160,7 @@ export class InclusiveTimesPicker {
   };
 
   private handleHourDecrement = () => {
-    if (this.use12HourFormat) {
+    if (this.useTwelveHourFormat) {
       const displayHours = this.getDisplayHours();
       const newDisplayHours = displayHours === 1 ? 12 : displayHours - 1;
       if (this.period === "AM") {
@@ -190,7 +190,7 @@ export class InclusiveTimesPicker {
     this.timeChanged.emit({
       hours: this.get24HourValue(),
       minutes: this.internalMinutes,
-      period: this.use12HourFormat ? this.period : undefined
+      period: this.useTwelveHourFormat ? this.period : undefined
     });
   }
 
@@ -200,8 +200,8 @@ export class InclusiveTimesPicker {
 
   render() {
     const displayHours = this.getDisplayHours();
-    const maxHours = this.use12HourFormat ? 12 : 23;
-    const minHours = this.use12HourFormat ? 1 : 0;
+    const maxHours = this.useTwelveHourFormat ? 12 : 23;
+    const minHours = this.useTwelveHourFormat ? 1 : 0;
 
     return (
       <Host class={this.elementClassName} aria-label={this.labels.timePicker}>
@@ -341,7 +341,7 @@ export class InclusiveTimesPicker {
           </div>
 
           {/* AM/PM Toggle */}
-          {this.use12HourFormat && (
+          {this.useTwelveHourFormat && (
             <div class={`${this.elementClassName}__period`}>
               <button
                 type="button"

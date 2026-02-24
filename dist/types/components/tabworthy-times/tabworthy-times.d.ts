@@ -17,7 +17,7 @@ export declare class InclusiveTimes {
     maxDate?: string;
     startDate: string;
     referenceDate: string;
-    use12HourFormat: boolean;
+    useTwelveHourFormat: boolean;
     timesLabels: TimesLabels;
     datesCalendarLabels?: DatesCalendarLabels;
     inline: boolean;
