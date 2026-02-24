@@ -67,6 +67,22 @@ describe("tabworthy-dates", () => {
     expect(instance.errorState).toBe(false);
   });
 
+  it("parseDate uses default shouldSetValue=true when not provided", async () => {
+    const page = await createPage();
+    const instance = page.rootInstance as any;
+
+    jest.spyOn(chronoParser, "chronoParseDate").mockResolvedValue({
+      value: new Date("2023-07-15")
+    } as any);
+
+    // Call parseDate with only the text argument to cover default shouldSetValue = true
+    const result = await instance.parseDate("July 15 2023");
+
+    expect(result.value).toBe("2023-07-15");
+    expect(instance.internalValue).toBe("2023-07-15");
+    expect(instance.errorState).toBe(false);
+  });
+
   it("parseDate keeps invalid state when parsing fails", async () => {
     const page = await createPage();
     const instance = page.rootInstance as any;
@@ -206,6 +222,27 @@ describe("tabworthy-dates", () => {
     parseSpy.mockResolvedValueOnce({ value: null, reason: "invalid" } as any);
     await instance.handleChange({ target: { value: "bad input" } } as any);
     expect(instance.errorMessage).toBe(instance.datesLabels.invalidDateError);
+  });
+
+  it("handleChange sets empty error message when minDate/maxDate reason but no min/max prop", async () => {
+    const page = await createPage(
+      '<tabworthy-dates id="test"></tabworthy-dates>'
+    );
+    const instance = page.rootInstance as any;
+
+    const parseSpy = jest.spyOn(chronoParser, "chronoParseDate");
+
+    // Test minDate reason without min-date prop set
+    parseSpy.mockResolvedValueOnce({ value: null, reason: "minDate" } as any);
+    await instance.handleChange({ target: { value: "some date" } } as any);
+    expect(instance.errorState).toBe(true);
+    expect(instance.errorMessage).toBe("");
+
+    // Test maxDate reason without max-date prop set
+    parseSpy.mockResolvedValueOnce({ value: null, reason: "maxDate" } as any);
+    await instance.handleChange({ target: { value: "another date" } } as any);
+    expect(instance.errorState).toBe(true);
+    expect(instance.errorMessage).toBe("");
   });
 
   it("handleChange updates range and handles range errors", async () => {
