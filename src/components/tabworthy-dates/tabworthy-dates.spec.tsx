@@ -131,6 +131,7 @@ describe("tabworthy-dates", () => {
     } as unknown as MouseEvent);
 
     expect(instance.internalValue).toBe("2023-01-20");
+    expect(instance.value).toBe(instance.internalValue);
   });
 
   it("handleQuickButtonClick parses range quick buttons", async () => {
@@ -152,6 +153,7 @@ describe("tabworthy-dates", () => {
     } as unknown as MouseEvent);
 
     expect(instance.internalValue).toEqual(["2023-07-05", "2023-07-10"]);
+    expect(instance.value).toEqual(instance.internalValue);
   });
 
   it("handleChange clears single input and emits empty value", async () => {
@@ -164,6 +166,7 @@ describe("tabworthy-dates", () => {
     await instance.handleChange({ target: { value: "" } } as any);
 
     expect(instance.internalValue).toBe("");
+    expect(instance.value).toBe(instance.internalValue);
     expect(instance.pickerRef.value).toBeNull();
     expect(emitSpy).toHaveBeenCalledWith("");
   });
@@ -246,6 +249,7 @@ describe("tabworthy-dates", () => {
     await instance.handleChange({ target: { value: "" } } as any);
 
     expect(instance.internalValue).toBe("");
+    expect(instance.value).toBe(instance.internalValue);
     expect(instance.pickerRef.value).toBeNull();
     expect(emitSpy).toHaveBeenCalledWith("");
   });
@@ -266,6 +270,7 @@ describe("tabworthy-dates", () => {
     expect(updateSpy).toHaveBeenCalled();
     expect(formatSpy).toHaveBeenCalledWith(true, false);
     expect(instance.errorState).toBe(false);
+    expect(instance.value).toBe(instance.internalValue);
   });
 
   it("formatInput handles plain and formatted modes", async () => {
@@ -308,12 +313,14 @@ describe("tabworthy-dates", () => {
 
     instance.handlePickerSelection(["2023-06-08", "2023-06-12"]);
     expect(instance.internalValue).toEqual(["2023-06-08", "2023-06-12"]);
+    expect(instance.value).toEqual(instance.internalValue);
     expect(instance.modalRef.close).toHaveBeenCalled();
     expect(emitSpy).toHaveBeenCalledWith(["2023-06-08", "2023-06-12"]);
 
     instance.range = false;
     instance.handlePickerSelection("2023-06-08");
     expect(instance.internalValue).toBe("2023-06-08");
+    expect(instance.value).toBe(instance.internalValue);
     expect(emitSpy).toHaveBeenCalledWith("2023-06-08");
   });
 
@@ -530,7 +537,40 @@ describe("tabworthy-dates", () => {
 
     expect(() => instance.handlePickerSelection(undefined)).not.toThrow();
     expect(instance.internalValue).toBe("");
+    expect(instance.value).toBe(instance.internalValue);
     expect(instance.inputRef.value).toBe("");
     expect(emitSpy).toHaveBeenCalledWith("");
+  });
+
+  it("watchValue with undefined clears input and picker value", async () => {
+    const page = await createPage(
+      '<tabworthy-dates id="test" value="2024-01-15"></tabworthy-dates>'
+    );
+    const instance = page.rootInstance as any;
+
+    instance.pickerRef = { value: new Date("2024-01-15") };
+    expect(instance.internalValue).toBe("2024-01-15");
+
+    instance.watchValue(undefined);
+
+    expect(instance.internalValue).toBeUndefined();
+    expect(instance.pickerRef.value).toBeNull();
+    expect(instance.inputRef.value).toBe("");
+  });
+
+  it("watchValue with empty string clears input and picker value", async () => {
+    const page = await createPage(
+      '<tabworthy-dates id="test" value="2024-01-15"></tabworthy-dates>'
+    );
+    const instance = page.rootInstance as any;
+
+    instance.pickerRef = { value: new Date("2024-01-15") };
+    expect(instance.internalValue).toBe("2024-01-15");
+
+    instance.watchValue("");
+
+    expect(instance.internalValue).toBe("");
+    expect(instance.pickerRef.value).toBeNull();
+    expect(instance.inputRef.value).toBe("");
   });
 });

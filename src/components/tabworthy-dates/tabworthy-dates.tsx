@@ -168,7 +168,7 @@ export class TabworthyDates {
   }
 
   componentDidLoad() {
-    this.syncFromValueProp();
+    this.syncFromValueProp(this.value);
     this.componentReady.emit();
     if (!this.id) {
       console.error(
@@ -235,6 +235,7 @@ export class TabworthyDates {
     }
 
     this.errorState = false;
+    this.value = this.internalValue;
     this.selectDate.emit(this.internalValue);
     this.announceDateChange(this.internalValue);
   }
@@ -304,6 +305,7 @@ export class TabworthyDates {
       if (this.pickerRef) {
         this.pickerRef.value = null;
       }
+      this.value = this.internalValue;
       return this.selectDate.emit(this.internalValue);
     }
     const parsedRange = await chronoParseRange(value, {
@@ -340,6 +342,7 @@ export class TabworthyDates {
       if (this.pickerRef) {
         this.pickerRef.value = null;
       }
+      this.value = this.internalValue;
       return this.selectDate.emit(this.internalValue);
     }
     const parsedDate = await chronoParseDate(value, {
@@ -485,6 +488,7 @@ export class TabworthyDates {
       }
       this.announceDateChange(this.internalValue);
     }
+    this.value = this.internalValue;
     this.selectDate.emit(this.internalValue);
   }
 
@@ -542,10 +546,7 @@ export class TabworthyDates {
       : this.elementClassName;
   }
 
-  private syncFromValueProp(value = this.value) {
-    if (!value) return;
-
-    // store
+  private syncFromValueProp(value: string | string[] | undefined) {
     this.internalValue = value;
 
     // update calendar (expects Date or Date[])
@@ -558,15 +559,23 @@ export class TabworthyDates {
         }, [] as Date[]);
         this.pickerRef.value = dates.length ? dates : null;
       } else {
-        const parsedDate = moment(this.value, this.format, true);
-        if (parsedDate.isValid()) {
-          this.pickerRef.value = parsedDate.toDate();
+        if (value) {
+          const parsedDate = moment(value, this.format, true);
+          if (parsedDate.isValid()) {
+            this.pickerRef.value = parsedDate.toDate();
+          }
+        } else {
+          this.pickerRef.value = null;
         }
       }
     }
 
+    if (!value) {
+      this.inputRef.value = "";
+    }
+
     // update text input (useInputValue=false so it formats from internalValue, not from input's current text)
-    if (this.inputRef) {
+    if (this.inputRef && value) {
       this.formatInput(!!this.shouldInputFormat(), false);
     }
   }
