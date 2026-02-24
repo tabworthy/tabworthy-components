@@ -124,6 +124,7 @@ export class InclusiveTimes {
     | boolean
     | string = true;
   @Prop() disableFreeformInput: boolean = false;
+  @Prop() inputClass: string = "";
 
   @State() internalValue?: string | string[] | null;
   @State() selectedDate?: Date;
@@ -345,7 +346,10 @@ export class InclusiveTimes {
             id={`${this.id}-input`}
             ref={(r) => (this.inputRef = r!)}
             type="text"
-            class={this.getClassName("input")}
+            class={{
+              [this.getClassName("input")]: true,
+              [this.inputClass]: !!this.inputClass
+            }}
             placeholder={this.placeholder}
             disabled={this.disabledState || this.disableFreeformInput}
             value={this.internalValue?.toString()}

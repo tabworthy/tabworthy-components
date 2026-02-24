@@ -123,7 +123,7 @@ export class TabworthyDates {
   @Prop() disableDate: HTMLTabworthyDatesCalendarElement["disableDate"] = () =>
     false;
   // Component name used to generate CSS classes
-  @Prop() elementClassName?: string = "tabworthy-dates";
+  @Prop() elementClassName: string = "tabworthy-dates";
   // Which day that should start the week (0 is sunday, 1 is monday)
   @Prop() firstDayOfWeek?: number = 1; // Monday
   // Format for the value prop (input/output format). Defaults to ISO format (YYYY-MM-DD). Uses moment.js format tokens.
@@ -139,6 +139,7 @@ export class TabworthyDates {
   // Show or hide the quick buttons
   @Prop() showQuickButtons: boolean = true;
   @Prop() disableFreeformInput: boolean = false;
+  @Prop() inputClass: string = "";
 
   @State() internalValue?: string | string[] | null;
   @State() errorState: boolean = this.hasError;
@@ -580,7 +581,10 @@ export class TabworthyDates {
             id={this.id ? `${this.id}-input` : undefined}
             type="text"
             placeholder={this.placeholder}
-            class={this.getClassName("input")}
+            class={{
+              [this.getClassName("input")]: true,
+              [this.inputClass]: !!this.inputClass
+            }}
             ref={(r) => (this.inputRef = r as HTMLInputElement)}
             onChange={this.handleChange}
             onFocus={() => this.formatInput(false)}
