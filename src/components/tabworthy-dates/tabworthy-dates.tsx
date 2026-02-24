@@ -459,7 +459,7 @@ export class TabworthyDates {
     }
   }
 
-  private handlePickerSelection(newValue: string | string[]) {
+  private handlePickerSelection(newValue: string | string[] | undefined) {
     if (this.isRangeValue(newValue)) {
       if (newValue.length === 2) this.modalRef?.close();
       // Convert ISO dates to specified format
@@ -474,7 +474,9 @@ export class TabworthyDates {
     } else {
       this.modalRef?.close();
       // Convert ISO date to specified format
-      const formattedDate = moment(newValue as string).format(this.format);
+      const formattedDate = newValue
+        ? moment(newValue).format(this.format)
+        : "";
       this.inputRef.value = formattedDate;
       this.internalValue = formattedDate;
       this.errorState = false;
@@ -486,7 +488,11 @@ export class TabworthyDates {
     this.selectDate.emit(this.internalValue);
   }
 
-  private announceDateChange(newValue: string | string[]) {
+  private announceDateChange(newValue: string | string[] | undefined) {
+    if (!newValue || (Array.isArray(newValue) && newValue.length === 0)) {
+      return;
+    }
+
     const newValueInIsoFormat = Array.isArray(newValue)
       ? newValue.map((date) => moment(date, this.format).toISOString())
       : moment(newValue, this.format).toISOString();

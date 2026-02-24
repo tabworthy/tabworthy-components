@@ -327,6 +327,16 @@ describe("tabworthy-dates", () => {
     expect(instance.internalValue).toBeUndefined();
   });
 
+  it("announceDateChange handles undefined without moment parsing errors", async () => {
+    const page = await createPage();
+    const instance = page.rootInstance as any;
+
+    // Should not throw or call moment with undefined
+    expect(() => instance.announceDateChange(undefined)).not.toThrow();
+    expect(() => instance.announceDateChange(null)).not.toThrow();
+    expect(() => instance.announceDateChange("")).not.toThrow();
+  });
+
   it("watchers and syncFromValueProp update state and picker/input refs", async () => {
     const page = await createPage(
       '<tabworthy-dates id="test" format="DD/MM/YYYY" value="15/03/2026"></tabworthy-dates>'
@@ -509,5 +519,18 @@ describe("tabworthy-dates", () => {
     );
     const input = page.root?.querySelector("input") as HTMLInputElement;
     expect(input.disabled).toBe(true);
+  });
+
+  it("handlePickerSelection handles undefined without moment parsing errors", async () => {
+    const page = await createPage();
+    const instance = page.rootInstance as any;
+    const emitSpy = jest.fn();
+    instance.selectDate = { emit: emitSpy };
+    instance.modalRef = { close: jest.fn() };
+
+    expect(() => instance.handlePickerSelection(undefined)).not.toThrow();
+    expect(instance.internalValue).toBe("");
+    expect(instance.inputRef.value).toBe("");
+    expect(emitSpy).toHaveBeenCalledWith("");
   });
 });
