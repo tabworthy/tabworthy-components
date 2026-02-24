@@ -80,7 +80,7 @@ export class InclusiveTimes {
   @Prop() referenceDate: string = getISODateString(new Date());
 
   // Use 12-hour format with AM/PM
-  @Prop() use12HourFormat: boolean = true;
+  @Prop() useTwelveHourFormat: boolean = true;
 
   // Labels used for internal translations
   @Prop() timesLabels: TimesLabels = defaultLabels;
@@ -428,7 +428,7 @@ export class InclusiveTimes {
                 <tabworthy-times-picker
                   hours={this.selectedHours}
                   minutes={this.selectedMinutes}
-                  use12HourFormat={this.use12HourFormat}
+                  useTwelveHourFormat={this.useTwelveHourFormat}
                   disabled={this.disabledState}
                   onTimeChanged={this.handleTimeChange}
                 />
