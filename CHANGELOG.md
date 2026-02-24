@@ -1,5 +1,11 @@
 # tabworthy-components
 
+## 0.8.5
+
+### Patch Changes
+
+- fix(dates): better syncFromValueProp
+
 ## 0.8.4
 
 ### Patch Changes
