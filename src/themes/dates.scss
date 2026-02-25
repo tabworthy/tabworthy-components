@@ -16,8 +16,8 @@ tabworthy-dates *:focus-visible {
 }
 
 .tabworthy-dates-calendar-wrapper {
-  border: 0.0625rem solid var(--tw-dates-border-color);
-  border-radius: 0.375rem;
+  border: 0.0625em solid var(--tw-dates-border-color);
+  border-radius: 0.375em;
   display: flex;
 
   &--inline {
@@ -29,24 +29,24 @@ tabworthy-dates *:focus-visible {
 .tabworthy-dates {
   display: block;
   width: min-content;
-  min-width: 18rem;
-  max-width: 24rem;
-  border-radius: 0.375rem;
+  min-width: 18em;
+  max-width: 24em;
+  border-radius: 0.375em;
   color: var(--tw-dates-text-color);
   background-color: var(--tw-dates-bg-color);
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  font-size: var(--tw-dates-font-size, 1rem);
+  font-size: var(--tw-dates-font-size, 1em);
   font-weight: 400;
   line-height: 1.5;
 }
 
-@media screen and (min-width: 23.5rem) {
+@media screen and (min-width: 23.5em) {
   .tabworthy-dates-calendar,
   .tabworthy-dates {
-    min-width: 20rem;
-    max-width: 24rem;
+    min-width: 20em;
+    max-width: 24em;
   }
 }
 
@@ -87,26 +87,26 @@ tabworthy-dates *:focus-visible {
 
 .tabworthy-dates-calendar__header {
   display: flex;
-  padding: 0.75rem;
+  padding: 0.75em;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.5em;
 }
 
 .tabworthy-dates-calendar__current-month {
   display: flex;
   flex-grow: 1;
-  gap: 0.5rem;
+  gap: 0.5em;
 }
 
 .tabworthy-dates-calendar__month-select,
 .tabworthy-dates-calendar__year-select {
   display: flex;
-  height: 2rem;
-  padding-right: 0.5rem;
-  padding-left: 0.5rem;
+  height: 2em;
+  padding-right: 0.5em;
+  padding-left: 0.5em;
   align-items: center;
   border: none;
-  border-radius: 0.25rem;
+  border-radius: 0.25em;
   color: var(--tw-dates-text-color);
   background: var(--tw-dates-bg2-color);
   font: inherit;
@@ -130,7 +130,7 @@ tabworthy-dates *:focus-visible {
 }
 
 .tabworthy-dates-calendar__year-select {
-  max-width: 5rem;
+  max-width: 5em;
 }
 
 .tabworthy-dates-calendar__previous-month-button,
@@ -138,14 +138,14 @@ tabworthy-dates *:focus-visible {
 .tabworthy-dates-calendar__previous-year-button,
 .tabworthy-dates-calendar__next-year-button {
   display: inline-flex;
-  width: 2rem;
-  height: 2rem;
-  padding: 0.375rem;
+  width: 2em;
+  height: 2em;
+  padding: 0.375em;
   flex-shrink: 0;
   justify-content: center;
   align-items: center;
   border: none;
-  border-radius: 0.25rem;
+  border-radius: 0.25em;
   color: var(--tw-dates-text-color);
   background-color: var(--tw-dates-bg2-color);
   cursor: pointer;
@@ -165,9 +165,9 @@ tabworthy-dates *:focus-visible {
 }
 
 .tabworthy-dates-calendar__body {
-  padding-right: 0.75rem;
-  padding-bottom: 0.75rem;
-  padding-left: 0.75rem;
+  padding-right: 0.75em;
+  padding-bottom: 0.75em;
+  padding-left: 0.75em;
 }
 
 .tabworthy-dates-calendar__calendar {
@@ -178,7 +178,7 @@ tabworthy-dates *:focus-visible {
 
 .tabworthy-dates-calendar__weekday > span {
   display: flex;
-  padding: 0.2rem;
+  padding: 0.2em;
   justify-content: center;
   align-items: center;
   font-weight: 600;
@@ -186,7 +186,7 @@ tabworthy-dates *:focus-visible {
 }
 
 .tabworthy-dates-calendar__date {
-  padding: 0.125rem;
+  padding: 0.125em;
   text-align: center;
   cursor: pointer;
 }
@@ -210,7 +210,7 @@ tabworthy-dates *:focus-visible {
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 0.25rem;
+  border-radius: 0.25em;
   aspect-ratio: 1;
 }
 
@@ -233,7 +233,7 @@ tabworthy-dates *:focus-visible {
   color: var(--tw-dates-bg-color);
   background-color: var(--tw-dates-active-color);
   font-weight: 500;
-  outline-offset: 0.125rem;
+  outline-offset: 0.125em;
   @media screen and (forced-colors: active) {
     background-color: Highlight;
   }
@@ -249,8 +249,8 @@ tabworthy-dates *:focus-visible {
   &::after {
     content: "";
     position: absolute;
-    height: 1.5rem;
-    width: 0.078125rem;
+    height: 1.5em;
+    width: 0.078125em;
     background-color: var(--tw-dates-disabled-color);
     transform: rotate(45deg);
     right: 50%;
@@ -273,17 +273,17 @@ tabworthy-dates *:focus-visible {
 }
 
 .tabworthy-dates-calendar__footer {
-  padding-right: 0.75rem;
-  padding-bottom: 0.75rem;
-  padding-left: 0.75rem;
+  padding-right: 0.75em;
+  padding-bottom: 0.75em;
+  padding-left: 0.75em;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1em;
 }
 .tabworthy-dates-calendar__footer-buttons {
   align-items: center;
   display: flex;
-  gap: 0.5rem;
+  gap: 0.5em;
 }
 
 .tabworthy-dates-calendar__clear-button,
@@ -291,13 +291,13 @@ tabworthy-dates *:focus-visible {
 .tabworthy-dates__quick-button,
 .tabworthy-dates__calendar-button {
   display: inline-flex;
-  height: 2rem;
-  padding-right: 0.5rem;
-  padding-left: 0.5rem;
+  height: 2em;
+  padding-right: 0.5em;
+  padding-left: 0.5em;
   justify-content: center;
   align-items: center;
   border: none;
-  border-radius: 0.25rem;
+  border-radius: 0.25em;
   color: var(--tw-dates-text-color);
   background-color: var(--tw-dates-bg2-color);
   font: inherit;
@@ -323,14 +323,14 @@ tabworthy-dates *:focus-visible {
   display: block;
 }
 .tabworthy-dates__calendar-button {
-  margin-left: 0.5rem;
-  height: 2.5rem;
+  margin-left: 0.5em;
+  height: 2.5em;
 }
 .tabworthy-dates__quick-group {
-  margin-top: 0.5rem;
+  margin-top: 0.5em;
   display: flex;
   flex-wrap: wrap;
-  column-gap: 0.5rem;
+  column-gap: 0.5em;
 }
 
 .tabworthy-dates__quick-button {
@@ -345,17 +345,17 @@ tabworthy-dates *:focus-visible {
 .tabworthy-dates__input {
   box-sizing: border-box;
   display: inline-flex;
-  height: 2.5rem;
-  padding-right: 0.5rem;
-  padding-left: 0.5rem;
+  height: 2.5em;
+  padding-right: 0.5em;
+  padding-left: 0.5em;
   justify-content: center;
   align-items: center;
-  border-radius: 0.25rem;
+  border-radius: 0.25em;
   color: var(--tw-dates-text-color);
   background: var(--tw-dates-bg2-color);
   line-height: 1;
   border: 1px solid var(--tw-dates-border-color);
-  font-size: var(--tw-dates-font-size, 1rem);
+  font-size: var(--tw-dates-font-size, 1em);
   flex-grow: 1;
 
   &[aria-invalid] {
@@ -376,7 +376,7 @@ tabworthy-dates *:focus-visible {
   color: var(--tw-dates-secondary-color);
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.25em;
   text-decoration: underline;
   text-underline-offset: 0.2em;
   border: none;
@@ -389,12 +389,12 @@ tabworthy-dates *:focus-visible {
   -webkit-font-smoothing: inherit;
   -moz-osx-font-smoothing: inherit;
   -webkit-appearance: none;
-  padding: 0.25rem;
+  padding: 0.25em;
 }
 
 .tabworthy-dates__label {
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.5em;
   display: inline-block;
   font-family: "Segoe UI", sans-serif;
   color: var(--tw-dates-text-color);
@@ -408,7 +408,7 @@ tabworthy-dates *:focus-visible {
 
 .tabworthy-dates__input-error {
   display: flex;
-  padding: 0.5rem;
+  padding: 0.5em;
   color: var(--tw-dates-error-color);
   font-weight: 700;
 }
