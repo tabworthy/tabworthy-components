@@ -9,7 +9,7 @@ export default {
     ["@semantic-release/changelog", { changelogFile: "CHANGELOG.md" }],
 
     // 2) bump package.json version for the release + publish to npm
-    ["@semantic-release/npm", { npmPublish: true }],
+    ["@semantic-release/npm", { npmPublish: false }],
 
     // 3) build your dist BEFORE committing/publishing
     ["@semantic-release/exec", { prepareCmd: "yarn build:stencil && yarn build:docs" }],
