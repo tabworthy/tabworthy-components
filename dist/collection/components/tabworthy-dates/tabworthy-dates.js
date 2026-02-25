@@ -78,8 +78,9 @@ export class TabworthyDates {
         this.handleCalendarButtonClick = async () => {
             var _a, _b, _c, _d, _e;
             await customElements.whenDefined("tabworthy-dates-modal");
-            this.calendarButtonRef &&
-                (await ((_a = this.modalRef) === null || _a === void 0 ? void 0 : _a.setTriggerElement(this.calendarButtonRef)));
+            // Use input container as trigger for proper dropdown alignment
+            this.inputContainerRef &&
+                (await ((_a = this.modalRef) === null || _a === void 0 ? void 0 : _a.setTriggerElement(this.inputContainerRef)));
             if ((await ((_b = this.modalRef) === null || _b === void 0 ? void 0 : _b.getState())) === false)
                 await ((_c = this.modalRef) === null || _c === void 0 ? void 0 : _c.open());
             else if ((await ((_d = this.modalRef) === null || _d === void 0 ? void 0 : _d.getState())) === true)
@@ -437,10 +438,10 @@ export class TabworthyDates {
     }
     render() {
         var _a;
-        return (h(Host, { key: 'e88b264159dd97824a678fd47e735daa7d6e7937' }, h("label", { key: 'bd130dbe90559f0f02760c0cd98069121208ead8', htmlFor: this.id ? `${this.id}-input` : undefined, class: this.getClassName("label") }, this.label), h("br", { key: 'e32218a5fd45461d589d10f7ed24b4512475f5e7' }), h("div", { key: '6a17c542843f1cbe42a17a6c437422773f17da5c', class: this.getClassName("input-container") }, h("input", { key: '72688ef25cd185f1c64e385602af5ac758eef488', disabled: this.disabledState || this.disableFreeformInput, id: this.id ? `${this.id}-input` : undefined, type: "text", placeholder: this.placeholder, class: {
+        return (h(Host, { key: '3e36f57e5d9f085e0175e79ce7a962e5ec338769' }, h("label", { key: 'ab7c37d2f5becd4caefade892cc6a2b14ffe517d', htmlFor: this.id ? `${this.id}-input` : undefined, class: this.getClassName("label") }, this.label), h("br", { key: '8c0a95500aeb784e6f9bf9295aa09077dc6801ca' }), h("div", { key: '63e8a6ee083b12791b52ecb2da15a736fb40611a', class: this.getClassName("input-container"), ref: (r) => (this.inputContainerRef = r) }, h("input", { key: '06a92d32ad8c629567fcacb4022a5a60ccd4f3d7', disabled: this.disabledState || this.disableFreeformInput, id: this.id ? `${this.id}-input` : undefined, type: "text", placeholder: this.placeholder, class: {
                 [this.getClassName("input")]: true,
                 [this.inputClass]: !!this.inputClass
-            }, ref: (r) => (this.inputRef = r), onChange: this.handleChange, onFocus: () => this.formatInput(false), onBlur: () => this.formatInput(true, false), "aria-describedby": this.errorState ? `${this.id}-error` : undefined, "aria-invalid": this.errorState }), !this.inline && (h("button", { key: '89acd9aa82cb8c10b7f73e351620babfc13bc96f', type: "button", ref: (r) => (this.calendarButtonRef = r), onClick: this.handleCalendarButtonClick, class: this.getClassName("calendar-button"), disabled: this.disabledState }, this.calendarButtonContent ? (h("span", { innerHTML: this.calendarButtonContent })) : (this.datesLabels.openCalendar)))), h("tabworthy-dates-modal", { key: '3a853a44a3637007547aba3f55d41f8c4f4ce363', label: this.datesLabels.calendar, ref: (el) => (this.modalRef = el), onOpened: () => {
+            }, ref: (r) => (this.inputRef = r), onChange: this.handleChange, onFocus: () => this.formatInput(false), onBlur: () => this.formatInput(true, false), "aria-describedby": this.errorState ? `${this.id}-error` : undefined, "aria-invalid": this.errorState }), !this.inline && (h("button", { key: '1925a172f3fb59c02563495d038f0e9dd806662a', type: "button", onClick: this.handleCalendarButtonClick, class: this.getClassName("calendar-button"), disabled: this.disabledState }, this.calendarButtonContent ? (h("span", { innerHTML: this.calendarButtonContent })) : (this.datesLabels.openCalendar)))), h("tabworthy-dates-modal", { key: 'fb65c2d4e5e9b6daab3b9029315d751214c4a1d3', label: this.datesLabels.calendar, ref: (el) => (this.modalRef = el), onOpened: () => {
                 if (!this.pickerRef)
                     return;
                 this.pickerRef.modalIsOpen = true;
@@ -448,11 +449,11 @@ export class TabworthyDates {
                 if (!this.pickerRef)
                     return;
                 this.pickerRef.modalIsOpen = false;
-            }, inline: this.inline }, h("tabworthy-dates-calendar", { key: '12900a935aebd37116e805a0528966ab3bbff699', range: this.range, locale: this.locale, onSelectDate: (event) => this.handlePickerSelection(event.detail), onChangeMonth: (event) => this.handleChangedMonths(event.detail), onChangeYear: (event) => this.handleYearChange(event.detail), labels: this.datesCalendarLabels ? this.datesCalendarLabels : undefined, ref: (el) => (this.pickerRef = el), startDate: this.startDate, firstDayOfWeek: this.firstDayOfWeek, showHiddenTitle: true, disabled: this.disabledState, showMonthStepper: this.showMonthStepper, showYearStepper: this.showYearStepper, showClearButton: this.showClearButton, showKeyboardHint: this.showKeyboardHint, showTodayButton: this.showTodayButton, disableDate: this.disableDate, minDate: this.minDate, maxDate: this.maxDate, inline: this.inline })), this.showQuickButtons &&
+            }, inline: this.inline, appendTo: this.appendTo }, h("tabworthy-dates-calendar", { key: '4f48512b4647749af1f9d2d8bcc31c29f8833e1f', range: this.range, locale: this.locale, onSelectDate: (event) => this.handlePickerSelection(event.detail), onChangeMonth: (event) => this.handleChangedMonths(event.detail), onChangeYear: (event) => this.handleYearChange(event.detail), labels: this.datesCalendarLabels ? this.datesCalendarLabels : undefined, ref: (el) => (this.pickerRef = el), startDate: this.startDate, firstDayOfWeek: this.firstDayOfWeek, showHiddenTitle: true, disabled: this.disabledState, showMonthStepper: this.showMonthStepper, showYearStepper: this.showYearStepper, showClearButton: this.showClearButton, showKeyboardHint: this.showKeyboardHint, showTodayButton: this.showTodayButton, disableDate: this.disableDate, minDate: this.minDate, maxDate: this.maxDate, inline: this.inline })), this.showQuickButtons &&
             ((_a = this.quickButtons) === null || _a === void 0 ? void 0 : _a.length) > 0 &&
-            this.chronoSupportedLocale && (h("div", { key: 'db492a4c33d882a7f056dd66d669cd639894a714', class: this.getClassName("quick-group"), role: "group", "aria-label": "Quick selection" }, this.quickButtons.map((buttonText) => {
+            this.chronoSupportedLocale && (h("div", { key: 'c22bb344f5fd2668d8f09f4fb410baec74e1d047', class: this.getClassName("quick-group"), role: "group", "aria-label": "Quick selection" }, this.quickButtons.map((buttonText) => {
             return (h("button", { class: this.getClassName("quick-button"), onClick: this.handleQuickButtonClick, disabled: this.disabledState, type: "button" }, buttonText));
-        }))), this.errorState && (h("div", { key: '8a4a4d89be39da4438beda996b2f1f3b785d9010', class: this.getClassName("input-error"), id: this.id ? `${this.id}-error` : undefined, role: "status" }, this.errorMessage))));
+        }))), this.errorState && (h("div", { key: '0c6cacc8d5a536c5a79a9899627c6318c3c85800', class: this.getClassName("input-error"), id: this.id ? `${this.id}-error` : undefined, role: "status" }, this.errorMessage))));
     }
     static get is() { return "tabworthy-dates"; }
     static get encapsulation() { return "scoped"; }
@@ -1148,6 +1149,30 @@ export class TabworthyDates {
                 "reflect": false,
                 "attribute": "input-class",
                 "defaultValue": "\"\""
+            },
+            "appendTo": {
+                "type": "string",
+                "mutable": false,
+                "complexType": {
+                    "original": "string | HTMLElement",
+                    "resolved": "HTMLElement | string",
+                    "references": {
+                        "HTMLElement": {
+                            "location": "global",
+                            "id": "global::HTMLElement"
+                        }
+                    }
+                },
+                "required": false,
+                "optional": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Element to append the dropdown to. Use \"body\" to append to document.body,\nor pass a CSS selector or HTMLElement. Useful for escaping overflow:hidden containers."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "attribute": "append-to"
             }
         };
     }

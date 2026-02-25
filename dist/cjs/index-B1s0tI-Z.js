@@ -1,3 +1,5 @@
+'use strict';
+
 const NAMESPACE = 'tabworthy-components';
 const BUILD = /* tabworthy-components */ { hotModuleReplacement: false, hydratedSelectorName: "hydrated", lazyLoad: true, propChangeCallback: true, slotRelocation: true, state: true, updatable: true};
 
@@ -655,6 +657,27 @@ var setAccessor = (elm, memberName, oldValue, newValue, isSvg, flags, initialRen
     {
       classList.remove(...oldClasses.filter((c) => c && !newClasses.includes(c)));
       classList.add(...newClasses.filter((c) => c && !oldClasses.includes(c)));
+    }
+  } else if (memberName === "style") {
+    {
+      for (const prop in oldValue) {
+        if (!newValue || newValue[prop] == null) {
+          if (prop.includes("-")) {
+            elm.style.removeProperty(prop);
+          } else {
+            elm.style[prop] = "";
+          }
+        }
+      }
+    }
+    for (const prop in newValue) {
+      if (!oldValue || newValue[prop] !== oldValue[prop]) {
+        if (prop.includes("-")) {
+          elm.style.setProperty(prop, newValue[prop]);
+        } else {
+          elm.style[prop] = newValue[prop];
+        }
+      }
     }
   } else if (memberName === "key") ; else if (memberName === "ref") {
     if (newValue) {
@@ -2132,4 +2155,11 @@ function transformTag(tag) {
   return tag;
 }
 
-export { Host as H, bootstrapLazy as b, createEvent as c, getElement as g, h, promiseResolve as p, registerInstance as r, setNonce as s };
+exports.Host = Host;
+exports.bootstrapLazy = bootstrapLazy;
+exports.createEvent = createEvent;
+exports.getElement = getElement;
+exports.h = h;
+exports.promiseResolve = promiseResolve;
+exports.registerInstance = registerInstance;
+exports.setNonce = setNonce;

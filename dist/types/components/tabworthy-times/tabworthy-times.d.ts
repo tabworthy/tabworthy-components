@@ -34,6 +34,11 @@ export declare class InclusiveTimes {
     inputShouldFormat?: boolean | string;
     disableFreeformInput: boolean;
     inputClass: string;
+    /**
+     * Element to append the dropdown to. Use "body" to append to document.body,
+     * or pass a CSS selector or HTMLElement. Useful for escaping overflow:hidden containers.
+     */
+    appendTo?: string | HTMLElement;
     internalValue?: string | string[] | null;
     selectedDate?: Date;
     selectedHours: number;
@@ -45,7 +50,7 @@ export declare class InclusiveTimes {
     componentReady: EventEmitter<void>;
     private modalRef?;
     private inputRef;
-    private calendarButtonRef?;
+    private inputContainerRef?;
     private pickerRef?;
     private errorMessage;
     private shouldInputFormat;

@@ -1,3 +1,29 @@
+# [0.9.0](https://github.com/tabworthy/tabworthy-components/compare/v0.8.7...v0.9.0) (2026-02-25)
+
+
+### Bug Fixes
+
+* **times:** polish border-radius css ([fb5b12e](https://github.com/tabworthy/tabworthy-components/commit/fb5b12e7506a25426463a9be9e9def5ac30f4f3b))
+
+
+### Features
+
+* appendTo for edge-cases with overflown modal ([677a042](https://github.com/tabworthy/tabworthy-components/commit/677a04247cfaa3c866f754af495f4b686cef179b))
+* positioning via popper ([41172a9](https://github.com/tabworthy/tabworthy-components/commit/41172a9daee7bd4258030759305de8316e32c61b))
+
+# [0.9.0](https://github.com/tabworthy/tabworthy-components/compare/v0.8.7...v0.9.0) (2026-02-25)
+
+
+### Bug Fixes
+
+* **times:** polish border-radius css ([fb5b12e](https://github.com/tabworthy/tabworthy-components/commit/fb5b12e7506a25426463a9be9e9def5ac30f4f3b))
+
+
+### Features
+
+* appendTo for edge-cases with overflown modal ([677a042](https://github.com/tabworthy/tabworthy-components/commit/677a04247cfaa3c866f754af495f4b686cef179b))
+* positioning via popper ([41172a9](https://github.com/tabworthy/tabworthy-components/commit/41172a9daee7bd4258030759305de8316e32c61b))
+
 ## [0.8.7](https://github.com/tabworthy/tabworthy-components/compare/v0.8.6...v0.8.7) (2026-02-25)
 
 

@@ -1,19 +1,138 @@
 import { h, Host } from "@stencil/core";
 import "@a11y/focus-trap";
 import { hideOthers } from "aria-hidden";
+import { createPopper } from "@popperjs/core";
 /**
  * @slot slot - The dialog content
  */
 export class InclusiveDatesModal {
     constructor() {
         this.inline = false;
+        /** Preferred placement of the dropdown (Popper.js placement) */
+        this.placement = "bottom-start";
+        /** Offset from the trigger element [skidding, distance] */
+        this.offset = [0, 8];
         this.closing = false;
         this.showing = this.inline || false;
+        this.positioned = false;
+        this.originalParent = null;
+        this.originalNextSibling = null;
+        this.isMovingPortal = false;
+        this.popperInstance = null;
         this.onKeyDown = (event) => {
             if (event.code === "Escape") {
                 this.close();
             }
         };
+    }
+    watchShowing(newValue) {
+        if (newValue) {
+            // Reset positioned state - portal setup happens in render ref callback
+            this.positioned = false;
+        }
+        else {
+            this.destroyPopperInstance();
+            this.cleanupPortal();
+            this.positioned = false;
+        }
+    }
+    getAppendToElement() {
+        if (!this.appendTo)
+            return null;
+        if (this.appendTo === "body") {
+            return document.body;
+        }
+        if (typeof this.appendTo === "string") {
+            return document.querySelector(this.appendTo);
+        }
+        return this.appendTo;
+    }
+    setupPortal() {
+        const appendToEl = this.getAppendToElement();
+        if (!appendToEl)
+            return;
+        // Store original position so we can restore later
+        this.originalParent = this.hostElement.parentElement;
+        this.originalNextSibling = this.hostElement.nextSibling;
+        // Guard against triggering disconnectedCallback during move
+        this.isMovingPortal = true;
+        appendToEl.appendChild(this.hostElement);
+        this.isMovingPortal = false;
+    }
+    cleanupPortal() {
+        // Guard against recursion - moving element triggers disconnectedCallback
+        if (this.isMovingPortal)
+            return;
+        // Move host back to original position
+        if (this.originalParent) {
+            this.isMovingPortal = true;
+            if (this.originalNextSibling) {
+                this.originalParent.insertBefore(this.hostElement, this.originalNextSibling);
+            }
+            else {
+                this.originalParent.appendChild(this.hostElement);
+            }
+            this.originalParent = null;
+            this.originalNextSibling = null;
+            this.isMovingPortal = false;
+        }
+    }
+    createPopperInstance() {
+        if (!this.triggerElement || !this.bodyRef)
+            return;
+        // Use fixed strategy when portaling to escape scroll containers
+        const useFixed = !!this.appendTo;
+        // When portaled, use viewport boundary; otherwise use clipping parents
+        const boundary = useFixed ? "viewport" : "clippingParents";
+        this.popperInstance = createPopper(this.triggerElement, this.bodyRef, {
+            placement: this.placement,
+            strategy: useFixed ? "fixed" : "absolute",
+            modifiers: [
+                {
+                    name: "offset",
+                    options: {
+                        offset: this.offset
+                    }
+                },
+                {
+                    name: "flip",
+                    options: {
+                        fallbackPlacements: ["top-start", "top-end", "bottom-end"],
+                        boundary
+                    }
+                },
+                {
+                    name: "preventOverflow",
+                    options: {
+                        boundary,
+                        altAxis: true,
+                        padding: 8
+                    }
+                },
+                {
+                    name: "computeStyles",
+                    options: {
+                        // Use GPU acceleration for smooth animations
+                        gpuAcceleration: true
+                    }
+                },
+                {
+                    // Custom modifier to ensure initial position is applied immediately
+                    name: "applyStyles",
+                    enabled: true
+                }
+            ]
+        });
+        // Force immediate position update
+        this.popperInstance.forceUpdate();
+        // Mark as positioned to show the element
+        this.positioned = true;
+    }
+    destroyPopperInstance() {
+        if (this.popperInstance) {
+            this.popperInstance.destroy();
+            this.popperInstance = null;
+        }
     }
     /**
      * Open the dialog.
@@ -29,13 +148,21 @@ export class InclusiveDatesModal {
      * Close the dialog.
      */
     async close() {
+        var _a;
         if (this.inline)
             return;
         this.showing = false;
         this.closed.emit(undefined);
-        this.undo();
+        (_a = this.undo) === null || _a === void 0 ? void 0 : _a.call(this);
         if (this.triggerElement)
             this.triggerElement.focus();
+    }
+    disconnectedCallback() {
+        // Skip cleanup if we're in the middle of portal operations
+        if (this.isMovingPortal)
+            return;
+        this.destroyPopperInstance();
+        this.cleanupPortal();
     }
     async getState() {
         return this.showing;
@@ -43,13 +170,44 @@ export class InclusiveDatesModal {
     async setTriggerElement(element) {
         this.triggerElement = element;
     }
+    /** Force update the popper position */
+    async updatePosition() {
+        var _a;
+        await ((_a = this.popperInstance) === null || _a === void 0 ? void 0 : _a.update());
+    }
     handleClick(event) {
-        if (this.showing && !this.el.contains(event.target)) {
-            this.close();
+        var _a;
+        if (this.showing) {
+            const target = event.target;
+            // Check if click is inside the host element, trigger element, or original parent (when portaled)
+            const clickedInside = this.hostElement.contains(target) ||
+                ((_a = this.triggerElement) === null || _a === void 0 ? void 0 : _a.contains(target)) ||
+                // When portaled, also check the original parent to avoid closing on container clicks
+                (this.originalParent && this.originalParent.contains(target));
+            if (!clickedInside) {
+                this.close();
+            }
         }
     }
     render() {
-        return (h(Host, { key: 'e5e440df97f5b2f51f742892ca591aff3a3e51a9', showing: this.showing, ref: (r) => r && (this.el = r) }, !this.inline && this.showing && (h("div", { key: 'f3b5f92b0f3b8eb54f665a14fcaa1616d59b182b', part: "body", onKeyDown: this.onKeyDown, role: "dialog", tabindex: -1, "aria-hidden": !this.showing, "aria-label": this.label, "aria-modal": this.showing }, h("focus-trap", { key: 'f94c02a8db391d671adc08ac1742dc6fabca72d3' }, h("div", { key: '888259505b6a2416674523d6a6924272b676daad', part: "content" }, h("slot", { key: 'e4e141ecae238f68fdde53baca66f478ebb93f88' }))))), this.inline && (h("div", { key: 'f2e7fb2614274d5dc7d03f10a0ee760363438435', part: "content" }, h("slot", { key: 'f845ef9c46b146ac916c90bb2fcec1f357aee5ee' })))));
+        return (h(Host, { key: '35e8ed14b0108e9cb75782516d070dfb8474b0b2', showing: this.showing, ref: (r) => r && (this.el = r) }, !this.inline && this.showing && (h("div", { key: 'fdb64ed8717e2a1620ef2d4ffb21a44d1de03a46', part: "body", ref: (r) => {
+                if (r) {
+                    this.bodyRef = r;
+                    // Setup portal and create popper when ref is set
+                    if (this.showing &&
+                        this.triggerElement &&
+                        !this.popperInstance) {
+                        // Setup portal first (move element to body), then create popper
+                        this.setupPortal();
+                        // Use double RAF to ensure DOM is fully settled after portal move
+                        requestAnimationFrame(() => {
+                            requestAnimationFrame(() => {
+                                this.createPopperInstance();
+                            });
+                        });
+                    }
+                }
+            }, style: { visibility: this.positioned ? "visible" : "hidden" }, onKeyDown: this.onKeyDown, role: "dialog", tabindex: -1, "aria-hidden": !this.showing, "aria-label": this.label, "aria-modal": this.showing }, h("focus-trap", { key: 'af4734b1a18dd62a600ca49313b1ba07f2d19039' }, h("div", { key: 'fb41d5ce07b5aac179e4bed63c18a8d254503a50', part: "content" }, h("slot", { key: 'fc480cf1a29a42b1a19737a72d410c139dc32f07' }))))), this.inline && (h("div", { key: '7aef10d50f790a1e72e05b26dc108c40500fa7c3', part: "content" }, h("slot", { key: '06395cd19052d1b81ab448c0a9a618da876fa86d' })))));
     }
     static get is() { return "tabworthy-dates-modal"; }
     static get encapsulation() { return "shadow"; }
@@ -103,13 +261,83 @@ export class InclusiveDatesModal {
                 "reflect": false,
                 "attribute": "inline",
                 "defaultValue": "false"
+            },
+            "placement": {
+                "type": "string",
+                "mutable": false,
+                "complexType": {
+                    "original": "Placement",
+                    "resolved": "\"auto\" | \"auto-end\" | \"auto-start\" | \"bottom\" | \"bottom-end\" | \"bottom-start\" | \"left\" | \"left-end\" | \"left-start\" | \"right\" | \"right-end\" | \"right-start\" | \"top\" | \"top-end\" | \"top-start\"",
+                    "references": {
+                        "Placement": {
+                            "location": "import",
+                            "path": "@popperjs/core",
+                            "id": "node_modules::Placement",
+                            "referenceLocation": "Placement"
+                        }
+                    }
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Preferred placement of the dropdown (Popper.js placement)"
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "attribute": "placement",
+                "defaultValue": "\"bottom-start\""
+            },
+            "offset": {
+                "type": "unknown",
+                "mutable": false,
+                "complexType": {
+                    "original": "[number, number]",
+                    "resolved": "[number, number]",
+                    "references": {}
+                },
+                "required": false,
+                "optional": false,
+                "docs": {
+                    "tags": [],
+                    "text": "Offset from the trigger element [skidding, distance]"
+                },
+                "getter": false,
+                "setter": false,
+                "defaultValue": "[0, 8]"
+            },
+            "appendTo": {
+                "type": "string",
+                "mutable": false,
+                "complexType": {
+                    "original": "string | HTMLElement",
+                    "resolved": "HTMLElement | string",
+                    "references": {
+                        "HTMLElement": {
+                            "location": "global",
+                            "id": "global::HTMLElement"
+                        }
+                    }
+                },
+                "required": false,
+                "optional": true,
+                "docs": {
+                    "tags": [],
+                    "text": "Element to append the dropdown to. Use \"body\" to append to document.body,\nor pass a CSS selector or HTMLElement. When set, the dropdown will be\nportaled to escape overflow:hidden containers."
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "attribute": "append-to"
             }
         };
     }
     static get states() {
         return {
             "closing": {},
-            "showing": {}
+            "showing": {},
+            "positioned": {}
         };
     }
     static get events() {
@@ -222,8 +450,32 @@ export class InclusiveDatesModal {
                     "text": "",
                     "tags": []
                 }
+            },
+            "updatePosition": {
+                "complexType": {
+                    "signature": "() => Promise<void>",
+                    "parameters": [],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "Force update the popper position",
+                    "tags": []
+                }
             }
         };
+    }
+    static get elementRef() { return "hostElement"; }
+    static get watchers() {
+        return [{
+                "propName": "showing",
+                "methodName": "watchShowing"
+            }];
     }
     static get listeners() {
         return [{

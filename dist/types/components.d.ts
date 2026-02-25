@@ -9,16 +9,22 @@ import { DatesLabels } from "./components/tabworthy-dates/tabworthy-dates";
 import { DatesCalendarLabels, YearChangedEventDetails } from "./components/tabworthy-dates-calendar/tabworthy-dates-calendar";
 import { ChronoOptions, ChronoParsedDateString } from "../shared/utils/chrono-parser/chrono-parser.type";
 import { DatesCalendarLabels as DatesCalendarLabels1, MonthChangedEventDetails, YearChangedEventDetails as YearChangedEventDetails1 } from "./components/tabworthy-dates-calendar/tabworthy-dates-calendar";
+import { Placement } from "@popperjs/core";
 import { TimesLabels } from "./components/tabworthy-times/tabworthy-times";
 import { InclusivekTimesPickerLabels, TimeValue } from "./components/tabworthy-times-picker/tabworthy-times-picker";
 export { DatesLabels } from "./components/tabworthy-dates/tabworthy-dates";
 export { DatesCalendarLabels, YearChangedEventDetails } from "./components/tabworthy-dates-calendar/tabworthy-dates-calendar";
 export { ChronoOptions, ChronoParsedDateString } from "../shared/utils/chrono-parser/chrono-parser.type";
 export { DatesCalendarLabels as DatesCalendarLabels1, MonthChangedEventDetails, YearChangedEventDetails as YearChangedEventDetails1 } from "./components/tabworthy-dates-calendar/tabworthy-dates-calendar";
+export { Placement } from "@popperjs/core";
 export { TimesLabels } from "./components/tabworthy-times/tabworthy-times";
 export { InclusivekTimesPickerLabels, TimeValue } from "./components/tabworthy-times-picker/tabworthy-times-picker";
 export namespace Components {
     interface TabworthyDates {
+        /**
+          * Element to append the dropdown to. Use "body" to append to document.body, or pass a CSS selector or HTMLElement. Useful for escaping overflow:hidden containers.
+         */
+        "appendTo"?: string | HTMLElement;
         "calendarButtonContent"?: string;
         "datesCalendarLabels"?: DatesCalendarLabels;
         /**
@@ -208,6 +214,10 @@ export namespace Components {
     }
     interface TabworthyDatesModal {
         /**
+          * Element to append the dropdown to. Use "body" to append to document.body, or pass a CSS selector or HTMLElement. When set, the dropdown will be portaled to escape overflow:hidden containers.
+         */
+        "appendTo"?: string | HTMLElement;
+        /**
           * Close the dialog.
          */
         "close": () => Promise<void>;
@@ -218,12 +228,30 @@ export namespace Components {
         "inline"?: boolean;
         "label": string;
         /**
+          * Offset from the trigger element [skidding, distance]
+          * @default [0, 8]
+         */
+        "offset": [number, number];
+        /**
           * Open the dialog.
          */
         "open": () => Promise<void>;
+        /**
+          * Preferred placement of the dropdown (Popper.js placement)
+          * @default "bottom-start"
+         */
+        "placement": Placement;
         "setTriggerElement": (element: HTMLElement) => Promise<void>;
+        /**
+          * Force update the popper position
+         */
+        "updatePosition": () => Promise<void>;
     }
     interface TabworthyTimes {
+        /**
+          * Element to append the dropdown to. Use "body" to append to document.body, or pass a CSS selector or HTMLElement. Useful for escaping overflow:hidden containers.
+         */
+        "appendTo"?: string | HTMLElement;
         "calendarButtonContent"?: string;
         "clearValue": () => Promise<void>;
         "datesCalendarLabels"?: DatesCalendarLabels;
@@ -477,6 +505,10 @@ declare namespace LocalJSX {
     type OneOf<K extends string, PropT, AttrT = PropT> = { [P in K]: PropT } & { [P in `attr:${K}` | `prop:${K}`]?: never } | { [P in `attr:${K}`]: AttrT } & { [P in K | `prop:${K}`]?: never } | { [P in `prop:${K}`]: PropT } & { [P in K | `attr:${K}`]?: never };
 
     interface TabworthyDates {
+        /**
+          * Element to append the dropdown to. Use "body" to append to document.body, or pass a CSS selector or HTMLElement. Useful for escaping overflow:hidden containers.
+         */
+        "appendTo"?: string | HTMLElement;
         "calendarButtonContent"?: string;
         "datesCalendarLabels"?: DatesCalendarLabels;
         /**
@@ -671,14 +703,32 @@ declare namespace LocalJSX {
     }
     interface TabworthyDatesModal {
         /**
+          * Element to append the dropdown to. Use "body" to append to document.body, or pass a CSS selector or HTMLElement. When set, the dropdown will be portaled to escape overflow:hidden containers.
+         */
+        "appendTo"?: string | HTMLElement;
+        /**
           * @default false
          */
         "inline"?: boolean;
         "label": string;
+        /**
+          * Offset from the trigger element [skidding, distance]
+          * @default [0, 8]
+         */
+        "offset"?: [number, number];
         "onClosed"?: (event: TabworthyDatesModalCustomEvent<any>) => void;
         "onOpened"?: (event: TabworthyDatesModalCustomEvent<any>) => void;
+        /**
+          * Preferred placement of the dropdown (Popper.js placement)
+          * @default "bottom-start"
+         */
+        "placement"?: Placement;
     }
     interface TabworthyTimes {
+        /**
+          * Element to append the dropdown to. Use "body" to append to document.body, or pass a CSS selector or HTMLElement. Useful for escaping overflow:hidden containers.
+         */
+        "appendTo"?: string | HTMLElement;
         "calendarButtonContent"?: string;
         "datesCalendarLabels"?: DatesCalendarLabels;
         /**
@@ -841,6 +891,7 @@ declare namespace LocalJSX {
         "showQuickButtons": boolean;
         "disableFreeformInput": boolean;
         "inputClass": string;
+        "appendTo": string | HTMLElement;
     }
     interface TabworthyDatesCalendarAttributes {
         "clearButtonContent": string;
@@ -869,6 +920,8 @@ declare namespace LocalJSX {
     interface TabworthyDatesModalAttributes {
         "label": string;
         "inline": boolean;
+        "placement": Placement;
+        "appendTo": string | HTMLElement;
     }
     interface TabworthyTimesAttributes {
         "id": string;
@@ -896,6 +949,7 @@ declare namespace LocalJSX {
         "inputShouldFormat": string;
         "disableFreeformInput": boolean;
         "inputClass": string;
+        "appendTo": string | HTMLElement;
     }
     interface TabworthyTimesPickerAttributes {
         "hours": number;
