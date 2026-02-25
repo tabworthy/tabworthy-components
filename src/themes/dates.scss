@@ -12,7 +12,7 @@ tabworthy-dates-calendar {
 }
 
 tabworthy-dates *:focus-visible {
-  outline: 0.25rem solid var(--tw-dates-focus-color);
+  outline: var(--tw-dates-focus-outline-width) solid var(--tw-dates-focus-color);
 }
 
 .tabworthy-dates-calendar-wrapper {
@@ -115,7 +115,8 @@ tabworthy-dates *:focus-visible {
     background-color: var(--tw-dates-hover-color);
   }
   &:focus-visible {
-    outline: 0.25rem solid var(--tw-dates-focus-color);
+    outline: var(--tw-dates-focus-outline-width) solid
+      var(--tw-dates-focus-color);
   }
   @media screen and (forced-colors: active) {
     border: 1px solid transparent;
@@ -152,7 +153,8 @@ tabworthy-dates *:focus-visible {
     background-color: var(--tw-dates-hover-color);
   }
   &:focus-visible {
-    outline: 0.25rem solid var(--tw-dates-focus-color);
+    outline: var(--tw-dates-focus-outline-width) solid
+      var(--tw-dates-focus-color);
   }
   &[aria-disabled] {
     color: var(--tw-dates-disabled-color);
@@ -194,7 +196,7 @@ tabworthy-dates *:focus-visible {
 }
 
 .tabworthy-dates-calendar__date:focus-visible > * {
-  outline: 0.25rem solid var(--tw-dates-focus-color);
+  outline: var(--tw-dates-focus-outline-width) solid var(--tw-dates-focus-color);
   @media screen and (forced-colors: active) {
     outline-color: Highlight;
   }
@@ -307,7 +309,8 @@ tabworthy-dates *:focus-visible {
   }
 
   &:focus-visible {
-    outline: 0.25rem solid var(--tw-dates-focus-color);
+    outline: var(--tw-dates-focus-outline-width) solid
+      var(--tw-dates-focus-color);
   }
 
   &:disabled {

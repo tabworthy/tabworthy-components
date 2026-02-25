@@ -2,8 +2,12 @@ import type { Preview } from "@storybook/web-components-vite";
 import '../dist/tabworthy-components/tabworthy-components.esm.js';
 import '../dist/themes/light.css';
 
+const baseVars = {
+  "--tw-dates-focus-outline-width": "0.25rem",
+}
 const vars = {
   light: {
+    ...baseVars,
     "--tw-dates-text-color": "#111",
     "--tw-dates-secondary-color": "#767676",
     "--tw-dates-border-color": "#949494",
@@ -16,8 +20,10 @@ const vars = {
     "--tw-dates-active-color": "#0000ff",
     "--tw-dates-placeholder-color": "unset",
     "--tw-dates-placeholder-opacity": "0.5",
+
   },
   dark: {
+    ...baseVars,
     "--tw-dates-text-color": "#fff",
     "--tw-dates-secondary-color": " #bcbcbcff",
     "--tw-dates-border-color": " #595959",
