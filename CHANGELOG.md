@@ -1,3 +1,10 @@
+## [0.8.7](https://github.com/tabworthy/tabworthy-components/compare/v0.8.6...v0.8.7) (2026-02-25)
+
+
+### Bug Fixes
+
+* **dates,times:** rem => em ([f43b89d](https://github.com/tabworthy/tabworthy-components/commit/f43b89d2e1761aec44a8b2138ecd9731d47dbfae))
+
 ## [0.8.6](https://github.com/tabworthy/tabworthy-components/compare/v0.8.5...v0.8.6) (2026-02-25)
 
 
