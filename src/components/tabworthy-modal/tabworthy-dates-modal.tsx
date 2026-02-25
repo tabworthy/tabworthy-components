@@ -1,5 +1,6 @@
 import {
   Component,
+  Element,
   Event,
   EventEmitter,
   h,
@@ -34,6 +35,12 @@ export class InclusiveDatesModal {
   @Prop() placement: Placement = "bottom-start";
   /** Offset from the trigger element [skidding, distance] */
   @Prop() offset: [number, number] = [0, 8];
+  /**
+   * Element to append the dropdown to. Use "body" to append to document.body,
+   * or pass a CSS selector or HTMLElement. When set, the dropdown will be
+   * portaled to escape overflow:hidden containers.
+   */
+  @Prop() appendTo?: string | HTMLElement;
 
   @State() closing = false;
   @State() showing = this.inline || false;
@@ -42,33 +49,89 @@ export class InclusiveDatesModal {
   @Event() opened!: EventEmitter;
   @Event() closed!: EventEmitter;
 
+  @Element() hostElement!: HTMLElement;
+
   private triggerElement!: HTMLElement;
   private el!: HTMLElement;
   private bodyRef!: HTMLDivElement;
+  private originalParent: HTMLElement | null = null;
+  private originalNextSibling: Node | null = null;
+  private isMovingPortal = false;
   private undo!: () => void;
   private popperInstance: PopperInstance | null = null;
 
   @Watch("showing")
   watchShowing(newValue: boolean) {
     if (newValue) {
-      // Reset positioned state
+      // Reset positioned state - portal setup happens in render ref callback
       this.positioned = false;
-      // Defer popper creation to next frame to ensure DOM is ready
-      requestAnimationFrame(() => {
-        this.createPopperInstance();
-      });
     } else {
       this.destroyPopperInstance();
+      this.cleanupPortal();
       this.positioned = false;
+    }
+  }
+
+  private getAppendToElement(): HTMLElement | null {
+    if (!this.appendTo) return null;
+
+    if (this.appendTo === "body") {
+      return document.body;
+    }
+
+    if (typeof this.appendTo === "string") {
+      return document.querySelector(this.appendTo);
+    }
+
+    return this.appendTo;
+  }
+
+  private setupPortal() {
+    const appendToEl = this.getAppendToElement();
+    if (!appendToEl) return;
+
+    // Store original position so we can restore later
+    this.originalParent = this.hostElement.parentElement;
+    this.originalNextSibling = this.hostElement.nextSibling;
+
+    // Guard against triggering disconnectedCallback during move
+    this.isMovingPortal = true;
+    appendToEl.appendChild(this.hostElement);
+    this.isMovingPortal = false;
+  }
+
+  private cleanupPortal() {
+    // Guard against recursion - moving element triggers disconnectedCallback
+    if (this.isMovingPortal) return;
+
+    // Move host back to original position
+    if (this.originalParent) {
+      this.isMovingPortal = true;
+      if (this.originalNextSibling) {
+        this.originalParent.insertBefore(
+          this.hostElement,
+          this.originalNextSibling
+        );
+      } else {
+        this.originalParent.appendChild(this.hostElement);
+      }
+      this.originalParent = null;
+      this.originalNextSibling = null;
+      this.isMovingPortal = false;
     }
   }
 
   private createPopperInstance() {
     if (!this.triggerElement || !this.bodyRef) return;
 
+    // Use fixed strategy when portaling to escape scroll containers
+    const useFixed = !!this.appendTo;
+    // When portaled, use viewport boundary; otherwise use clipping parents
+    const boundary = useFixed ? "viewport" : "clippingParents";
+
     this.popperInstance = createPopper(this.triggerElement, this.bodyRef, {
       placement: this.placement,
-      strategy: "absolute",
+      strategy: useFixed ? "fixed" : "absolute",
       modifiers: [
         {
           name: "offset",
@@ -80,13 +143,13 @@ export class InclusiveDatesModal {
           name: "flip",
           options: {
             fallbackPlacements: ["top-start", "top-end", "bottom-end"],
-            boundary: "clippingParents"
+            boundary
           }
         },
         {
           name: "preventOverflow",
           options: {
-            boundary: "clippingParents",
+            boundary,
             altAxis: true,
             padding: 8
           }
@@ -143,7 +206,10 @@ export class InclusiveDatesModal {
   }
 
   disconnectedCallback() {
+    // Skip cleanup if we're in the middle of portal operations
+    if (this.isMovingPortal) return;
     this.destroyPopperInstance();
+    this.cleanupPortal();
   }
 
   @Method()
@@ -170,8 +236,17 @@ export class InclusiveDatesModal {
 
   @Listen("click", { capture: true, target: "window" })
   handleClick(event: MouseEvent) {
-    if (this.showing && !this.el.contains(event.target as Node)) {
-      this.close();
+    if (this.showing) {
+      const target = event.target as Node;
+      // Check if click is inside the host element, trigger element, or original parent (when portaled)
+      const clickedInside =
+        this.hostElement.contains(target) ||
+        this.triggerElement?.contains(target) ||
+        // When portaled, also check the original parent to avoid closing on container clicks
+        (this.originalParent && this.originalParent.contains(target));
+      if (!clickedInside) {
+        this.close();
+      }
     }
   }
 
@@ -184,14 +259,19 @@ export class InclusiveDatesModal {
             ref={(r) => {
               if (r) {
                 this.bodyRef = r;
-                // Create popper when ref is set
+                // Setup portal and create popper when ref is set
                 if (
                   this.showing &&
                   this.triggerElement &&
                   !this.popperInstance
                 ) {
+                  // Setup portal first (move element to body), then create popper
+                  this.setupPortal();
+                  // Use double RAF to ensure DOM is fully settled after portal move
                   requestAnimationFrame(() => {
-                    this.createPopperInstance();
+                    requestAnimationFrame(() => {
+                      this.createPopperInstance();
+                    });
                   });
                 }
               }

@@ -256,6 +256,7 @@ const WithinOverflownModalTemplate = (args: any) => html`
               ?show-month-stepper=${args.showMonthStepper}
               ?show-clear-button=${args.showClearButton}
               ?show-today-button=${args.showTodayButton}
+              append-to="body"
               @selectDateTime=${(e: CustomEvent) =>
                 args.selectDateTime?.(e.detail)}
               @changeYear=${(e: CustomEvent) => args.changeYear?.(e.detail)}

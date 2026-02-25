@@ -125,6 +125,11 @@ export class InclusiveTimes {
     | string = true;
   @Prop() disableFreeformInput: boolean = false;
   @Prop() inputClass: string = "";
+  /**
+   * Element to append the dropdown to. Use "body" to append to document.body,
+   * or pass a CSS selector or HTMLElement. Useful for escaping overflow:hidden containers.
+   */
+  @Prop() appendTo?: string | HTMLElement;
 
   @State() internalValue?: string | string[] | null;
   @State() selectedDate?: Date;
@@ -404,6 +409,7 @@ export class InclusiveTimes {
             }
           }}
           inline={this.inline}
+          appendTo={this.appendTo}
         >
           <div class={this.getClassName("picker-container")}>
             <tabworthy-dates-calendar

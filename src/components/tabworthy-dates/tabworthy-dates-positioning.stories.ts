@@ -264,6 +264,7 @@ const WithinOverflownModalTemplate = (args: any) => html`
               show-today-button=${args.showTodayButton}
               ?show-keyboard-hint=${args.showKeyboardHint}
               input-should-format=${args.inputShouldFormat}
+              append-to="body"
               @selectDate=${(e: CustomEvent) => args.selectDate?.(e.detail)}
               @changeYear=${(e: CustomEvent) => args.changeYear?.(e.detail)}
               @componentReady=${(e: CustomEvent) =>

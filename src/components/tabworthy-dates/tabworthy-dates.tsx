@@ -140,6 +140,11 @@ export class TabworthyDates {
   @Prop() showQuickButtons: boolean = true;
   @Prop() disableFreeformInput: boolean = false;
   @Prop() inputClass: string = "";
+  /**
+   * Element to append the dropdown to. Use "body" to append to document.body,
+   * or pass a CSS selector or HTMLElement. Useful for escaping overflow:hidden containers.
+   */
+  @Prop() appendTo?: string | HTMLElement;
 
   @State() internalValue?: string | string[] | null;
   @State() errorState: boolean = this.hasError;
@@ -640,6 +645,7 @@ export class TabworthyDates {
             this.pickerRef.modalIsOpen = false;
           }}
           inline={this.inline}
+          appendTo={this.appendTo}
         >
           <tabworthy-dates-calendar
             range={this.range}
