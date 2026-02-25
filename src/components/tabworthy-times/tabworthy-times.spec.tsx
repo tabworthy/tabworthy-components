@@ -1,5 +1,6 @@
 import { newSpecPage } from "@stencil/core/testing";
 import { InclusiveTimes } from "./tabworthy-times";
+import { InclusiveDatesCalendar } from "../tabworthy-dates-calendar/tabworthy-dates-calendar";
 
 describe("tabworthy-times", () => {
   const originalError = console.error;
@@ -359,5 +360,20 @@ describe("tabworthy-times", () => {
     );
     const input = page.root?.querySelector("input") as HTMLInputElement;
     expect(input.disabled).toBe(true);
+  });
+
+  it("shows selected date class in calendar when value is preselected", async () => {
+    const page = await newSpecPage({
+      components: [InclusiveTimes, InclusiveDatesCalendar],
+      html: `<tabworthy-times id="test-times" value="2024-03-15T14:30:00" format="YYYY-MM-DDTHH:mm:ss"></tabworthy-times>`
+    });
+
+    await page.waitForChanges();
+
+    const selectedDate = page.root?.querySelector(
+      ".tabworthy-dates-calendar__date--selected"
+    );
+    expect(selectedDate).toBeTruthy();
+    expect(selectedDate?.getAttribute("data-date")).toBe("2024-03-15");
   });
 });

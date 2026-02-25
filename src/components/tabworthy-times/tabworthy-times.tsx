@@ -317,6 +317,18 @@ export class InclusiveTimes {
     return `${this.elementClassName}__${suffix}`;
   }
 
+  private toDate(
+    dateString: string | string[] | undefined
+  ): Date | Date[] | null {
+    if (!dateString) return null;
+
+    const date = Array.isArray(dateString)
+      ? dateString.map((d) => moment(d, this.format).toDate())
+      : moment(dateString, this.format).toDate();
+
+    return date;
+  }
+
   @Method()
   async clearValue() {
     this.internalValue = null;
@@ -419,6 +431,7 @@ export class InclusiveTimes {
               minDate={this.minDate}
               maxDate={this.maxDate}
               inline={this.inline}
+              value={this.value ? this.toDate(this.value) : undefined}
             >
               <div
                 slot="after-calendar"
