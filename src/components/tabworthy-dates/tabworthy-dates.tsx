@@ -76,7 +76,7 @@ export class TabworthyDates {
   // A placeholder for the text field
   @Prop() placeholder: string = this.range
     ? `Try "June 8 to 12"`
-    : `Try "tomorrrow" or "in ten days"`;
+    : `Try "tomorrow" or "in ten days"`;
   // Locale used for internal translations and date parsing
   @Prop() locale: string = navigator?.language || "en-US";
   // If the datepicker is disabled
