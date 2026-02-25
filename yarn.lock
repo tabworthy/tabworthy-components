@@ -1826,6 +1826,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@popperjs/core@npm:^2.11.8":
+  version: 2.11.8
+  resolution: "@popperjs/core@npm:2.11.8"
+  checksum: 10c0/4681e682abc006d25eb380d0cf3efc7557043f53b6aea7a5057d0d1e7df849a00e281cd8ea79c902a35a414d7919621fc2ba293ecec05f413598e0b23d5a1e63
+  languageName: node
+  linkType: hard
+
 "@react-aria/live-announcer@npm:^3.1.2":
   version: 3.1.2
   resolution: "@react-aria/live-announcer@npm:3.1.2"
@@ -2695,6 +2702,7 @@ __metadata:
   resolution: "@tabworthy/components@workspace:."
   dependencies:
     "@a11y/focus-trap": "npm:^1.0.5"
+    "@popperjs/core": "npm:^2.11.8"
     "@react-aria/live-announcer": "npm:^3.1.2"
     "@semantic-release/changelog": "npm:^6.0.3"
     "@semantic-release/exec": "npm:^7.1.0"

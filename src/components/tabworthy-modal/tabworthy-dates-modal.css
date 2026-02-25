@@ -1,9 +1,12 @@
 :host::part(body) {
+  /* Popper.js sets position, top, left, transform */
   position: absolute;
+  top: 0;
+  left: 0;
   width: fit-content;
   z-index: 1200;
-  margin-top: 0.5rem;
 }
+
 :host::part(backdrop) {
   /* Placeholder */
 }

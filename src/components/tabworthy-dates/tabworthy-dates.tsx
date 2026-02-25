@@ -153,7 +153,7 @@ export class TabworthyDates {
 
   private modalRef?: HTMLTabworthyDatesModalElement;
   private inputRef!: HTMLInputElement;
-  private calendarButtonRef?: HTMLButtonElement;
+  private inputContainerRef?: HTMLDivElement;
   private pickerRef?: HTMLTabworthyDatesCalendarElement;
   private chronoSupportedLocale = ["en", "ja", "fr", "nl", "ru", "pt"].includes(
     this.locale.slice(0, 2)
@@ -242,8 +242,9 @@ export class TabworthyDates {
 
   private handleCalendarButtonClick = async () => {
     await customElements.whenDefined("tabworthy-dates-modal");
-    this.calendarButtonRef &&
-      (await this.modalRef?.setTriggerElement(this.calendarButtonRef));
+    // Use input container as trigger for proper dropdown alignment
+    this.inputContainerRef &&
+      (await this.modalRef?.setTriggerElement(this.inputContainerRef));
     if ((await this.modalRef?.getState()) === false)
       await this.modalRef?.open();
     else if ((await this.modalRef?.getState()) === true)
@@ -590,7 +591,10 @@ export class TabworthyDates {
           {this.label}
         </label>
         <br />
-        <div class={this.getClassName("input-container")}>
+        <div
+          class={this.getClassName("input-container")}
+          ref={(r) => (this.inputContainerRef = r)}
+        >
           <input
             disabled={this.disabledState || this.disableFreeformInput}
             id={this.id ? `${this.id}-input` : undefined}
@@ -610,7 +614,6 @@ export class TabworthyDates {
           {!this.inline && (
             <button
               type="button"
-              ref={(r) => (this.calendarButtonRef = r)}
               onClick={this.handleCalendarButtonClick}
               class={this.getClassName("calendar-button")}
               disabled={this.disabledState}

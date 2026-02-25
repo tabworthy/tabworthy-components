@@ -139,7 +139,7 @@ export class InclusiveTimes {
 
   private modalRef?: HTMLTabworthyDatesModalElement;
   private inputRef!: HTMLInputElement;
-  private calendarButtonRef?: HTMLButtonElement;
+  private inputContainerRef?: HTMLDivElement;
   private pickerRef?: HTMLTabworthyDatesCalendarElement;
   private errorMessage = "";
 
@@ -261,8 +261,9 @@ export class InclusiveTimes {
 
   private handleCalendarButtonClick = async () => {
     if (this.modalRef) {
+      // Use input container as trigger for proper dropdown alignment
       await this.modalRef.setTriggerElement(
-        this.calendarButtonRef as HTMLElement
+        this.inputContainerRef as HTMLElement
       );
       await this.modalRef.open();
     }
@@ -353,7 +354,10 @@ export class InclusiveTimes {
         <label htmlFor={`${this.id}-input`} class={this.getClassName("label")}>
           {this.label}
         </label>
-        <div class={this.getClassName("input-container")}>
+        <div
+          class={this.getClassName("input-container")}
+          ref={(r) => (this.inputContainerRef = r)}
+        >
           <input
             id={`${this.id}-input`}
             ref={(r) => (this.inputRef = r!)}
@@ -373,7 +377,6 @@ export class InclusiveTimes {
           {!this.inline && (
             <button
               type="button"
-              ref={(r) => (this.calendarButtonRef = r)}
               onClick={this.handleCalendarButtonClick}
               class={this.getClassName("calendar-button")}
               disabled={this.disabledState}
