@@ -4,6 +4,11 @@ import '../dist/themes/light.css';
 
 const baseVars = {
   "--tw-dates-focus-outline-width": "0.25rem",
+  "--tw-dates-font-size": "1rem",
+  "--tw-times-picker-label-font-size": "0.75rem",
+  "--tw-times-picker-input-font-size": "1.25rem",
+  "--tw-times-period-button-font-size": "0.875rem",
+  "--tw-times-picker-separator-font-size": "1.5rem",
 }
 const vars = {
   light: {

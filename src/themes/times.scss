@@ -29,7 +29,7 @@
     background: var(--tw-dates-bg2-color);
     line-height: 1;
     border: 1px solid var(--tw-dates-border-color);
-    font-size: 1rem;
+    font-size: var(--tw-dates-font-size, 1rem);
     flex-grow: 1;
 
     &:focus {
@@ -103,13 +103,6 @@
     }
   }
 
-  &__time-label {
-    margin: 0 0 0.75rem 0;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--tw-dates-text-color);
-  }
-
   &__input-error {
     display: flex;
     padding: 0.5rem;
@@ -152,7 +145,7 @@
   }
 
   &__label {
-    font-size: 0.75rem;
+    font-size: var(--tw-times-picker-label-font-size, 0.75rem);
     font-weight: 500;
     color: var(--tw-dates-text-color);
     text-transform: uppercase;
@@ -212,7 +205,7 @@
     width: 3rem;
     height: 2.5rem;
     text-align: center;
-    font-size: 1.25rem;
+    font-size: var(--tw-times-picker-input-font-size, 1.25rem);
     font-weight: 600;
     border: 1px solid var(--tw-dates-border-color);
     border-radius: 0.25rem;
@@ -242,7 +235,7 @@
   }
 
   &__separator {
-    font-size: 1.5rem;
+    font-size: var(--tw-times-picker-separator-font-size, 1.5rem);
     font-weight: 600;
     color: var(--tw-dates-text-color);
   }
@@ -266,7 +259,7 @@
     color: var(--tw-dates-text-color);
     cursor: pointer;
     border-radius: 0.25rem;
-    font-size: 0.875rem;
+    font-size: var(--tw-times-period-button-font-size, 0.875rem);
     font-weight: 500;
     transition: background-color 0.2s ease;
 
