@@ -1,3 +1,13 @@
+## [0.8.6](https://github.com/tabworthy/tabworthy-components/compare/v0.8.5...v0.8.6) (2026-02-25)
+
+
+### Bug Fixes
+
+* **dates:** typo in placeholder ([ee34913](https://github.com/tabworthy/tabworthy-components/commit/ee34913c99e1165505ab312600ad2a229dd01793))
+* **times,dates:** control focus outline width via var ([0e8c38a](https://github.com/tabworthy/tabworthy-components/commit/0e8c38ab3cee7c565afd0321f2e35cc4ad86c825))
+* **times,dates:** control font-size via var ([3d3665f](https://github.com/tabworthy/tabworthy-components/commit/3d3665f6bb67173b8073c3af38f57b36bb629841))
+* **times:** preselected value shows correctly in calendar ([3211bae](https://github.com/tabworthy/tabworthy-components/commit/3211baef19be746a53d0105cec1192969d53fa31))
+
 # tabworthy-components
 
 ## 0.8.5

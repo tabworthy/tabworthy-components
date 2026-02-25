@@ -81,7 +81,7 @@ export namespace Components {
         "nextYearButtonContent"?: string;
         "parseDate": (text: string, shouldSetValue?: boolean, chronoOptions?: ChronoOptions | undefined) => Promise<ChronoParsedDateString>;
         /**
-          * @default this.range     ? `Try "June 8 to 12"`     : `Try "tomorrrow" or "in ten days"`
+          * @default this.range     ? `Try "June 8 to 12"`     : `Try "tomorrow" or "in ten days"`
          */
         "placeholder": string;
         /**
@@ -541,7 +541,7 @@ declare namespace LocalJSX {
         "onComponentReady"?: (event: TabworthyDatesCustomEvent<void>) => void;
         "onSelectDate"?: (event: TabworthyDatesCustomEvent<string | string[] | undefined>) => void;
         /**
-          * @default this.range     ? `Try "June 8 to 12"`     : `Try "tomorrrow" or "in ten days"`
+          * @default this.range     ? `Try "June 8 to 12"`     : `Try "tomorrow" or "in ten days"`
          */
         "placeholder"?: string;
         /**

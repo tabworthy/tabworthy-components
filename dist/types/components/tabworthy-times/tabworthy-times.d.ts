@@ -64,6 +64,7 @@ export declare class InclusiveTimes {
     private handleInputChange;
     private formatInput;
     private getClassName;
+    private toDate;
     clearValue(): Promise<void>;
     render(): any;
 }
