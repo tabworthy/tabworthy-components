@@ -95,7 +95,10 @@
     background-color: var(--tw-dates-bg-color);
     height: 100%;
     justify-content: center;
-    border-radius: 0.375em;
+    border-top-right-radius: 0.375em;
+    border-bottom-right-radius: 0.375em;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
 
     tabworthy-times-picker {
       padding: 0 0.75em 0.75em 0.75em !important;
@@ -287,21 +290,39 @@
   }
 }
 
+.tabworthy-times__picker-container {
+  .tabworthy-dates-calendar {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+  }
+}
+
 @media (max-width: 768px) {
   .tabworthy-times__picker-container {
     flex-direction: column;
-  }
 
-  .tabworthy-dates-calendar-wrapper {
-    display: flex;
-    flex-direction: column;
-  }
+    .tabworthy-dates-calendar-wrapper {
+      display: flex;
+      flex-direction: column;
 
-  .tabworthy-times__divider {
-    display: block;
-  }
+      .tabworthy-dates-calendar {
+        border-bottom-left-radius: 0;
+        border-top-right-radius: 0.375em;
+      }
+    }
 
-  .tabworthy-times__time-section tabworthy-times-picker {
-    padding: 0.75em !important;
+    .tabworthy-times__divider {
+      display: block;
+    }
+
+    .tabworthy-times__time-section {
+      border-bottom-left-radius: 0.375em;
+      border-bottom-right-radius: 0.375em;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      tabworthy-times-picker {
+        padding: 0.75em !important;
+      }
+    }
   }
 }
