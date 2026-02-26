@@ -20,7 +20,7 @@ import {
 } from "../tabworthy-dates-calendar/tabworthy-dates-calendar";
 import { getISODateString, removeTimezoneOffset } from "@shared/utils/utils";
 
-export interface TimesLabels extends DatesLabels {
+export interface TimesLabels extends Omit<DatesLabels, "quickSelection"> {
   timeLabel: string;
 }
 

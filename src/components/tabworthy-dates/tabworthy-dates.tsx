@@ -40,6 +40,7 @@ export interface DatesLabels {
   disabledDateError: string;
   to: string;
   startDate: string;
+  quickSelection: string;
 }
 
 const defaultLabels: DatesLabels = {
@@ -52,7 +53,8 @@ const defaultLabels: DatesLabels = {
   rangeOutOfBoundsError: `Please enter a valid range of dates`,
   disabledDateError: `Please choose an available date`,
   to: "to",
-  startDate: "Start date"
+  startDate: "Start date",
+  quickSelection: "Quick selection"
 };
 
 @Component({
@@ -684,7 +686,7 @@ export class TabworthyDates {
             <div
               class={this.getClassName("quick-group")}
               role="group"
-              aria-label="Quick selection"
+              aria-label={this.datesLabels.quickSelection}
             >
               {this.quickButtons.map((buttonText) => {
                 return (
