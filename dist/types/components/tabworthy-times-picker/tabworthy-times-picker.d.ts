@@ -4,7 +4,7 @@ export interface TimeValue {
     minutes: number;
     period?: "AM" | "PM";
 }
-export interface InclusivekTimesPickerLabels {
+export interface TimesPickerLabels {
     hours: string;
     minutes: string;
     am: string;
@@ -15,12 +15,12 @@ export interface InclusivekTimesPickerLabels {
     incrementMinutes: string;
     decrementMinutes: string;
 }
-export declare class InclusiveTimesPicker {
+export declare class TabworthyTimesPicker {
     el: HTMLElement;
     hours: number;
     minutes: number;
     useTwelveHourFormat: boolean;
-    labels: InclusivekTimesPickerLabels;
+    labels: TimesPickerLabels;
     labelsSrOnly: boolean;
     disabled: boolean;
     elementClassName: string;

@@ -11,14 +11,16 @@ import { ChronoOptions, ChronoParsedDateString } from "../shared/utils/chrono-pa
 import { DatesCalendarLabels as DatesCalendarLabels1, MonthChangedEventDetails, YearChangedEventDetails as YearChangedEventDetails1 } from "./components/tabworthy-dates-calendar/tabworthy-dates-calendar";
 import { Placement } from "@popperjs/core";
 import { TimesLabels } from "./components/tabworthy-times/tabworthy-times";
-import { InclusivekTimesPickerLabels, TimeValue } from "./components/tabworthy-times-picker/tabworthy-times-picker";
+import { TimesPickerLabels } from "./components/tabworthy-times-picker/tabworthy-times-picker";
+import { TimesPickerLabels as TimesPickerLabels1, TimeValue } from "./components/tabworthy-times-picker/tabworthy-times-picker";
 export { DatesLabels } from "./components/tabworthy-dates/tabworthy-dates";
 export { DatesCalendarLabels, YearChangedEventDetails } from "./components/tabworthy-dates-calendar/tabworthy-dates-calendar";
 export { ChronoOptions, ChronoParsedDateString } from "../shared/utils/chrono-parser/chrono-parser.type";
 export { DatesCalendarLabels as DatesCalendarLabels1, MonthChangedEventDetails, YearChangedEventDetails as YearChangedEventDetails1 } from "./components/tabworthy-dates-calendar/tabworthy-dates-calendar";
 export { Placement } from "@popperjs/core";
 export { TimesLabels } from "./components/tabworthy-times/tabworthy-times";
-export { InclusivekTimesPickerLabels, TimeValue } from "./components/tabworthy-times-picker/tabworthy-times-picker";
+export { TimesPickerLabels } from "./components/tabworthy-times-picker/tabworthy-times-picker";
+export { TimesPickerLabels as TimesPickerLabels1, TimeValue } from "./components/tabworthy-times-picker/tabworthy-times-picker";
 export namespace Components {
     interface TabworthyDates {
         /**
@@ -343,6 +345,7 @@ export namespace Components {
           * @default defaultLabels
          */
         "timesLabels": TimesLabels;
+        "timesPickerLabels"?: TimesPickerLabels;
         /**
           * @default true
          */
@@ -365,7 +368,7 @@ export namespace Components {
         /**
           * @default defaultLabels
          */
-        "labels": InclusivekTimesPickerLabels;
+        "labels": TimesPickerLabels1;
         /**
           * @default true
          */
@@ -822,6 +825,7 @@ declare namespace LocalJSX {
           * @default defaultLabels
          */
         "timesLabels"?: TimesLabels;
+        "timesPickerLabels"?: TimesPickerLabels;
         /**
           * @default true
          */
@@ -844,7 +848,7 @@ declare namespace LocalJSX {
         /**
           * @default defaultLabels
          */
-        "labels"?: InclusivekTimesPickerLabels;
+        "labels"?: TimesPickerLabels1;
         /**
           * @default true
          */

@@ -1,3 +1,17 @@
+## [0.9.2](https://github.com/tabworthy/tabworthy-components/compare/v0.9.1...v0.9.2) (2026-02-26)
+
+
+### Bug Fixes
+
+* **times:** pass through time-picker i18n labels ([fda2db7](https://github.com/tabworthy/tabworthy-components/commit/fda2db750c1504d124af10ad6c54fa444573c525))
+
+## [0.9.2](https://github.com/tabworthy/tabworthy-components/compare/v0.9.1...v0.9.2) (2026-02-26)
+
+
+### Bug Fixes
+
+* **times:** pass through time-picker i18n labels ([fda2db7](https://github.com/tabworthy/tabworthy-components/commit/fda2db750c1504d124af10ad6c54fa444573c525))
+
 ## [0.9.1](https://github.com/tabworthy/tabworthy-components/compare/v0.9.0...v0.9.1) (2026-02-26)
 
 
