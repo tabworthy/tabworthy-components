@@ -17,8 +17,7 @@ export default {
     // 4) commit dist + changelog + package.json back to repo
     ["@semantic-release/git", {
       assets: ["dist/**", "CHANGELOG.md", "package.json"],
-      message:
-        "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}",
+      message: "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}",
     }],
 
     // 5) GitHub release (uses notes)
