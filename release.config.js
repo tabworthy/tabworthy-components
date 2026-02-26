@@ -12,7 +12,7 @@ export default {
     ["@semantic-release/npm", { npmPublish: false }],
 
     // 3) build your dist BEFORE committing/publishing
-    ["@semantic-release/exec", { prepareCmd: "yarn build:stencil && yarn build:docs" }],
+    ["@semantic-release/exec", { prepareCmd: "yarn build:stencil" }],
 
     // 4) commit dist + changelog + package.json back to repo
     ["@semantic-release/git", {
