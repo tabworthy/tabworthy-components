@@ -13,6 +13,7 @@ export interface DatesLabels {
     disabledDateError: string;
     to: string;
     startDate: string;
+    quickSelection: string;
 }
 export declare class TabworthyDates {
     el: HTMLElement;
