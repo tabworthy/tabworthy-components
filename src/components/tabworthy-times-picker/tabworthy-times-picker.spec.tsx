@@ -1,5 +1,5 @@
 import { newSpecPage } from "@stencil/core/testing";
-import { InclusiveTimesPicker } from "./tabworthy-times-picker";
+import { TabworthyTimesPicker } from "./tabworthy-times-picker";
 
 type TimeChangedDetail = {
   hours: number;
@@ -12,7 +12,7 @@ describe("tabworthy-times-picker", () => {
     html = `<tabworthy-times-picker></tabworthy-times-picker>`
   ) => {
     return newSpecPage({
-      components: [InclusiveTimesPicker],
+      components: [TabworthyTimesPicker],
       html
     });
   };
@@ -21,7 +21,7 @@ describe("tabworthy-times-picker", () => {
     const page = await createPage();
 
     expect(page.root).toBeTruthy();
-    expect(page.rootInstance).toBeInstanceOf(InclusiveTimesPicker);
+    expect(page.rootInstance).toBeInstanceOf(TabworthyTimesPicker);
     expect(page.rootInstance.hours).toBe(12);
     expect(page.rootInstance.minutes).toBe(0);
   });

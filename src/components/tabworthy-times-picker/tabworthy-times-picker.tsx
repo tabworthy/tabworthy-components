@@ -16,7 +16,7 @@ export interface TimeValue {
   period?: "AM" | "PM";
 }
 
-export interface InclusivekTimesPickerLabels {
+export interface TimesPickerLabels {
   hours: string;
   minutes: string;
   am: string;
@@ -28,7 +28,7 @@ export interface InclusivekTimesPickerLabels {
   decrementMinutes: string;
 }
 
-const defaultLabels: InclusivekTimesPickerLabels = {
+const defaultLabels: TimesPickerLabels = {
   hours: "Hours",
   minutes: "Minutes",
   am: "AM",
@@ -45,7 +45,7 @@ const defaultLabels: InclusivekTimesPickerLabels = {
   shadow: false,
   tag: "tabworthy-times-picker"
 })
-export class InclusiveTimesPicker {
+export class TabworthyTimesPicker {
   @Element() el!: HTMLElement;
 
   // Current time value (24-hour format)
@@ -54,7 +54,7 @@ export class InclusiveTimesPicker {
 
   @Prop() useTwelveHourFormat: boolean = false;
   // Labels for accessibility and i18n
-  @Prop() labels: InclusivekTimesPickerLabels = defaultLabels;
+  @Prop() labels: TimesPickerLabels = defaultLabels;
   // Hide labels visually but keep them for screen readers
   @Prop() labelsSrOnly: boolean = true;
   @Prop() disabled: boolean = false;

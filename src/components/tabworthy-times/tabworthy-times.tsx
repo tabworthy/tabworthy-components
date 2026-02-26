@@ -11,7 +11,10 @@ import {
   Watch
 } from "@stencil/core";
 import moment from "moment";
-import { TimeValue } from "../tabworthy-times-picker/tabworthy-times-picker";
+import {
+  TimesPickerLabels,
+  TimeValue
+} from "../tabworthy-times-picker/tabworthy-times-picker";
 import { DatesLabels } from "../tabworthy-dates/tabworthy-dates";
 import {
   DatesCalendarLabels,
@@ -85,8 +88,7 @@ export class InclusiveTimes {
   // Labels used for internal translations
   @Prop() timesLabels: TimesLabels = defaultLabels;
   @Prop() datesCalendarLabels?: DatesCalendarLabels;
-
-  // Prevent hiding the calendar
+  @Prop() timesPickerLabels?: TimesPickerLabels;
   @Prop() inline: boolean = false;
 
   // Current error state of the input field
@@ -453,6 +455,7 @@ export class InclusiveTimes {
                   useTwelveHourFormat={this.useTwelveHourFormat}
                   disabled={this.disabledState}
                   onTimeChanged={this.handleTimeChange}
+                  labels={this.timesPickerLabels}
                 />
               </div>
             </tabworthy-dates-calendar>
