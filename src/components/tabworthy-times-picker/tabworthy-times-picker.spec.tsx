@@ -4,6 +4,7 @@ import { TabworthyTimesPicker } from "./tabworthy-times-picker";
 type TimeChangedDetail = {
   hours: number;
   minutes: number;
+  seconds?: number;
   period?: "AM" | "PM";
 };
 
@@ -391,5 +392,177 @@ describe("tabworthy-times-picker", () => {
     expect(hourInput.value).toBe("03");
     expect(minuteInput.value).toBe("45");
     expect(pmButton).toBeTruthy();
+  });
+
+  describe("showSeconds mode", () => {
+    it("does not render seconds control by default", async () => {
+      const page = await createPage();
+      const secondsInput = page.root?.querySelector(
+        "#tabworthy-times-picker-seconds"
+      );
+      expect(secondsInput).toBeNull();
+    });
+
+    it("renders seconds control when showSeconds is true", async () => {
+      const page = await createPage(
+        `<tabworthy-times-picker show-seconds="true"></tabworthy-times-picker>`
+      );
+      const secondsInput = page.root?.querySelector(
+        "#tabworthy-times-picker-seconds"
+      );
+      expect(secondsInput).toBeTruthy();
+    });
+
+    it("respects initial seconds prop value", async () => {
+      const page = await createPage(
+        `<tabworthy-times-picker show-seconds="true" seconds="45"></tabworthy-times-picker>`
+      );
+      const secondsInput = page.root?.querySelector(
+        "#tabworthy-times-picker-seconds"
+      ) as HTMLInputElement;
+      expect(secondsInput.value).toBe("45");
+    });
+
+    it("emits seconds in timeChanged event when showSeconds is true", async () => {
+      const page = await createPage(
+        `<tabworthy-times-picker show-seconds="true" hours="10" minutes="30" seconds="15"></tabworthy-times-picker>`
+      );
+      const handler = jest.fn();
+      page.root?.addEventListener("timeChanged", ((
+        event: CustomEvent<TimeChangedDetail>
+      ) => handler(event.detail)) as EventListener);
+
+      const increment = page.root?.querySelector(
+        '[aria-label="Increment seconds"]'
+      ) as HTMLButtonElement;
+
+      increment.click();
+      await page.waitForChanges();
+      expect(handler.mock.calls.at(-1)?.[0]).toEqual({
+        hours: 10,
+        minutes: 30,
+        seconds: 16,
+        period: undefined
+      });
+    });
+
+    it("increments seconds and wraps at 60", async () => {
+      const page = await createPage(
+        `<tabworthy-times-picker show-seconds="true" seconds="59"></tabworthy-times-picker>`
+      );
+      const handler = jest.fn();
+      page.root?.addEventListener("timeChanged", ((
+        event: CustomEvent<TimeChangedDetail>
+      ) => handler(event.detail)) as EventListener);
+
+      const increment = page.root?.querySelector(
+        '[aria-label="Increment seconds"]'
+      ) as HTMLButtonElement;
+
+      increment.click();
+      await page.waitForChanges();
+      expect(handler.mock.calls.at(-1)?.[0].seconds).toBe(0);
+    });
+
+    it("decrements seconds and wraps at 0", async () => {
+      const page = await createPage(
+        `<tabworthy-times-picker show-seconds="true" seconds="0"></tabworthy-times-picker>`
+      );
+      const handler = jest.fn();
+      page.root?.addEventListener("timeChanged", ((
+        event: CustomEvent<TimeChangedDetail>
+      ) => handler(event.detail)) as EventListener);
+
+      const decrement = page.root?.querySelector(
+        '[aria-label="Decrement seconds"]'
+      ) as HTMLButtonElement;
+
+      decrement.click();
+      await page.waitForChanges();
+      expect(handler.mock.calls.at(-1)?.[0].seconds).toBe(59);
+    });
+
+    it("handles direct seconds input", async () => {
+      const page = await createPage(
+        `<tabworthy-times-picker show-seconds="true" seconds="30"></tabworthy-times-picker>`
+      );
+      const handler = jest.fn();
+      page.root?.addEventListener("timeChanged", ((
+        event: CustomEvent<TimeChangedDetail>
+      ) => handler(event.detail)) as EventListener);
+
+      const secondsInput = page.root?.querySelector(
+        "#tabworthy-times-picker-seconds"
+      ) as HTMLInputElement;
+
+      secondsInput.value = "45";
+      secondsInput.dispatchEvent(new Event("input"));
+      await page.waitForChanges();
+
+      expect(handler.mock.calls.at(-1)?.[0].seconds).toBe(45);
+    });
+
+    it("does not include seconds in event when showSeconds is false", async () => {
+      const page = await createPage(
+        `<tabworthy-times-picker hours="10" minutes="30"></tabworthy-times-picker>`
+      );
+      const handler = jest.fn();
+      page.root?.addEventListener("timeChanged", ((
+        event: CustomEvent<TimeChangedDetail>
+      ) => handler(event.detail)) as EventListener);
+
+      const increment = page.root?.querySelector(
+        '[aria-label="Increment minutes"]'
+      ) as HTMLButtonElement;
+
+      increment.click();
+      await page.waitForChanges();
+      expect(handler.mock.calls.at(-1)?.[0].seconds).toBeUndefined();
+    });
+
+    it("reacts to watched seconds prop changes", async () => {
+      const page = await createPage(
+        `<tabworthy-times-picker show-seconds="true" seconds="10"></tabworthy-times-picker>`
+      );
+
+      page.rootInstance.seconds = 55;
+      await page.waitForChanges();
+
+      const secondsInput = page.root?.querySelector(
+        "#tabworthy-times-picker-seconds"
+      ) as HTMLInputElement;
+      expect(secondsInput.value).toBe("55");
+    });
+
+    it("renders seconds label with correct aria-label", async () => {
+      const page = await createPage(
+        `<tabworthy-times-picker show-seconds="true"></tabworthy-times-picker>`
+      );
+
+      const secondsInput = page.root?.querySelector(
+        "#tabworthy-times-picker-seconds"
+      ) as HTMLInputElement;
+      expect(secondsInput.getAttribute("aria-label")).toBe("Seconds");
+    });
+
+    it("disables seconds controls when disabled prop is true", async () => {
+      const page = await createPage(
+        `<tabworthy-times-picker show-seconds="true" disabled="true"></tabworthy-times-picker>`
+      );
+
+      const secondsInput = page.root?.querySelector(
+        "#tabworthy-times-picker-seconds"
+      ) as HTMLInputElement;
+      const incrementBtn = page.root?.querySelectorAll(
+        '[aria-label="Increment seconds"]'
+      )[0] as HTMLButtonElement;
+      const decrementBtn = page.root?.querySelectorAll(
+        '[aria-label="Decrement seconds"]'
+      )[0] as HTMLButtonElement;
+
+      expect(secondsInput.disabled).toBe(true);
+      expect(incrementBtn.getAttribute("disabled")).not.toBeNull();
+      expect(decrementBtn.getAttribute("disabled")).not.toBeNull();
+    });
   });
 });

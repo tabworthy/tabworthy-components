@@ -33,6 +33,7 @@ const meta: Meta<Components.TabworthyTimes> = {
       ?show-clear-button=${args.showClearButton}
       ?show-today-button=${args.showTodayButton}
       ?show-close-button=${args.showCloseButton}
+      ?show-seconds=${args.showSeconds}
       input-should-format=${args.inputShouldFormat}
       calendar-button-content=${ifDefined(args.calendarButtonContent)}
       ?disable-freeform-input=${args.disableFreeformInput}
@@ -52,15 +53,7 @@ export const Default: Story = {
     id: "datetime-default",
     label: "Choose a date and time",
     placeholder: "Select date and time",
-    locale: "en-US",
-    format: "YYYY-MM-DDTHH:mm:ss",
-    useTwelveHourFormat: true,
-    showMonthStepper: true,
-    showYearStepper: false,
-    showClearButton: true,
-    showTodayButton: true,
-    showCloseButton: true,
-    firstDayOfWeek: 1
+    locale: "en-US"
   }
 };
 
@@ -126,5 +119,23 @@ export const WithoutFreeFormInput: Story = {
     placeholder: "Select a datetime from the picker",
     disableFreeformInput: true,
     value: "2024-03-15T14:30:00"
+  }
+};
+
+export const MaxUI: Story = {
+  args: {
+    id: "datetime-default",
+    label: "Choose a date and time",
+    placeholder: "Select date and time",
+    locale: "en-US",
+    format: "YYYY-MM-DDTHH:mm:ss",
+    useTwelveHourFormat: true,
+    showMonthStepper: true,
+    showYearStepper: false,
+    showClearButton: true,
+    showTodayButton: true,
+    showCloseButton: true,
+    showSeconds: true,
+    firstDayOfWeek: 1
   }
 };

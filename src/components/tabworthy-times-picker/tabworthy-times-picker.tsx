@@ -13,12 +13,14 @@ import {
 export interface TimeValue {
   hours: number;
   minutes: number;
+  seconds?: number;
   period?: "AM" | "PM";
 }
 
 export interface TimesPickerLabels {
   hours: string;
   minutes: string;
+  seconds: string;
   am: string;
   pm: string;
   timePicker: string;
@@ -26,18 +28,23 @@ export interface TimesPickerLabels {
   decrementHours: string;
   incrementMinutes: string;
   decrementMinutes: string;
+  incrementSeconds: string;
+  decrementSeconds: string;
 }
 
 const defaultLabels: TimesPickerLabels = {
   hours: "Hours",
   minutes: "Minutes",
+  seconds: "Seconds",
   am: "AM",
   pm: "PM",
   timePicker: "Time picker",
   incrementHours: "Increment hours",
   decrementHours: "Decrement hours",
   incrementMinutes: "Increment minutes",
-  decrementMinutes: "Decrement minutes"
+  decrementMinutes: "Decrement minutes",
+  incrementSeconds: "Increment seconds",
+  decrementSeconds: "Decrement seconds"
 };
 
 @Component({
@@ -51,8 +58,11 @@ export class TabworthyTimesPicker {
   // Current time value (24-hour format)
   @Prop({ mutable: true }) hours: number = 12;
   @Prop({ mutable: true }) minutes: number = 0;
+  @Prop({ mutable: true }) seconds: number = 0;
 
   @Prop() useTwelveHourFormat: boolean = false;
+  // Show seconds control
+  @Prop() showSeconds: boolean = false;
   // Labels for accessibility and i18n
   @Prop() labels: TimesPickerLabels = defaultLabels;
   // Hide labels visually but keep them for screen readers
@@ -62,6 +72,7 @@ export class TabworthyTimesPicker {
 
   @State() internalHours: number = this.hours;
   @State() internalMinutes: number = this.minutes;
+  @State() internalSeconds: number = this.seconds;
   @State() period: "AM" | "PM" = this.hours >= 12 ? "PM" : "AM";
 
   @Event() timeChanged!: EventEmitter<TimeValue>;
@@ -77,9 +88,15 @@ export class TabworthyTimesPicker {
     this.internalMinutes = newValue;
   }
 
+  @Watch("seconds")
+  watchSeconds(newValue: number) {
+    this.internalSeconds = newValue;
+  }
+
   componentWillLoad() {
     this.internalHours = this.hours;
     this.internalMinutes = this.minutes;
+    this.internalSeconds = this.seconds;
     this.period = this.hours >= 12 ? "PM" : "AM";
   }
 
@@ -186,10 +203,27 @@ export class TabworthyTimesPicker {
     this.emitTimeChange();
   };
 
+  private handleSecondChange = (e: Event) => {
+    this.internalSeconds = parseInt((e.target as HTMLInputElement).value, 10);
+    this.emitTimeChange();
+  };
+
+  private handleSecondIncrement = () => {
+    this.internalSeconds = (this.internalSeconds + 1) % 60;
+    this.emitTimeChange();
+  };
+
+  private handleSecondDecrement = () => {
+    this.internalSeconds =
+      this.internalSeconds === 0 ? 59 : this.internalSeconds - 1;
+    this.emitTimeChange();
+  };
+
   private emitTimeChange() {
     this.timeChanged.emit({
       hours: this.get24HourValue(),
       minutes: this.internalMinutes,
+      seconds: this.showSeconds ? this.internalSeconds : undefined,
       period: this.useTwelveHourFormat ? this.period : undefined
     });
   }
@@ -339,6 +373,76 @@ export class TabworthyTimesPicker {
               </button>
             </div>
           </div>
+
+          {/* Seconds */}
+          {this.showSeconds && [
+            <div class={`${this.elementClassName}__separator`}>:</div>,
+            <div class={`${this.elementClassName}__field`}>
+              <label
+                htmlFor={`${this.elementClassName}-seconds`}
+                class={{
+                  [`${this.elementClassName}__label`]: true,
+                  [`${this.elementClassName}__label--sr-only`]:
+                    this.labelsSrOnly
+                }}
+              >
+                {this.labels.seconds}
+              </label>
+              <div class={`${this.elementClassName}__control`}>
+                <button
+                  type="button"
+                  class={`${this.elementClassName}__button ${this.elementClassName}__button--increment`}
+                  onClick={this.handleSecondIncrement}
+                  disabled={this.disabled}
+                  aria-label={this.labels.incrementSeconds}
+                >
+                  <svg
+                    fill="none"
+                    height="16"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    width="16"
+                  >
+                    <polyline points="18 15 12 9 6 15"></polyline>
+                  </svg>
+                </button>
+                <input
+                  id={`${this.elementClassName}-seconds`}
+                  type="number"
+                  class={`${this.elementClassName}__input`}
+                  value={this.padZero(this.internalSeconds)}
+                  min={0}
+                  max={59}
+                  onInput={this.handleSecondChange}
+                  disabled={this.disabled}
+                  aria-label={this.labels.seconds}
+                />
+                <button
+                  type="button"
+                  class={`${this.elementClassName}__button ${this.elementClassName}__button--decrement`}
+                  onClick={this.handleSecondDecrement}
+                  disabled={this.disabled}
+                  aria-label={this.labels.decrementSeconds}
+                >
+                  <svg
+                    fill="none"
+                    height="16"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    width="16"
+                  >
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          ]}
 
           {/* AM/PM Toggle */}
           {this.useTwelveHourFormat && (

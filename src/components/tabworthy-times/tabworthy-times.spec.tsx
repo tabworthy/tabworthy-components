@@ -91,6 +91,7 @@ describe("tabworthy-times", () => {
 
     instance.selectedHours = 9;
     instance.selectedMinutes = 45;
+    instance.selectedSeconds = 0;
     instance.updateValue(new Date("2024-03-15"));
 
     expect(instance.internalValue).toContain("2024-03-15T09:45:00");
@@ -110,6 +111,7 @@ describe("tabworthy-times", () => {
 
     instance.selectedHours = 17;
     instance.selectedMinutes = 0;
+    instance.selectedSeconds = 0;
     instance.updateValue([new Date("2024-03-15"), new Date("2024-03-16")]);
 
     expect(Array.isArray(instance.internalValue)).toBe(true);
@@ -195,6 +197,7 @@ describe("tabworthy-times", () => {
     const instance = page.rootInstance as any;
 
     instance.inputRef = { value: "" } as HTMLInputElement;
+    instance.selectedSeconds = 0;
     instance.handleInputChange({
       target: { value: "2024-03-15 10:30" }
     } as any);
@@ -411,5 +414,132 @@ describe("tabworthy-times", () => {
     const instance = page.rootInstance as any;
 
     expect(instance.showCloseButton).toBe(false);
+  });
+
+  describe("showSeconds mode", () => {
+    it("does not show seconds by default", async () => {
+      const page = await createPage();
+      const instance = page.rootInstance as any;
+
+      expect(instance.showSeconds).toBe(false);
+    });
+
+    it("respects showSeconds prop", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="test" show-seconds="true"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      expect(instance.showSeconds).toBe(true);
+    });
+
+    it("initializes selectedSeconds to current time when no value provided", async () => {
+      const now = new Date();
+      const page = await createPage(
+        '<tabworthy-times id="test" show-seconds="true"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      expect(instance.selectedSeconds).toBeGreaterThanOrEqual(0);
+      expect(instance.selectedSeconds).toBeLessThanOrEqual(59);
+
+      // Verify the seconds is close to current time (within 5 seconds tolerance)
+      expect(
+        Math.abs(instance.selectedSeconds - now.getSeconds())
+      ).toBeLessThanOrEqual(5);
+    });
+
+    it("parses seconds from value prop", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="test" value="2024-03-15T14:30:45"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      expect(instance.selectedSeconds).toBe(45);
+    });
+
+    it("updates selectedSeconds via time picker event", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="test" value="2024-03-15T14:30:00" show-seconds="true"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.handleTimeChange({
+        detail: { hours: 14, minutes: 30, seconds: 55 }
+      });
+
+      expect(instance.selectedSeconds).toBe(55);
+    });
+
+    it("includes seconds in formatted output", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="test" show-seconds="true"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.inputRef = { value: "" } as HTMLInputElement;
+      instance.selectedHours = 10;
+      instance.selectedMinutes = 30;
+      instance.selectedSeconds = 45;
+      instance.updateValue(new Date("2024-03-15"));
+
+      expect(instance.internalValue).toContain("2024-03-15T10:30:45");
+    });
+
+    it("includes seconds in range mode output", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="test" range show-seconds="true"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.inputRef = { value: "" } as HTMLInputElement;
+      instance.selectedHours = 10;
+      instance.selectedMinutes = 30;
+      instance.selectedSeconds = 15;
+      instance.updateValue([new Date("2024-03-15"), new Date("2024-03-16")]);
+
+      expect(instance.internalValue[0]).toContain("2024-03-15T10:30:15");
+      expect(instance.internalValue[1]).toContain("2024-03-16T10:30:15");
+    });
+
+    it("passes showSeconds and seconds to times-picker component", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="test" show-seconds="true" value="2024-03-15T14:30:45"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      expect(instance.showSeconds).toBe(true);
+      expect(instance.selectedSeconds).toBe(45);
+    });
+
+    it("does not update seconds when event detail has no seconds", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="test" value="2024-03-15T14:30:45"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      expect(instance.selectedSeconds).toBe(45);
+
+      instance.handleTimeChange({ detail: { hours: 15, minutes: 0 } });
+
+      // Seconds should remain unchanged
+      expect(instance.selectedSeconds).toBe(45);
+    });
+
+    it("clears seconds when clearValue is called", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="test" value="2024-03-15T14:30:45" show-seconds="true"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      expect(instance.selectedSeconds).toBe(45);
+
+      instance.inputRef = { value: "" } as HTMLInputElement;
+      instance.pickerRef = { value: new Date("2024-03-15") };
+      await instance.clearValue();
+
+      // After clearing, selectedSeconds should be reset on next value sync
+      expect(instance.internalValue).toBeNull();
+    });
   });
 });

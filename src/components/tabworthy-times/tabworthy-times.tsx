@@ -85,6 +85,9 @@ export class InclusiveTimes {
   // Use 12-hour format with AM/PM
   @Prop() useTwelveHourFormat: boolean = true;
 
+  // Show seconds picker control
+  @Prop() showSeconds: boolean = false;
+
   // Labels used for internal translations
   @Prop() timesLabels: TimesLabels = defaultLabels;
   @Prop() datesCalendarLabels?: DatesCalendarLabels;
@@ -140,6 +143,7 @@ export class InclusiveTimes {
   @State() selectedDate?: Date;
   @State() selectedHours: number = new Date().getHours();
   @State() selectedMinutes: number = new Date().getMinutes();
+  @State() selectedSeconds: number = new Date().getSeconds();
   @State() errorState: boolean = this.hasError;
   @State() disabledState: boolean = this.disabled;
 
@@ -197,6 +201,7 @@ export class InclusiveTimes {
           this.selectedDate = parsed.toDate();
           this.selectedHours = parsed.hours();
           this.selectedMinutes = parsed.minutes();
+          this.selectedSeconds = parsed.seconds();
         }
       }
     } else {
@@ -211,7 +216,7 @@ export class InclusiveTimes {
         const m = moment(d);
         m.hours(this.selectedHours);
         m.minutes(this.selectedMinutes);
-        m.seconds(0);
+        m.seconds(this.selectedSeconds);
         return m.format(this.format);
       });
       this.internalValue = formattedDates;
@@ -222,7 +227,7 @@ export class InclusiveTimes {
       const m = moment(date);
       m.hours(this.selectedHours);
       m.minutes(this.selectedMinutes);
-      m.seconds(0);
+      m.seconds(this.selectedSeconds);
       const formatted = m.format(this.format);
       this.internalValue = formatted;
       this.value = formatted;
@@ -262,6 +267,9 @@ export class InclusiveTimes {
   private handleTimeChange = (event: CustomEvent<TimeValue>) => {
     this.selectedHours = event.detail.hours;
     this.selectedMinutes = event.detail.minutes;
+    if (event.detail.seconds !== undefined) {
+      this.selectedSeconds = event.detail.seconds;
+    }
 
     // Update the value if we have a selected date
     if (this.selectedDate) {
@@ -457,6 +465,8 @@ export class InclusiveTimes {
                 <tabworthy-times-picker
                   hours={this.selectedHours}
                   minutes={this.selectedMinutes}
+                  seconds={this.selectedSeconds}
+                  showSeconds={this.showSeconds}
                   useTwelveHourFormat={this.useTwelveHourFormat}
                   disabled={this.disabledState}
                   onTimeChanged={this.handleTimeChange}
