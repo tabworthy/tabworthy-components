@@ -256,6 +256,141 @@ describe("tabworthy-times", () => {
     expect(emitSpy).toHaveBeenCalledWith(undefined);
   });
 
+  it("clears value when calendar emits undefined (clear button clicked in modal)", async () => {
+    const page = await createPage(
+      '<tabworthy-times id="time" value="2024-03-15T14:30:00" show-clear-button="true"></tabworthy-times>'
+    );
+    const instance = page.rootInstance as any;
+
+    instance.inputRef = { value: "Mar 15, 2024 2:30 PM" } as HTMLInputElement;
+    instance.pickerRef = { value: new Date("2024-03-15") };
+    const emitSpy = jest.spyOn(instance.selectDateTime, "emit");
+
+    // Verify initial value exists
+    expect(instance.value).toBe("2024-03-15T14:30:00");
+    expect(instance.internalValue).toBe("2024-03-15T14:30:00");
+
+    // Simulate the calendar's clear button emitting undefined
+    await instance.handlePickerSelection(undefined);
+
+    expect(instance.internalValue).toBeNull();
+    expect(instance.value).toBeUndefined();
+    expect(instance.selectedDate).toBeUndefined();
+    expect(instance.inputRef.value).toBe("");
+    expect(instance.pickerRef.value).toBeNull();
+    expect(emitSpy).toHaveBeenCalledWith(undefined);
+  });
+
+  it("clears value with complex config: disable-freeform-input, input-should-format=false, timezone format", async () => {
+    const page = await createPage(
+      `<tabworthy-times
+        id="setup-form-end-at"
+        show-clear-button="true"
+        show-year-stepper="true"
+        show-month-stepper="true"
+        show-today-button="true"
+        input-should-format="false"
+        disable-freeform-input="true"
+        show-close-button="true"
+        show-seconds="false"
+        min-date="2024-11-11"
+        format="DD/MM/YYYY h:mm A Z"
+      ></tabworthy-times>`
+    );
+    const instance = page.rootInstance as any;
+    const emitSpy = jest.spyOn(instance.selectDateTime, "emit");
+
+    // Simulate opening the modal and selecting a date
+    instance.pickerRef = { value: null };
+    await instance.handlePickerSelection("2024-11-15");
+    await page.waitForChanges();
+
+    // Verify a value was set
+    expect(instance.value).toBeTruthy();
+    expect(instance.internalValue).toBeTruthy();
+    expect(instance.selectedDate).toBeInstanceOf(Date);
+
+    // Simulate clicking the clear button in the modal
+    await instance.handlePickerSelection(undefined);
+    await page.waitForChanges();
+
+    // Verify value was cleared
+    expect(instance.internalValue).toBeNull();
+    expect(instance.value).toBeUndefined();
+    expect(instance.selectedDate).toBeUndefined();
+    expect(instance.inputRef.value).toBe("");
+    expect(emitSpy).toHaveBeenCalledWith(undefined);
+  });
+
+  it("handles clear when no value was set (opens modal then clicks clear)", async () => {
+    const page = await createPage(
+      `<tabworthy-times
+        id="setup-form-end-at"
+        show-clear-button="true"
+        show-year-stepper="true"
+        show-month-stepper="true"
+        show-today-button="true"
+        input-should-format="false"
+        disable-freeform-input="true"
+        show-close-button="true"
+        show-seconds="false"
+        min-date="2024-11-11"
+        format="DD/MM/YYYY h:mm A Z"
+      ></tabworthy-times>`
+    );
+    const instance = page.rootInstance as any;
+    const emitSpy = jest.spyOn(instance.selectDateTime, "emit");
+
+    // No initial value set - verify initial state
+    expect(instance.value).toBeUndefined();
+    expect(instance.internalValue).toBeNull();
+    expect(instance.selectedDate).toBeUndefined();
+
+    // Simulate opening the modal (pickerRef is set)
+    instance.pickerRef = { value: null };
+
+    // Simulate clicking the clear button in the modal without selecting anything first
+    await instance.handlePickerSelection(undefined);
+    await page.waitForChanges();
+
+    // Should not throw error and should remain in cleared state
+    expect(instance.internalValue).toBeNull();
+    expect(instance.value).toBeUndefined();
+    expect(instance.selectedDate).toBeUndefined();
+    expect(instance.inputRef.value).toBe("");
+    expect(emitSpy).toHaveBeenCalledWith(undefined);
+  });
+
+  it("clearValue does not throw when inputRef is not initialized", async () => {
+    const page = await createPage(
+      `<tabworthy-times
+        id="test"
+        show-clear-button="true"
+        input-should-format="false"
+        disable-freeform-input="true"
+        format="DD/MM/YYYY h:mm A Z"
+      ></tabworthy-times>`
+    );
+    const instance = page.rootInstance as any;
+    const emitSpy = jest.spyOn(instance.selectDateTime, "emit");
+
+    // Temporarily remove inputRef to simulate edge case
+    const originalInputRef = instance.inputRef;
+    instance.inputRef = undefined;
+
+    // Should not throw when inputRef is undefined
+    await expect(instance.clearValue()).resolves.not.toThrow();
+
+    // Restore inputRef
+    instance.inputRef = originalInputRef;
+
+    // Verify state is cleared
+    expect(instance.internalValue).toBeNull();
+    expect(instance.value).toBeUndefined();
+    expect(instance.selectedDate).toBeUndefined();
+    expect(emitSpy).toHaveBeenCalledWith(undefined);
+  });
+
   it("renders calendar button, custom content, and error message", async () => {
     const page = await createPage(
       '<tabworthy-times id="time" calendar-button-content="<span>📅</span>"></tabworthy-times>'

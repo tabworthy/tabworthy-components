@@ -241,7 +241,12 @@ export class InclusiveTimes {
     }
   }
 
-  private handlePickerSelection = async (dateString: string) => {
+  private handlePickerSelection = async (dateString: string | undefined) => {
+    // Handle clear button click (calendar emits undefined)
+    if (!dateString) {
+      return this.clearValue();
+    }
+
     const dates = dateString.split(",");
 
     if (this.range && dates.length === 2) {
@@ -353,7 +358,9 @@ export class InclusiveTimes {
     this.internalValue = null;
     this.value = undefined;
     this.selectedDate = undefined;
-    this.inputRef.value = "";
+    if (this.inputRef) {
+      this.inputRef.value = "";
+    }
 
     if (this.pickerRef) {
       this.pickerRef.value = null;
