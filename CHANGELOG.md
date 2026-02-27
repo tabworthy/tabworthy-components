@@ -5,12 +5,6 @@
 
 * **dates, times:** showCloseButton ([f76dd36](https://github.com/tabworthy/tabworthy-components/commit/f76dd362c4c7a83f0eabc369940ae45b26cddfc7))
 
-# [0.10.0](https://github.com/tabworthy/tabworthy-components/compare/v0.9.2...v0.10.0) (2026-02-27)
-
-
-### Features
-
-* **dates, times:** showCloseButton ([f76dd36](https://github.com/tabworthy/tabworthy-components/commit/f76dd362c4c7a83f0eabc369940ae45b26cddfc7))
 
 ## [0.9.2](https://github.com/tabworthy/tabworthy-components/compare/v0.9.1...v0.9.2) (2026-02-26)
 
