@@ -138,8 +138,8 @@ export class InclusiveTimes {
 
   @State() internalValue?: string | string[] | null;
   @State() selectedDate?: Date;
-  @State() selectedHours: number = 12;
-  @State() selectedMinutes: number = 0;
+  @State() selectedHours: number = new Date().getHours();
+  @State() selectedMinutes: number = new Date().getMinutes();
   @State() errorState: boolean = this.hasError;
   @State() disabledState: boolean = this.disabled;
 

@@ -31,6 +31,26 @@ describe("tabworthy-times", () => {
     );
   });
 
+  it("initializes to current time when no value is provided", async () => {
+    const now = new Date();
+    const page = await createPage();
+    const instance = page.rootInstance as any;
+
+    // Verify hours and minutes are within valid ranges
+    expect(instance.selectedHours).toBeGreaterThanOrEqual(0);
+    expect(instance.selectedHours).toBeLessThanOrEqual(23);
+    expect(instance.selectedMinutes).toBeGreaterThanOrEqual(0);
+    expect(instance.selectedMinutes).toBeLessThanOrEqual(59);
+
+    // Verify the time is close to current time (within 2 minutes tolerance)
+    const instanceMinutesSinceMidnight =
+      instance.selectedHours * 60 + instance.selectedMinutes;
+    const currentMinutesSinceMidnight = now.getHours() * 60 + now.getMinutes();
+    expect(
+      Math.abs(instanceMinutesSinceMidnight - currentMinutesSinceMidnight)
+    ).toBeLessThanOrEqual(2);
+  });
+
   it("syncs initial value and parses selected time", async () => {
     const page = await createPage(
       '<tabworthy-times id="time" value="2024-03-15T14:30:00"></tabworthy-times>'
