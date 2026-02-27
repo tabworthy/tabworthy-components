@@ -343,6 +343,10 @@ export namespace Components {
          */
         "showMonthStepper": boolean;
         /**
+          * @default false
+         */
+        "showSeconds": boolean;
+        /**
           * @default true
          */
         "showTodayButton": boolean;
@@ -390,6 +394,14 @@ export namespace Components {
           * @default 0
          */
         "minutes": number;
+        /**
+          * @default 0
+         */
+        "seconds": number;
+        /**
+          * @default false
+         */
+        "showSeconds": boolean;
         /**
           * @default false
          */
@@ -838,6 +850,10 @@ declare namespace LocalJSX {
          */
         "showMonthStepper"?: boolean;
         /**
+          * @default false
+         */
+        "showSeconds"?: boolean;
+        /**
           * @default true
          */
         "showTodayButton"?: boolean;
@@ -886,6 +902,14 @@ declare namespace LocalJSX {
          */
         "minutes"?: number;
         "onTimeChanged"?: (event: TabworthyTimesPickerCustomEvent<TimeValue>) => void;
+        /**
+          * @default 0
+         */
+        "seconds"?: number;
+        /**
+          * @default false
+         */
+        "showSeconds"?: boolean;
         /**
           * @default false
          */
@@ -971,6 +995,7 @@ declare namespace LocalJSX {
         "startDate": string;
         "referenceDate": string;
         "useTwelveHourFormat": boolean;
+        "showSeconds": boolean;
         "inline": boolean;
         "hasError": boolean;
         "showYearStepper": boolean;
@@ -990,7 +1015,9 @@ declare namespace LocalJSX {
     interface TabworthyTimesPickerAttributes {
         "hours": number;
         "minutes": number;
+        "seconds": number;
         "useTwelveHourFormat": boolean;
+        "showSeconds": boolean;
         "labelsSrOnly": boolean;
         "disabled": boolean;
         "elementClassName": string;

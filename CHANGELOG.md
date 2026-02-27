@@ -1,3 +1,15 @@
+# [0.11.0](https://github.com/tabworthy/tabworthy-components/compare/v0.10.1...v0.11.0) (2026-02-27)
+
+
+### Bug Fixes
+
+* **times:** current time of datetime not provided ([3b7d0fe](https://github.com/tabworthy/tabworthy-components/commit/3b7d0fefe3db58b5520955ad401ad8eec8b16f8c))
+
+
+### Features
+
+* **times:** showSeconds ([97e6358](https://github.com/tabworthy/tabworthy-components/commit/97e63589419eaa0882262593a6b854f7c6758a47))
+
 ## [0.10.1](https://github.com/tabworthy/tabworthy-components/compare/v0.10.0...v0.10.1) (2026-02-27)
 
 

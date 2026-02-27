@@ -19,6 +19,7 @@ export declare class InclusiveTimes {
     startDate: string;
     referenceDate: string;
     useTwelveHourFormat: boolean;
+    showSeconds: boolean;
     timesLabels: TimesLabels;
     datesCalendarLabels?: DatesCalendarLabels;
     timesPickerLabels?: TimesPickerLabels;
@@ -46,6 +47,7 @@ export declare class InclusiveTimes {
     selectedDate?: Date;
     selectedHours: number;
     selectedMinutes: number;
+    selectedSeconds: number;
     errorState: boolean;
     disabledState: boolean;
     selectDateTime: EventEmitter<string | string[] | undefined>;

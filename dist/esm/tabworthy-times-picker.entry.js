@@ -3,13 +3,16 @@ import { r as registerInstance, c as createEvent, h, H as Host, g as getElement 
 const defaultLabels = {
     hours: "Hours",
     minutes: "Minutes",
+    seconds: "Seconds",
     am: "AM",
     pm: "PM",
     timePicker: "Time picker",
     incrementHours: "Increment hours",
     decrementHours: "Decrement hours",
     incrementMinutes: "Increment minutes",
-    decrementMinutes: "Decrement minutes"
+    decrementMinutes: "Decrement minutes",
+    incrementSeconds: "Increment seconds",
+    decrementSeconds: "Decrement seconds"
 };
 const TabworthyTimesPicker = class {
     constructor(hostRef) {
@@ -18,7 +21,10 @@ const TabworthyTimesPicker = class {
         // Current time value (24-hour format)
         this.hours = 12;
         this.minutes = 0;
+        this.seconds = 0;
         this.useTwelveHourFormat = false;
+        // Show seconds control
+        this.showSeconds = false;
         // Labels for accessibility and i18n
         this.labels = defaultLabels;
         // Hide labels visually but keep them for screen readers
@@ -27,6 +33,7 @@ const TabworthyTimesPicker = class {
         this.elementClassName = "tabworthy-times-picker";
         this.internalHours = this.hours;
         this.internalMinutes = this.minutes;
+        this.internalSeconds = this.seconds;
         this.period = this.hours >= 12 ? "PM" : "AM";
         this.handleHourChange = (e) => {
             const value = parseInt(e.target.value, 10);
@@ -104,6 +111,19 @@ const TabworthyTimesPicker = class {
                 this.internalMinutes === 0 ? 59 : this.internalMinutes - 1;
             this.emitTimeChange();
         };
+        this.handleSecondChange = (e) => {
+            this.internalSeconds = parseInt(e.target.value, 10);
+            this.emitTimeChange();
+        };
+        this.handleSecondIncrement = () => {
+            this.internalSeconds = (this.internalSeconds + 1) % 60;
+            this.emitTimeChange();
+        };
+        this.handleSecondDecrement = () => {
+            this.internalSeconds =
+                this.internalSeconds === 0 ? 59 : this.internalSeconds - 1;
+            this.emitTimeChange();
+        };
     }
     watchHours(newValue) {
         this.internalHours = newValue;
@@ -112,9 +132,13 @@ const TabworthyTimesPicker = class {
     watchMinutes(newValue) {
         this.internalMinutes = newValue;
     }
+    watchSeconds(newValue) {
+        this.internalSeconds = newValue;
+    }
     componentWillLoad() {
         this.internalHours = this.hours;
         this.internalMinutes = this.minutes;
+        this.internalSeconds = this.seconds;
         this.period = this.hours >= 12 ? "PM" : "AM";
     }
     getDisplayHours() {
@@ -143,6 +167,7 @@ const TabworthyTimesPicker = class {
         this.timeChanged.emit({
             hours: this.get24HourValue(),
             minutes: this.internalMinutes,
+            seconds: this.showSeconds ? this.internalSeconds : undefined,
             period: this.useTwelveHourFormat ? this.period : undefined
         });
     }
@@ -153,16 +178,22 @@ const TabworthyTimesPicker = class {
         const displayHours = this.getDisplayHours();
         const maxHours = this.useTwelveHourFormat ? 12 : 23;
         const minHours = this.useTwelveHourFormat ? 1 : 0;
-        return (h(Host, { key: '9b58907eb4784f4b3b1c0a25fd51fec33832ce07', class: this.elementClassName, "aria-label": this.labels.timePicker }, h("div", { key: 'a337deb490c90bc628d92cf8025a1dbab461d98a', class: `${this.elementClassName}__container` }, h("div", { key: 'e3b37266b5bf5758f4435f8b4d23a34a6da5906d', class: `${this.elementClassName}__field` }, h("label", { key: '08ee8679d4f3abbf211feb4c4c83d103542679bb', htmlFor: `${this.elementClassName}-hours`, class: {
+        return (h(Host, { key: 'be075e309d41904bf237c3a4b31b063ac4d1a7e0', class: this.elementClassName, "aria-label": this.labels.timePicker }, h("div", { key: '39d3a55428ad6f567490aa9a55ab94766de39e7f', class: `${this.elementClassName}__container` }, h("div", { key: '5efcc6b13a4473d5d889689d205128b328ae9417', class: `${this.elementClassName}__field` }, h("label", { key: 'f2e760229dd54d2265539e924dc133eda7f53fb8', htmlFor: `${this.elementClassName}-hours`, class: {
                 [`${this.elementClassName}__label`]: true,
                 [`${this.elementClassName}__label--sr-only`]: this.labelsSrOnly
-            } }, this.labels.hours), h("div", { key: 'b55bc02c9bf1b68bdbd443781ab63f672e470a25', class: `${this.elementClassName}__control` }, h("button", { key: '2f39fbe193148518255188a72ced6253a362972b', type: "button", class: `${this.elementClassName}__button ${this.elementClassName}__button--increment`, onClick: this.handleHourIncrement, disabled: this.disabled, "aria-label": this.labels.incrementHours }, h("svg", { key: '870b6b42129f6f6e17de83c79abfaa1d3bbfa63a', fill: "none", height: "16", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", stroke: "currentColor", viewBox: "0 0 24 24", width: "16" }, h("polyline", { key: 'be9e46c59488605aab9793e9a5dfb720390eb66a', points: "18 15 12 9 6 15" }))), h("input", { key: '46ae9335a93cec99f4f4c66ea798aa4bedd10173', id: `${this.elementClassName}-hours`, type: "number", class: `${this.elementClassName}__input`, value: this.padZero(displayHours), min: minHours, max: maxHours, onInput: this.handleHourChange, disabled: this.disabled, "aria-label": this.labels.hours }), h("button", { key: '45a67eb11ec557b9177a28aa0ff1a209b8253cdb', type: "button", class: `${this.elementClassName}__button ${this.elementClassName}__button--decrement`, onClick: this.handleHourDecrement, disabled: this.disabled, "aria-label": this.labels.decrementHours }, h("svg", { key: '2e54fbfd5177e0bf967f0f07a0bcc90f9de70676', fill: "none", height: "16", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", stroke: "currentColor", viewBox: "0 0 24 24", width: "16" }, h("polyline", { key: '6f386c6c865b2c4fa1547fb2eb84bcb1d73dfb6c', points: "6 9 12 15 18 9" }))))), h("div", { key: '745ee4c84ac76dcb35df64109b666100364e8053', class: `${this.elementClassName}__separator` }, ":"), h("div", { key: 'e299001fc01bc9c4bbb46cd9580764c95614e8ca', class: `${this.elementClassName}__field` }, h("label", { key: '9bb317196dc9619ccbe91007b1003cd7231626a7', htmlFor: `${this.elementClassName}-minutes`, class: {
+            } }, this.labels.hours), h("div", { key: 'a1f92371d923c50adb423d8fa36d84fe632fcdcb', class: `${this.elementClassName}__control` }, h("button", { key: 'ce1a13d5d97f664cd5a7ef9ac144cb2d7a76b0e3', type: "button", class: `${this.elementClassName}__button ${this.elementClassName}__button--increment`, onClick: this.handleHourIncrement, disabled: this.disabled, "aria-label": this.labels.incrementHours }, h("svg", { key: '9f4f27bc5e3ecc1da7f9520c5a67bef79b546229', fill: "none", height: "16", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", stroke: "currentColor", viewBox: "0 0 24 24", width: "16" }, h("polyline", { key: '2537a3c151f846b52f427bff20145dd581b2db7b', points: "18 15 12 9 6 15" }))), h("input", { key: 'dbe3c7e05bf44f2942f38e397fa8abcd5ec9a080', id: `${this.elementClassName}-hours`, type: "number", class: `${this.elementClassName}__input`, value: this.padZero(displayHours), min: minHours, max: maxHours, onInput: this.handleHourChange, disabled: this.disabled, "aria-label": this.labels.hours }), h("button", { key: '69e610902e8324369a57f5943699f019533f9b0a', type: "button", class: `${this.elementClassName}__button ${this.elementClassName}__button--decrement`, onClick: this.handleHourDecrement, disabled: this.disabled, "aria-label": this.labels.decrementHours }, h("svg", { key: 'fd3a91c8c82abb4ba948c1735a4d6b1ab9879452', fill: "none", height: "16", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", stroke: "currentColor", viewBox: "0 0 24 24", width: "16" }, h("polyline", { key: 'f2fb31860bc57fe95b78e0331d4dce611976f1cc', points: "6 9 12 15 18 9" }))))), h("div", { key: '5f488705145ebbaaba10f7e0370dd614e5ac9c91', class: `${this.elementClassName}__separator` }, ":"), h("div", { key: 'c886bc72ad9098a1015d97cdb64d609d10b4b7c0', class: `${this.elementClassName}__field` }, h("label", { key: '3590285320f4ee5403e41cceb964aa2440ee3caa', htmlFor: `${this.elementClassName}-minutes`, class: {
                 [`${this.elementClassName}__label`]: true,
                 [`${this.elementClassName}__label--sr-only`]: this.labelsSrOnly
-            } }, this.labels.minutes), h("div", { key: '62033213721f2696cbe36dd76ba522e3a21ce718', class: `${this.elementClassName}__control` }, h("button", { key: '011daa926e28024e7e76f996af334fe34728ce78', type: "button", class: `${this.elementClassName}__button ${this.elementClassName}__button--increment`, onClick: this.handleMinuteIncrement, disabled: this.disabled, "aria-label": this.labels.incrementMinutes }, h("svg", { key: '03ee7c275d8924d87b735751b56505bab3c09f94', fill: "none", height: "16", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", stroke: "currentColor", viewBox: "0 0 24 24", width: "16" }, h("polyline", { key: '0f27d33a1440e7418c3f98863df276cdd596eee8', points: "18 15 12 9 6 15" }))), h("input", { key: '63b25ff463cbfccff9360f486279bc25381a3a3a', id: `${this.elementClassName}-minutes`, type: "number", class: `${this.elementClassName}__input`, value: this.padZero(this.internalMinutes), min: 0, max: 59, onInput: this.handleMinuteChange, disabled: this.disabled, "aria-label": this.labels.minutes }), h("button", { key: 'bc2d44f2e89dc7adb87930b84c3b7bfb6f5dcf3c', type: "button", class: `${this.elementClassName}__button ${this.elementClassName}__button--decrement`, onClick: this.handleMinuteDecrement, disabled: this.disabled, "aria-label": this.labels.decrementMinutes }, h("svg", { key: 'b565bf9b1564e18f930bdaedf9c47ace88eaa6ac', fill: "none", height: "16", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", stroke: "currentColor", viewBox: "0 0 24 24", width: "16" }, h("polyline", { key: 'bf864da5aca3787bda78283fff66c8c4611ed541', points: "6 9 12 15 18 9" }))))), this.useTwelveHourFormat && (h("div", { key: '9b9268553b3417ed186a4057258e9565e49a87f7', class: `${this.elementClassName}__period` }, h("button", { key: '6a953b254ca0e827aed00ac2889c6127df308a61', type: "button", class: {
+            } }, this.labels.minutes), h("div", { key: '0e4271bc5e35b9664ef599af056c997a0b09c64f', class: `${this.elementClassName}__control` }, h("button", { key: '29d095829fb141f2f2495a5cbc4bb7f28f39b54b', type: "button", class: `${this.elementClassName}__button ${this.elementClassName}__button--increment`, onClick: this.handleMinuteIncrement, disabled: this.disabled, "aria-label": this.labels.incrementMinutes }, h("svg", { key: '683cb78389935a9a68e59d875df60dc168ca5a4b', fill: "none", height: "16", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", stroke: "currentColor", viewBox: "0 0 24 24", width: "16" }, h("polyline", { key: '21084833e0479ace54ee23b2b9a39276752d6467', points: "18 15 12 9 6 15" }))), h("input", { key: '07d608da760816c37ae394fe5798ad25ca0c17db', id: `${this.elementClassName}-minutes`, type: "number", class: `${this.elementClassName}__input`, value: this.padZero(this.internalMinutes), min: 0, max: 59, onInput: this.handleMinuteChange, disabled: this.disabled, "aria-label": this.labels.minutes }), h("button", { key: '07aee6f5f9b6cfe23fa50ae9ad2319f627c9efe2', type: "button", class: `${this.elementClassName}__button ${this.elementClassName}__button--decrement`, onClick: this.handleMinuteDecrement, disabled: this.disabled, "aria-label": this.labels.decrementMinutes }, h("svg", { key: '3e284e93b451ab57b0c4e0a29b8c3953f5a79033', fill: "none", height: "16", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", stroke: "currentColor", viewBox: "0 0 24 24", width: "16" }, h("polyline", { key: '589c1da5150f4b3def68b9dcb14f2ee56b9022e2', points: "6 9 12 15 18 9" }))))), this.showSeconds && [
+            h("div", { key: '717844859ad07d5912fdd0b386151aeb40ccbf94', class: `${this.elementClassName}__separator` }, ":"),
+            h("div", { key: 'a27907f31a3d71abb9f7c5bce411569ddd22594d', class: `${this.elementClassName}__field` }, h("label", { key: 'c6312aeccdfe835aa0bd02bc7078b4a30aa70921', htmlFor: `${this.elementClassName}-seconds`, class: {
+                    [`${this.elementClassName}__label`]: true,
+                    [`${this.elementClassName}__label--sr-only`]: this.labelsSrOnly
+                } }, this.labels.seconds), h("div", { key: 'c347d3847e999a900cba2410dbc2c5711d01d746', class: `${this.elementClassName}__control` }, h("button", { key: 'b0862893f9d99e6ef7da0cfc02f6a6e1f0bc4443', type: "button", class: `${this.elementClassName}__button ${this.elementClassName}__button--increment`, onClick: this.handleSecondIncrement, disabled: this.disabled, "aria-label": this.labels.incrementSeconds }, h("svg", { key: 'b4032699911ed9e589c015b4c3b9d31766b53d38', fill: "none", height: "16", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", stroke: "currentColor", viewBox: "0 0 24 24", width: "16" }, h("polyline", { key: '5bfbeefa5ea9d4901a7bc08de5bf01578fbf6cec', points: "18 15 12 9 6 15" }))), h("input", { key: '3c7e4e5b4f7a162e9ce9efa815d1c180ff5395d2', id: `${this.elementClassName}-seconds`, type: "number", class: `${this.elementClassName}__input`, value: this.padZero(this.internalSeconds), min: 0, max: 59, onInput: this.handleSecondChange, disabled: this.disabled, "aria-label": this.labels.seconds }), h("button", { key: '6f5a37921ef128033fe8241b63903739f0ddc245', type: "button", class: `${this.elementClassName}__button ${this.elementClassName}__button--decrement`, onClick: this.handleSecondDecrement, disabled: this.disabled, "aria-label": this.labels.decrementSeconds }, h("svg", { key: '5c24cc5df194f53889ec353a5527c239df94a380', fill: "none", height: "16", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", stroke: "currentColor", viewBox: "0 0 24 24", width: "16" }, h("polyline", { key: '090946e452acf54e8bc491094573368160f55cbe', points: "6 9 12 15 18 9" })))))
+        ], this.useTwelveHourFormat && (h("div", { key: '4bbd646f21dc099efc94e86b05ce35e22c28ee16', class: `${this.elementClassName}__period` }, h("button", { key: '3b41814b8fe32ffe3ef898fe816cc027440c6c2b', type: "button", class: {
                 [`${this.elementClassName}__period-button`]: true,
                 [`${this.elementClassName}__period-button--active`]: this.period === "AM"
-            }, onClick: () => this.handlePeriodChange("AM"), disabled: this.disabled, "aria-label": this.labels.am, "aria-pressed": this.period === "AM" }, this.labels.am), h("button", { key: '5371401b679895edd32d8a901c1339a8d3baacb6', type: "button", class: {
+            }, onClick: () => this.handlePeriodChange("AM"), disabled: this.disabled, "aria-label": this.labels.am, "aria-pressed": this.period === "AM" }, this.labels.am), h("button", { key: 'fd9052000876c0516e13ab701a4e5164a7d72112', type: "button", class: {
                 [`${this.elementClassName}__period-button`]: true,
                 [`${this.elementClassName}__period-button--active`]: this.period === "PM"
             }, onClick: () => this.handlePeriodChange("PM"), disabled: this.disabled, "aria-label": this.labels.pm, "aria-pressed": this.period === "PM" }, this.labels.pm))))));
@@ -174,6 +205,9 @@ const TabworthyTimesPicker = class {
             }],
         "minutes": [{
                 "watchMinutes": 0
+            }],
+        "seconds": [{
+                "watchSeconds": 0
             }]
     }; }
 };

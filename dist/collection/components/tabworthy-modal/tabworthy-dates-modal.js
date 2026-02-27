@@ -190,7 +190,7 @@ export class InclusiveDatesModal {
         }
     }
     render() {
-        return (h(Host, { key: '086d18e9b2c4924a12bc7dffb47df846ffc66f2f', showing: this.showing, ref: (r) => r && (this.el = r) }, !this.inline && this.showing && (h("div", { key: 'db2947e2f1a80b986fd815fbe3ee9c2cebc486c3', part: "body", ref: (r) => {
+        return (h(Host, { key: 'bf48e957915fbc2975d7ba2f2ca6844e2c14270e', showing: this.showing, ref: (r) => r && (this.el = r) }, !this.inline && this.showing && (h("div", { key: '87fd577d1289e3c6f888b614d127e729003b1fe6', part: "body", ref: (r) => {
                 if (r) {
                     this.bodyRef = r;
                     // Setup portal and create popper when ref is set
@@ -207,7 +207,7 @@ export class InclusiveDatesModal {
                         });
                     }
                 }
-            }, style: { visibility: this.positioned ? "visible" : "hidden" }, onKeyDown: this.onKeyDown, role: "dialog", tabindex: -1, "aria-hidden": !this.showing, "aria-label": this.label, "aria-modal": this.showing }, h("focus-trap", { key: '7801a9389dd510ad741b5edefdbdfb22f7beb29b' }, h("div", { key: '9e54bb90bc8f2aa5fe928eb063c10a1d9c1e69c9', part: "content" }, h("slot", { key: '42242c16758b365e489eaaae6267b540e19a6bb6' }))))), this.inline && (h("div", { key: 'fade4f7462beb49692ed196e74ecbc4971fb102d', part: "content" }, h("slot", { key: '6c0c7f4c842965350bb1cac12be2042c135e2c64' })))));
+            }, style: { visibility: this.positioned ? "visible" : "hidden" }, onKeyDown: this.onKeyDown, role: "dialog", tabindex: -1, "aria-hidden": !this.showing, "aria-label": this.label, "aria-modal": this.showing }, h("focus-trap", { key: '5f994a20957137ce8e95d17191cb9436ae4c2315' }, h("div", { key: '6ab5e6990d04e9e6b0905971b52b33410608759e', part: "content" }, h("slot", { key: '9d99fbd7f47ee014277fe4493f86a90b3929103c' }))))), this.inline && (h("div", { key: 'fc1766214d1727cc2865a17da6661f06bd67429f', part: "content" }, h("slot", { key: '28d41dba4356ce3bd0aa7db06943296de4372695' })))));
     }
     static get is() { return "tabworthy-dates-modal"; }
     static get encapsulation() { return "shadow"; }
