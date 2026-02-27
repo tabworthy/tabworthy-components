@@ -660,4 +660,20 @@ describe("tabworthy-dates", () => {
     // Should have formatted the date using Intl.DateTimeFormat
     expect(instance.inputRef.value).toContain("2024");
   });
+
+  it("passes showCloseButton prop to calendar component", async () => {
+    const page = await createPage(
+      '<tabworthy-dates id="test" show-close-button="true"></tabworthy-dates>'
+    );
+    const instance = page.rootInstance as any;
+
+    expect(instance.showCloseButton).toBe(true);
+  });
+
+  it("does not have showCloseButton enabled by default", async () => {
+    const page = await createPage();
+    const instance = page.rootInstance as any;
+
+    expect(instance.showCloseButton).toBe(false);
+  });
 });

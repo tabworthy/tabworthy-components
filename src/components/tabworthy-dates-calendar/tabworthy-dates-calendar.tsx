@@ -37,6 +37,7 @@ import { dateIsWithinBounds } from "@shared/utils/utils";
 
 export type DatesCalendarLabels = {
   clearButton: string;
+  closeButton: string;
   monthSelect: string;
   nextMonthButton: string;
   nextYearButton: string;
@@ -53,6 +54,7 @@ export type DatesCalendarLabels = {
 
 const defaultLabels: DatesCalendarLabels = {
   clearButton: "Clear value",
+  closeButton: "Close",
   monthSelect: "Select month",
   nextMonthButton: "Next month",
   nextYearButton: "Next year",
@@ -86,6 +88,7 @@ export class InclusiveDatesCalendar {
   @Element() el!: HTMLElement;
 
   @Prop() clearButtonContent?: string;
+  @Prop() closeButtonContent?: string;
   @Prop() disabled: boolean = false;
   @Prop() modalIsOpen?: boolean = false;
 
@@ -103,6 +106,7 @@ export class InclusiveDatesCalendar {
   @Prop() maxDate?: string;
   @Prop() inline: boolean = false;
   @Prop() showClearButton?: boolean = false;
+  @Prop() showCloseButton?: boolean = false;
   @Prop() showMonthStepper?: boolean = true;
   @Prop() showTodayButton?: boolean = true;
   @Prop() showYearStepper?: boolean = false;
@@ -122,6 +126,7 @@ export class InclusiveDatesCalendar {
   @Event({ bubbles: false })
   changeMonth?: EventEmitter<MonthChangedEventDetails>;
   @Event({ bubbles: false }) changeYear?: EventEmitter<YearChangedEventDetails>;
+  @Event({ bubbles: false }) requestClose?: EventEmitter<void>;
 
   private moveFocusAfterMonthChanged?: Boolean;
   private moveFocusOnModalOpen?: Boolean;
@@ -443,9 +448,16 @@ export class InclusiveDatesCalendar {
     this.hoveredDate = undefined;
   };
 
+  private close = () => {
+    this.requestClose?.emit();
+  };
+
   render() {
     const showFooter =
-      this.showTodayButton || this.showClearButton || this.showKeyboardHint;
+      this.showTodayButton ||
+      this.showClearButton ||
+      this.showCloseButton ||
+      this.showKeyboardHint;
 
     const disabled = {
       year: {
@@ -813,6 +825,17 @@ export class InclusiveDatesCalendar {
                       type="button"
                     >
                       {this.labels.clearButton}
+                    </button>
+                  )}
+                  {this.showCloseButton && (
+                    <button
+                      class={this.getClassName("close-button")}
+                      disabled={this.disabled}
+                      innerHTML={this.closeButtonContent || undefined}
+                      onClick={this.close}
+                      type="button"
+                    >
+                      {this.labels.closeButton}
                     </button>
                   )}
                 </div>

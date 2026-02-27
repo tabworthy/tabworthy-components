@@ -414,4 +414,61 @@ describe("tabworthy-dates-calendar", () => {
     keyboardHint.click();
     expect(keyboardHint).toBeTruthy();
   });
+
+  it("renders close button when showCloseButton is true", async () => {
+    const page = await createPage(
+      "<tabworthy-dates-calendar show-close-button></tabworthy-dates-calendar>"
+    );
+
+    const closeButton = page.root?.querySelector(
+      ".tabworthy-dates-calendar__close-button"
+    );
+    expect(closeButton).toBeTruthy();
+  });
+
+  it("does not render close button when showCloseButton is false", async () => {
+    const page = await createPage(
+      "<tabworthy-dates-calendar></tabworthy-dates-calendar>"
+    );
+
+    const closeButton = page.root?.querySelector(
+      ".tabworthy-dates-calendar__close-button"
+    );
+    expect(closeButton).toBeFalsy();
+  });
+
+  it("emits requestClose event when close button is clicked", async () => {
+    const page = await createPage(
+      "<tabworthy-dates-calendar show-close-button></tabworthy-dates-calendar>"
+    );
+    const instance = page.rootInstance as any;
+
+    const emitSpy = jest.spyOn(instance.requestClose, "emit");
+
+    instance.close();
+
+    expect(emitSpy).toHaveBeenCalled();
+  });
+
+  it("renders custom close button content when provided", async () => {
+    const page = await createPage(
+      `<tabworthy-dates-calendar show-close-button close-button-content="<span>X</span>"></tabworthy-dates-calendar>`
+    );
+
+    const closeButton = page.root?.querySelector(
+      ".tabworthy-dates-calendar__close-button"
+    );
+    expect(closeButton?.innerHTML).toContain("X");
+  });
+
+  it("renders footer when only showCloseButton is true", async () => {
+    const page = await createPage(
+      "<tabworthy-dates-calendar show-close-button show-today-button='false' show-clear-button='false'></tabworthy-dates-calendar>"
+    );
+
+    const footer = page.root?.querySelector(
+      ".tabworthy-dates-calendar__footer"
+    );
+    expect(footer).toBeTruthy();
+  });
 });

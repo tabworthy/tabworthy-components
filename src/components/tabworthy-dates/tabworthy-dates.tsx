@@ -113,6 +113,8 @@ export class TabworthyDates {
   @Prop() showMonthStepper: boolean = true;
   // Show or hide the clear button
   @Prop() showClearButton: boolean = true;
+  // Show or hide the close button
+  @Prop() showCloseButton: boolean = false;
   // Show or hide the today button
   @Prop() showTodayButton: boolean = true;
   // Enable or disable input field formatting for accepted dates (eg. "Tuesday May 2, 2021" instead of "2021-05-02")
@@ -661,6 +663,7 @@ export class TabworthyDates {
             onChangeYear={(event) =>
               this.handleYearChange(event.detail as YearChangedEventDetails)
             }
+            onRequestClose={() => this.modalRef?.close()}
             labels={
               this.datesCalendarLabels ? this.datesCalendarLabels : undefined
             }
@@ -672,6 +675,7 @@ export class TabworthyDates {
             showMonthStepper={this.showMonthStepper}
             showYearStepper={this.showYearStepper}
             showClearButton={this.showClearButton}
+            showCloseButton={this.showCloseButton}
             showKeyboardHint={this.showKeyboardHint}
             showTodayButton={this.showTodayButton}
             disableDate={this.disableDate}

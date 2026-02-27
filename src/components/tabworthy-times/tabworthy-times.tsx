@@ -103,6 +103,9 @@ export class InclusiveTimes {
   // Show or hide the clear button
   @Prop() showClearButton: boolean = true;
 
+  // Show or hide the close button
+  @Prop() showCloseButton: boolean = false;
+
   // Show or hide the today button
   @Prop() showTodayButton: boolean = true;
 
@@ -428,6 +431,7 @@ export class InclusiveTimes {
               onChangeYear={(event) =>
                 this.handleYearChange(event.detail as YearChangedEventDetails)
               }
+              onRequestClose={() => this.modalRef?.close()}
               labels={this.datesCalendarLabels}
               ref={(el) => (this.pickerRef = el)}
               startDate={this.startDate}
@@ -437,6 +441,7 @@ export class InclusiveTimes {
               showMonthStepper={this.showMonthStepper}
               showYearStepper={this.showYearStepper}
               showClearButton={this.showClearButton}
+              showCloseButton={this.showCloseButton}
               showTodayButton={this.showTodayButton}
               disableDate={this.disableDate}
               minDate={this.minDate}
