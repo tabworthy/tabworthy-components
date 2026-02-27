@@ -111,6 +111,10 @@ export namespace Components {
         /**
           * @default false
          */
+        "showCloseButton": boolean;
+        /**
+          * @default false
+         */
         "showKeyboardHint": boolean;
         /**
           * @default true
@@ -141,6 +145,7 @@ export namespace Components {
     }
     interface TabworthyDatesCalendar {
         "clearButtonContent"?: string;
+        "closeButtonContent"?: string;
         /**
           * @default () => false
          */
@@ -187,6 +192,10 @@ export namespace Components {
           * @default false
          */
         "showClearButton"?: boolean;
+        /**
+          * @default false
+         */
+        "showCloseButton"?: boolean;
         /**
           * @default true
          */
@@ -326,6 +335,10 @@ export namespace Components {
          */
         "showClearButton": boolean;
         /**
+          * @default false
+         */
+        "showCloseButton": boolean;
+        /**
           * @default true
          */
         "showMonthStepper": boolean;
@@ -427,6 +440,7 @@ declare global {
         "selectDate": string | string[] | undefined;
         "changeMonth": MonthChangedEventDetails;
         "changeYear": YearChangedEventDetails1;
+        "requestClose": void;
     }
     interface HTMLTabworthyDatesCalendarElement extends Components.TabworthyDatesCalendar, HTMLStencilElement {
         addEventListener<K extends keyof HTMLTabworthyDatesCalendarElementEventMap>(type: K, listener: (this: HTMLTabworthyDatesCalendarElement, ev: TabworthyDatesCalendarCustomEvent<HTMLTabworthyDatesCalendarElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -598,6 +612,10 @@ declare namespace LocalJSX {
         /**
           * @default false
          */
+        "showCloseButton"?: boolean;
+        /**
+          * @default false
+         */
         "showKeyboardHint"?: boolean;
         /**
           * @default true
@@ -628,6 +646,7 @@ declare namespace LocalJSX {
     }
     interface TabworthyDatesCalendar {
         "clearButtonContent"?: string;
+        "closeButtonContent"?: string;
         /**
           * @default () => false
          */
@@ -666,6 +685,7 @@ declare namespace LocalJSX {
         "nextYearButtonContent"?: string;
         "onChangeMonth"?: (event: TabworthyDatesCalendarCustomEvent<MonthChangedEventDetails>) => void;
         "onChangeYear"?: (event: TabworthyDatesCalendarCustomEvent<YearChangedEventDetails1>) => void;
+        "onRequestClose"?: (event: TabworthyDatesCalendarCustomEvent<void>) => void;
         "onSelectDate"?: (event: TabworthyDatesCalendarCustomEvent<string | string[] | undefined>) => void;
         "previousMonthButtonContent"?: string;
         "previousYearButtonContent"?: string;
@@ -677,6 +697,10 @@ declare namespace LocalJSX {
           * @default false
          */
         "showClearButton"?: boolean;
+        /**
+          * @default false
+         */
+        "showCloseButton"?: boolean;
         /**
           * @default true
          */
@@ -806,6 +830,10 @@ declare namespace LocalJSX {
          */
         "showClearButton"?: boolean;
         /**
+          * @default false
+         */
+        "showCloseButton"?: boolean;
+        /**
           * @default true
          */
         "showMonthStepper"?: boolean;
@@ -884,6 +912,7 @@ declare namespace LocalJSX {
         "showYearStepper": boolean;
         "showMonthStepper": boolean;
         "showClearButton": boolean;
+        "showCloseButton": boolean;
         "showTodayButton": boolean;
         "inputShouldFormat": string;
         "showKeyboardHint": boolean;
@@ -899,6 +928,7 @@ declare namespace LocalJSX {
     }
     interface TabworthyDatesCalendarAttributes {
         "clearButtonContent": string;
+        "closeButtonContent": string;
         "disabled": boolean;
         "modalIsOpen": boolean;
         "elementClassName": string;
@@ -913,6 +943,7 @@ declare namespace LocalJSX {
         "maxDate": string;
         "inline": boolean;
         "showClearButton": boolean;
+        "showCloseButton": boolean;
         "showMonthStepper": boolean;
         "showTodayButton": boolean;
         "showYearStepper": boolean;
@@ -945,6 +976,7 @@ declare namespace LocalJSX {
         "showYearStepper": boolean;
         "showMonthStepper": boolean;
         "showClearButton": boolean;
+        "showCloseButton": boolean;
         "showTodayButton": boolean;
         "calendarButtonContent": string;
         "elementClassName": string;

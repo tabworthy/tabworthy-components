@@ -38,6 +38,7 @@ export declare class TabworthyDates {
     showYearStepper: boolean;
     showMonthStepper: boolean;
     showClearButton: boolean;
+    showCloseButton: boolean;
     showTodayButton: boolean;
     inputShouldFormat?: boolean | string;
     showKeyboardHint: boolean;

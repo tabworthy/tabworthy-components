@@ -1,6 +1,7 @@
 import { EventEmitter } from "../../stencil-public-runtime";
 export type DatesCalendarLabels = {
     clearButton: string;
+    closeButton: string;
     monthSelect: string;
     nextMonthButton: string;
     nextYearButton: string;
@@ -24,6 +25,7 @@ export interface YearChangedEventDetails {
 export declare class InclusiveDatesCalendar {
     el: HTMLElement;
     clearButtonContent?: string;
+    closeButtonContent?: string;
     disabled: boolean;
     modalIsOpen?: boolean;
     disableDate: (date: Date) => boolean;
@@ -40,6 +42,7 @@ export declare class InclusiveDatesCalendar {
     maxDate?: string;
     inline: boolean;
     showClearButton?: boolean;
+    showCloseButton?: boolean;
     showMonthStepper?: boolean;
     showTodayButton?: boolean;
     showYearStepper?: boolean;
@@ -54,6 +57,7 @@ export declare class InclusiveDatesCalendar {
     selectDate?: EventEmitter<string | string[] | undefined>;
     changeMonth?: EventEmitter<MonthChangedEventDetails>;
     changeYear?: EventEmitter<YearChangedEventDetails>;
+    requestClose?: EventEmitter<void>;
     private moveFocusAfterMonthChanged?;
     private moveFocusOnModalOpen?;
     componentWillLoad(): void;
@@ -85,5 +89,6 @@ export declare class InclusiveDatesCalendar {
     private onKeyDown;
     private onMouseEnter;
     private onMouseLeave;
+    private close;
     render(): any;
 }

@@ -3,6 +3,7 @@ import { addDays, dateIsWithinLowerBounds, dateIsWithinUpperBounds, getDaysOfMon
 import { dateIsWithinBounds } from "../../../../shared/utils/utils";
 const defaultLabels = {
     clearButton: "Clear value",
+    closeButton: "Close",
     monthSelect: "Select month",
     nextMonthButton: "Next month",
     nextYearButton: "Next year",
@@ -28,6 +29,7 @@ export class InclusiveDatesCalendar {
         this.locale = (navigator === null || navigator === void 0 ? void 0 : navigator.language) || "en-US";
         this.inline = false;
         this.showClearButton = false;
+        this.showCloseButton = false;
         this.showMonthStepper = true;
         this.showTodayButton = true;
         this.showYearStepper = false;
@@ -151,6 +153,10 @@ export class InclusiveDatesCalendar {
         };
         this.onMouseLeave = () => {
             this.hoveredDate = undefined;
+        };
+        this.close = () => {
+            var _a;
+            (_a = this.requestClose) === null || _a === void 0 ? void 0 : _a.emit();
         };
     }
     componentWillLoad() {
@@ -291,7 +297,10 @@ export class InclusiveDatesCalendar {
     }
     render() {
         var _a;
-        const showFooter = this.showTodayButton || this.showClearButton || this.showKeyboardHint;
+        const showFooter = this.showTodayButton ||
+            this.showClearButton ||
+            this.showCloseButton ||
+            this.showKeyboardHint;
         const disabled = {
             year: {
                 prev: this.disabled ||
@@ -310,15 +319,15 @@ export class InclusiveDatesCalendar {
                     monthIsDisabled(getNextMonth(this.currentDate).getMonth(), getNextMonth(this.currentDate).getFullYear(), this.minDate, this.maxDate)
             }
         };
-        return (h(Host, { key: 'cc8676fdeec05b5635c367353e7bb1b8c997dedd' }, h("div", { key: '4a4efc949f954772a55dad16e507a938b0308130', class: {
+        return (h(Host, { key: 'abba9db6dddb2eda2732272a4965549e9efbcaa3' }, h("div", { key: '07e733d1bc665da354ad45f3441bbfe6f575284c', class: {
                 [`${this.getClassName()}-wrapper`]: true,
                 [`${this.getClassName()}-wrapper--inline`]: this.inline
-            } }, h("div", { key: 'de0afeccacba5e76162a4d22041f3b65983e77fe', class: {
+            } }, h("div", { key: '7cf7cda0096034917e4dc406b14b992f4fd59046', class: {
                 [this.getClassName()]: true,
                 [`${this.getClassName()}--disabled`]: this.disabled
-            } }, h("div", { key: 'e8ed89a15cd32f629e559c9e9922c97816aff70c', class: this.getClassName("header") }, this.showHiddenTitle && (h("span", { key: '8a922cf4df9ee3f87a673cfaf2d04fe539305bbe', "aria-atomic": "true", "aria-live": "polite", class: "visually-hidden" }, this.getTitle())), this.showYearStepper && (h("button", { key: '225e73d3b12646781661d28057f4d9611e624c69', "aria-label": this.labels.previousYearButton, class: this.getClassName("previous-year-button"), "aria-disabled": disabled.year.prev, innerHTML: this.previousYearButtonContent || undefined, onClick: this.previousYear, type: "button" }, h("svg", { key: 'e0fd3f0d41f596b450642eb9c27c5958feb7ba30', fill: "none", height: "24", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", stroke: "currentColor", viewBox: "0 0 24 24", width: "24" }, h("polyline", { key: '85735b11b068015e671f550639ded6193dfbab28', points: "11 17 6 12 11 7" }), h("polyline", { key: '19c3ffcbb7b98261be4b309a2bbbaa826ea1ad73', points: "18 17 13 12 18 7" })))), this.showMonthStepper && (h("button", { key: '4b687ad0f92198cb9a324b8c0d380ae0a31f2346', "aria-label": this.labels.previousMonthButton, class: this.getClassName("previous-month-button"), "aria-disabled": disabled.month.prev, innerHTML: this.previousMonthButtonContent || undefined, onClick: this.previousMonth, type: "button" }, h("svg", { key: 'a1931a36fddf8a84cc8f4d367b34b8b59d03cc09', fill: "none", height: "24", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", stroke: "currentColor", viewBox: "0 0 24 24", width: "24" }, h("polyline", { key: 'e053a2405fb992e9eaeddf114b8da460b41ade13', points: "15 18 9 12 15 6" })))), h("span", { key: 'fbf8feee129211cf10f611c879288d76f7456c9d', class: this.getClassName("current-month") }, h("select", { key: 'ca2826280a1ab8065551fa908d40f96cc04d5464', "aria-label": this.labels.monthSelect, class: this.getClassName("month-select"), "aria-disabled": this.disabled, name: "month", onChange: this.onMonthSelect }, getMonths(this.locale).map((month, index) => {
+            } }, h("div", { key: '6286dfb1d637d48b4338247309a4bd07ba9bcc47', class: this.getClassName("header") }, this.showHiddenTitle && (h("span", { key: '7ef10a2c9b56de6dd6dbebf42aa107cb5402837a', "aria-atomic": "true", "aria-live": "polite", class: "visually-hidden" }, this.getTitle())), this.showYearStepper && (h("button", { key: 'f82e1314c5b696a3d34b9c131d187b9814c1a3e7', "aria-label": this.labels.previousYearButton, class: this.getClassName("previous-year-button"), "aria-disabled": disabled.year.prev, innerHTML: this.previousYearButtonContent || undefined, onClick: this.previousYear, type: "button" }, h("svg", { key: '8fb0e89ba5da9a5f22c4030f401512d907e93676', fill: "none", height: "24", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", stroke: "currentColor", viewBox: "0 0 24 24", width: "24" }, h("polyline", { key: '063019349c518195eb0b59177c39c1475d9cdaf0', points: "11 17 6 12 11 7" }), h("polyline", { key: 'e9a7e1ce55ed818788de12ea064ddc9030cf82a3', points: "18 17 13 12 18 7" })))), this.showMonthStepper && (h("button", { key: 'b4dafea59ef7d7ef705df7aaa95198f7236aac77', "aria-label": this.labels.previousMonthButton, class: this.getClassName("previous-month-button"), "aria-disabled": disabled.month.prev, innerHTML: this.previousMonthButtonContent || undefined, onClick: this.previousMonth, type: "button" }, h("svg", { key: '50aac77c0a53acef931af7ba1ef934e52f4a6e1f', fill: "none", height: "24", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", stroke: "currentColor", viewBox: "0 0 24 24", width: "24" }, h("polyline", { key: 'a7cebfbcc0be9e66815f3a69a13501d8ba1bbb83', points: "15 18 9 12 15 6" })))), h("span", { key: 'ec9add8bd9f35bccbf6c4c47510cd90be4ed7175', class: this.getClassName("current-month") }, h("select", { key: 'c36f648d42e8ee62e1a3b2d4bbeeab013dc871d5', "aria-label": this.labels.monthSelect, class: this.getClassName("month-select"), "aria-disabled": this.disabled, name: "month", onChange: this.onMonthSelect }, getMonths(this.locale).map((month, index) => {
             return (h("option", { key: month, selected: this.currentDate.getMonth() === index, value: index + 1, disabled: monthIsDisabled(index, this.currentDate.getFullYear(), this.minDate, this.maxDate) }, month));
-        })), h("input", { key: 'b3f5b2dabeb38734d3602ac8aaff56a7d5a49393', "aria-label": this.labels.yearSelect, class: this.getClassName("year-select"), "aria-disabled": this.disabled, max: this.maxDate ? this.maxDate.slice(0, 4) : 9999, min: this.minDate ? this.minDate.slice(0, 4) : 1, name: "year", onChange: this.onYearSelect, type: "number", value: this.currentDate.getFullYear() })), this.showMonthStepper && (h("button", { key: '9312dc20b70fbda5bd86f25b230665a8f7f75386', "aria-label": this.labels.nextMonthButton, class: this.getClassName("next-month-button"), "aria-disabled": disabled.month.next, innerHTML: this.nextMonthButtonContent || undefined, onClick: this.nextMonth, type: "button" }, h("svg", { key: '82f1f31e919a2e316941824c0b0d59c5a1852f73', fill: "none", height: "24", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", stroke: "currentColor", viewBox: "0 0 24 24", width: "24" }, h("polyline", { key: '3365487b15f4149b5ae035ca1f1364396c133ef0', points: "9 18 15 12 9 6" })))), this.showYearStepper && (h("button", { key: 'e83b33e034ee0fbd49e8aab90e1716ada40d2f19', "aria-label": this.labels.nextYearButton, class: this.getClassName("next-year-button"), "aria-disabled": disabled.year.next, innerHTML: this.nextYearButtonContent || undefined, onClick: this.nextYear, type: "button" }, h("svg", { key: '32b65eb085653d5c62e60262fc87f59b6d105e57', fill: "none", height: "24", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", stroke: "currentColor", viewBox: "0 0 24 24", width: "24" }, h("polyline", { key: 'eaa98641ba48a322fd7b3ac953d13104bb63aad3', points: "13 17 18 12 13 7" }), h("polyline", { key: '89b7de7ec2e24a01a808e885ac68a11c3779f9c2', points: "6 17 11 12 6 7" }))))), h("div", { key: 'a21c8a94b1ae0e5b66074d2ca956afac456f366f', class: this.getClassName("body") }, h("table", { key: '2968d8355122e3eb18de35b4c72d2404794f62e6', class: this.getClassName("calendar"), onKeyDown: this.onKeyDown, role: "grid", "aria-label": this.getTitle() }, h("thead", { key: '568a00357a3e64e692c80d90739c560513239c1d', class: this.getClassName("calendar-header") }, h("tr", { key: '4e80bf075ad630237b5ea156267a0c0d9d4f0423', class: this.getClassName("weekday-row") }, (_a = this.weekdays) === null || _a === void 0 ? void 0 : _a.map((weekday) => (h("th", { role: "columnheader", abbr: weekday[1], class: this.getClassName("weekday"), key: weekday[0], scope: "col" }, h("span", { "aria-hidden": "true" }, weekday[0]), h("span", { class: "visually-hidden" }, weekday[1])))))), h("tbody", { key: '26dfbb76ab92d065ab5f38b7135fced7738ca4a7' }, this.getCalendarRows().map((calendarRow) => {
+        })), h("input", { key: '547174f2f8fe0248589a40a46aace91171f08ad7', "aria-label": this.labels.yearSelect, class: this.getClassName("year-select"), "aria-disabled": this.disabled, max: this.maxDate ? this.maxDate.slice(0, 4) : 9999, min: this.minDate ? this.minDate.slice(0, 4) : 1, name: "year", onChange: this.onYearSelect, type: "number", value: this.currentDate.getFullYear() })), this.showMonthStepper && (h("button", { key: '458fd7350775325c43895f9896b151f8d490a725', "aria-label": this.labels.nextMonthButton, class: this.getClassName("next-month-button"), "aria-disabled": disabled.month.next, innerHTML: this.nextMonthButtonContent || undefined, onClick: this.nextMonth, type: "button" }, h("svg", { key: '3b6c5f32830d6983e2e59e89f8986012533f1b0f', fill: "none", height: "24", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", stroke: "currentColor", viewBox: "0 0 24 24", width: "24" }, h("polyline", { key: 'b2dde5779945c6c7f6bd686b05874bc62f34c817', points: "9 18 15 12 9 6" })))), this.showYearStepper && (h("button", { key: '0f7ea0b890e11d42634c8751cca659caf788ca67', "aria-label": this.labels.nextYearButton, class: this.getClassName("next-year-button"), "aria-disabled": disabled.year.next, innerHTML: this.nextYearButtonContent || undefined, onClick: this.nextYear, type: "button" }, h("svg", { key: 'a1f3037455d82547829d3f3afc15f6ea773277b4', fill: "none", height: "24", "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", stroke: "currentColor", viewBox: "0 0 24 24", width: "24" }, h("polyline", { key: 'ee5bfeadf5b183cba36c15ce6a5c30654ff98fe2', points: "13 17 18 12 13 7" }), h("polyline", { key: '02966a045d9496e161bbd4a40e103990b0e146a9', points: "6 17 11 12 6 7" }))))), h("div", { key: 'e588f18d365e6e1f87e1da7033741cb22ebafed7', class: this.getClassName("body") }, h("table", { key: '7c6b926b3bc6b832b9fb1aabaac6841eb30cda30', class: this.getClassName("calendar"), onKeyDown: this.onKeyDown, role: "grid", "aria-label": this.getTitle() }, h("thead", { key: '4ebbefd8e10e5d83308e84eeafd85c29902275b1', class: this.getClassName("calendar-header") }, h("tr", { key: '101788f84e1f2a44a498813024944fe32a7c7388', class: this.getClassName("weekday-row") }, (_a = this.weekdays) === null || _a === void 0 ? void 0 : _a.map((weekday) => (h("th", { role: "columnheader", abbr: weekday[1], class: this.getClassName("weekday"), key: weekday[0], scope: "col" }, h("span", { "aria-hidden": "true" }, weekday[0]), h("span", { class: "visually-hidden" }, weekday[1])))))), h("tbody", { key: '4498ab21f627f5f8582db15d5babfc4e84c20b38' }, this.getCalendarRows().map((calendarRow) => {
             const rowKey = `row-${calendarRow[0].getMonth()}-${calendarRow[0].getDate()}`;
             return (h("tr", { class: this.getClassName("calendar-row"), key: rowKey }, calendarRow.map((day) => {
                 var _a, _b, _c;
@@ -385,8 +394,8 @@ export class InclusiveDatesCalendar {
                         ? 0
                         : -1 }, h(Tag, { "aria-hidden": "true" }, day.getDate()), h("span", { class: "visually-hidden" }, getScreenReaderText())));
             })));
-        })))), showFooter && (h("div", { key: '102ea99b292e7a028692615c68be2e8c5720913c', class: this.getClassName("footer") }, h("div", { key: '6e1d52da734e986a9044847edd7ace16460605f2', class: this.getClassName("footer-buttons") }, this.showTodayButton && (h("button", { key: '9508eadf9835bea2e1640e6ac622665bd19da4d8', class: this.getClassName("today-button"), disabled: this.disabled, innerHTML: this.todayButtonContent || undefined, onClick: this.showToday, type: "button" }, this.labels.todayButton)), this.showClearButton && (h("button", { key: '262b926076309bc44d5b36dd64217196b4d6e8e2', class: this.getClassName("clear-button"), disabled: this.disabled, innerHTML: this.clearButtonContent || undefined, onClick: this.clear, type: "button" }, this.labels.clearButton))), this.showKeyboardHint &&
-            !window.matchMedia("(pointer: coarse)").matches && (h("button", { key: '09c974e2b246f57381e0461dbb27eb83e523812d', type: "button", onClick: () => alert("Todo: Add Keyboard helper!"), class: this.getClassName("keyboard-hint") }, h("svg", { key: '4dd5a8ce6e5c96e79adf6d8b0308b56fae5be361', xmlns: "http://www.w3.org/2000/svg", height: "1em", width: "1em", viewBox: "0 0 48 48", fill: "currentColor" }, h("path", { key: 'f3378678d6a0dc9fe7ea9ffd42dc083c3dca5ec8', d: "M7 38q-1.2 0-2.1-.925Q4 36.15 4 35V13q0-1.2.9-2.1.9-.9 2.1-.9h34q1.2 0 2.1.9.9.9.9 2.1v22q0 1.15-.9 2.075Q42.2 38 41 38Zm0-3h34V13H7v22Zm8-3.25h18v-3H15Zm-4.85-6.25h3v-3h-3Zm6.2 0h3v-3h-3Zm6.15 0h3v-3h-3Zm6.2 0h3v-3h-3Zm6.15 0h3v-3h-3Zm-24.7-6.25h3v-3h-3Zm6.2 0h3v-3h-3Zm6.15 0h3v-3h-3Zm6.2 0h3v-3h-3Zm6.15 0h3v-3h-3ZM7 35V13v22Z" })), this.labels.keyboardHint))))), h("slot", { key: 'ec9b51b9aaf6c48e643120115dbc7f418e9fb8e4', name: "after-calendar" }))));
+        })))), showFooter && (h("div", { key: '48fde61cd9cdf8900bf8e15d408f3ad11cba9d9d', class: this.getClassName("footer") }, h("div", { key: 'a0b3e3b48f1f530648dff20598a0665ded2fbbe1', class: this.getClassName("footer-buttons") }, this.showTodayButton && (h("button", { key: '06a03df2fe08b9c76d393fdfe48e279c58acf613', class: this.getClassName("today-button"), disabled: this.disabled, innerHTML: this.todayButtonContent || undefined, onClick: this.showToday, type: "button" }, this.labels.todayButton)), this.showClearButton && (h("button", { key: 'e8bc81d95650edbf8c3b4d4e217d155c8a6f88b2', class: this.getClassName("clear-button"), disabled: this.disabled, innerHTML: this.clearButtonContent || undefined, onClick: this.clear, type: "button" }, this.labels.clearButton)), this.showCloseButton && (h("button", { key: '4ca7b4c414ca22092bee6fffb51179bbc1d66ee6', class: this.getClassName("close-button"), disabled: this.disabled, innerHTML: this.closeButtonContent || undefined, onClick: this.close, type: "button" }, this.labels.closeButton))), this.showKeyboardHint &&
+            !window.matchMedia("(pointer: coarse)").matches && (h("button", { key: 'd34f89d3fb25286752bc4aa71893d0277dde3d17', type: "button", onClick: () => alert("Todo: Add Keyboard helper!"), class: this.getClassName("keyboard-hint") }, h("svg", { key: '5cf389d28d296804a5b5adfea6a0084290d125dd', xmlns: "http://www.w3.org/2000/svg", height: "1em", width: "1em", viewBox: "0 0 48 48", fill: "currentColor" }, h("path", { key: 'b84709ea4f714b979ff76078ee71556dc8671b04', d: "M7 38q-1.2 0-2.1-.925Q4 36.15 4 35V13q0-1.2.9-2.1.9-.9 2.1-.9h34q1.2 0 2.1.9.9.9.9 2.1v22q0 1.15-.9 2.075Q42.2 38 41 38Zm0-3h34V13H7v22Zm8-3.25h18v-3H15Zm-4.85-6.25h3v-3h-3Zm6.2 0h3v-3h-3Zm6.15 0h3v-3h-3Zm6.2 0h3v-3h-3Zm6.15 0h3v-3h-3Zm-24.7-6.25h3v-3h-3Zm6.2 0h3v-3h-3Zm6.15 0h3v-3h-3Zm6.2 0h3v-3h-3Zm6.15 0h3v-3h-3ZM7 35V13v22Z" })), this.labels.keyboardHint))))), h("slot", { key: '1a37c10a1e2e367b1ee42756c85894d7ff5325f5', name: "after-calendar" }))));
     }
     static get is() { return "tabworthy-dates-calendar"; }
     static get encapsulation() { return "scoped"; }
@@ -420,6 +429,25 @@ export class InclusiveDatesCalendar {
                 "setter": false,
                 "reflect": false,
                 "attribute": "clear-button-content"
+            },
+            "closeButtonContent": {
+                "type": "string",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": true,
+                "docs": {
+                    "tags": [],
+                    "text": ""
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "attribute": "close-button-content"
             },
             "disabled": {
                 "type": "boolean",
@@ -549,7 +577,7 @@ export class InclusiveDatesCalendar {
                 "mutable": false,
                 "complexType": {
                     "original": "DatesCalendarLabels",
-                    "resolved": "{ clearButton: string; monthSelect: string; nextMonthButton: string; nextYearButton: string; picker: string; previousMonthButton: string; previousYearButton: string; todayButton: string; yearSelect: string; keyboardHint: string; selected: string; chooseAsStartDate: string; chooseAsEndDate: string; }",
+                    "resolved": "{ clearButton: string; closeButton: string; monthSelect: string; nextMonthButton: string; nextYearButton: string; picker: string; previousMonthButton: string; previousYearButton: string; todayButton: string; yearSelect: string; keyboardHint: string; selected: string; chooseAsStartDate: string; chooseAsEndDate: string; }",
                     "references": {
                         "DatesCalendarLabels": {
                             "location": "local",
@@ -740,6 +768,26 @@ export class InclusiveDatesCalendar {
                 "setter": false,
                 "reflect": false,
                 "attribute": "show-clear-button",
+                "defaultValue": "false"
+            },
+            "showCloseButton": {
+                "type": "boolean",
+                "mutable": false,
+                "complexType": {
+                    "original": "boolean",
+                    "resolved": "boolean",
+                    "references": {}
+                },
+                "required": false,
+                "optional": true,
+                "docs": {
+                    "tags": [],
+                    "text": ""
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "attribute": "show-close-button",
                 "defaultValue": "false"
             },
             "showMonthStepper": {
@@ -969,6 +1017,21 @@ export class InclusiveDatesCalendar {
                             "id": "src/components/tabworthy-dates-calendar/tabworthy-dates-calendar.tsx::YearChangedEventDetails"
                         }
                     }
+                }
+            }, {
+                "method": "requestClose",
+                "name": "requestClose",
+                "bubbles": false,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": ""
+                },
+                "complexType": {
+                    "original": "void",
+                    "resolved": "void",
+                    "references": {}
                 }
             }];
     }

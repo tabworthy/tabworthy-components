@@ -190,7 +190,7 @@ export class InclusiveDatesModal {
         }
     }
     render() {
-        return (h(Host, { key: '35e8ed14b0108e9cb75782516d070dfb8474b0b2', showing: this.showing, ref: (r) => r && (this.el = r) }, !this.inline && this.showing && (h("div", { key: 'fdb64ed8717e2a1620ef2d4ffb21a44d1de03a46', part: "body", ref: (r) => {
+        return (h(Host, { key: '086d18e9b2c4924a12bc7dffb47df846ffc66f2f', showing: this.showing, ref: (r) => r && (this.el = r) }, !this.inline && this.showing && (h("div", { key: 'db2947e2f1a80b986fd815fbe3ee9c2cebc486c3', part: "body", ref: (r) => {
                 if (r) {
                     this.bodyRef = r;
                     // Setup portal and create popper when ref is set
@@ -207,7 +207,7 @@ export class InclusiveDatesModal {
                         });
                     }
                 }
-            }, style: { visibility: this.positioned ? "visible" : "hidden" }, onKeyDown: this.onKeyDown, role: "dialog", tabindex: -1, "aria-hidden": !this.showing, "aria-label": this.label, "aria-modal": this.showing }, h("focus-trap", { key: 'af4734b1a18dd62a600ca49313b1ba07f2d19039' }, h("div", { key: 'fb41d5ce07b5aac179e4bed63c18a8d254503a50', part: "content" }, h("slot", { key: 'fc480cf1a29a42b1a19737a72d410c139dc32f07' }))))), this.inline && (h("div", { key: '7aef10d50f790a1e72e05b26dc108c40500fa7c3', part: "content" }, h("slot", { key: '06395cd19052d1b81ab448c0a9a618da876fa86d' })))));
+            }, style: { visibility: this.positioned ? "visible" : "hidden" }, onKeyDown: this.onKeyDown, role: "dialog", tabindex: -1, "aria-hidden": !this.showing, "aria-label": this.label, "aria-modal": this.showing }, h("focus-trap", { key: '7801a9389dd510ad741b5edefdbdfb22f7beb29b' }, h("div", { key: '9e54bb90bc8f2aa5fe928eb063c10a1d9c1e69c9', part: "content" }, h("slot", { key: '42242c16758b365e489eaaae6267b540e19a6bb6' }))))), this.inline && (h("div", { key: 'fade4f7462beb49692ed196e74ecbc4971fb102d', part: "content" }, h("slot", { key: '6c0c7f4c842965350bb1cac12be2042c135e2c64' })))));
     }
     static get is() { return "tabworthy-dates-modal"; }
     static get encapsulation() { return "shadow"; }

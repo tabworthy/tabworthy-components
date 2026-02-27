@@ -27,6 +27,7 @@ export declare class InclusiveTimes {
     showYearStepper: boolean;
     showMonthStepper: boolean;
     showClearButton: boolean;
+    showCloseButton: boolean;
     showTodayButton: boolean;
     calendarButtonContent?: string;
     disableDate: (date: Date) => boolean;
