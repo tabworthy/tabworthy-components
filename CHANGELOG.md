@@ -1,3 +1,10 @@
+## [0.11.1](https://github.com/tabworthy/tabworthy-components/compare/v0.11.0...v0.11.1) (2026-02-27)
+
+
+### Bug Fixes
+
+* **times:** clearButton should work correctly ([4783086](https://github.com/tabworthy/tabworthy-components/commit/4783086eab479abe8cab72b7dffacb6758b49c51))
+
 # [0.11.0](https://github.com/tabworthy/tabworthy-components/compare/v0.10.1...v0.11.0) (2026-02-27)
 
 

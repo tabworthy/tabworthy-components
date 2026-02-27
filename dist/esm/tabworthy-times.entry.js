@@ -73,6 +73,10 @@ const InclusiveTimes = class {
         this.disabledState = this.disabled;
         this.errorMessage = "";
         this.handlePickerSelection = async (dateString) => {
+            // Handle clear button click (calendar emits undefined)
+            if (!dateString) {
+                return this.clearValue();
+            }
             const dates = dateString.split(",");
             if (this.range && dates.length === 2) {
                 const startDate = removeTimezoneOffset(new Date(dates[0]));
@@ -236,7 +240,9 @@ const InclusiveTimes = class {
         this.internalValue = null;
         this.value = undefined;
         this.selectedDate = undefined;
-        this.inputRef.value = "";
+        if (this.inputRef) {
+            this.inputRef.value = "";
+        }
         if (this.pickerRef) {
             this.pickerRef.value = null;
         }
@@ -244,10 +250,10 @@ const InclusiveTimes = class {
     }
     render() {
         var _a;
-        return (h(Host, { key: '347e952540e649e53bf13dadfd156f3c9a31b4d2', class: this.elementClassName, "has-error": this.errorState, disabled: this.disabledState }, h("label", { key: '3c516fa313feaaabc837e53264c7b10989199f6c', htmlFor: `${this.id}-input`, class: this.getClassName("label") }, this.label), h("div", { key: 'edc0f1a6e627273fdd6cae27810d97a2b6763f76', class: this.getClassName("input-container"), ref: (r) => (this.inputContainerRef = r) }, h("input", { key: '14a3ed21097915739c2db94e6ede2dbb09f09945', id: `${this.id}-input`, ref: (r) => (this.inputRef = r), type: "text", class: {
+        return (h(Host, { key: 'de07eab0ee0cd6624756ce18a0dcc38a509692e4', class: this.elementClassName, "has-error": this.errorState, disabled: this.disabledState }, h("label", { key: '666a1cd43b7c2d1633210d7422ec8d2c3fc44e44', htmlFor: `${this.id}-input`, class: this.getClassName("label") }, this.label), h("div", { key: '222432b8a431bac954fb625f5b724df077d9feeb', class: this.getClassName("input-container"), ref: (r) => (this.inputContainerRef = r) }, h("input", { key: 'c3284e4348cd736f2edf708978956fb88f78118a', id: `${this.id}-input`, ref: (r) => (this.inputRef = r), type: "text", class: {
                 [this.getClassName("input")]: true,
                 [this.inputClass]: !!this.inputClass
-            }, placeholder: this.placeholder, disabled: this.disabledState || this.disableFreeformInput, value: (_a = this.internalValue) === null || _a === void 0 ? void 0 : _a.toString(), onBlur: this.handleInputBlur, onChange: this.handleInputChange, "aria-describedby": this.errorState ? `${this.id}-error` : undefined, "aria-invalid": this.errorState }), !this.inline && (h("button", { key: '0a02d0b3e851476d421408bcf622af4c71a4e9b5', type: "button", onClick: this.handleCalendarButtonClick, class: this.getClassName("calendar-button"), disabled: this.disabledState }, this.calendarButtonContent ? (h("span", { innerHTML: this.calendarButtonContent })) : (this.timesLabels.openCalendar)))), h("tabworthy-dates-modal", { key: '972b23ebef8d198da1c7b23966f5b343c53dc89b', label: this.timesLabels.calendar, ref: (el) => (this.modalRef = el), onOpened: () => {
+            }, placeholder: this.placeholder, disabled: this.disabledState || this.disableFreeformInput, value: (_a = this.internalValue) === null || _a === void 0 ? void 0 : _a.toString(), onBlur: this.handleInputBlur, onChange: this.handleInputChange, "aria-describedby": this.errorState ? `${this.id}-error` : undefined, "aria-invalid": this.errorState }), !this.inline && (h("button", { key: '9087c6b9cec31990b13ba6a1a7ad66f937ddee3a', type: "button", onClick: this.handleCalendarButtonClick, class: this.getClassName("calendar-button"), disabled: this.disabledState }, this.calendarButtonContent ? (h("span", { innerHTML: this.calendarButtonContent })) : (this.timesLabels.openCalendar)))), h("tabworthy-dates-modal", { key: '79613c7af13afe36e03cfede116b260f9d1d2b63', label: this.timesLabels.calendar, ref: (el) => (this.modalRef = el), onOpened: () => {
                 if (this.pickerRef) {
                     this.pickerRef.modalIsOpen = true;
                 }
@@ -255,7 +261,7 @@ const InclusiveTimes = class {
                 if (this.pickerRef) {
                     this.pickerRef.modalIsOpen = false;
                 }
-            }, inline: this.inline, appendTo: this.appendTo }, h("div", { key: '7bab739450039dfb34b638a5882d2334e18e7ee9', class: this.getClassName("picker-container") }, h("tabworthy-dates-calendar", { key: '169dd2b5b134d40613547c5633f1ba7aafa79e5a', range: this.range, locale: this.locale, onSelectDate: (event) => this.handlePickerSelection(event.detail), onChangeMonth: (event) => this.handleChangedMonths(event.detail), onChangeYear: (event) => this.handleYearChange(event.detail), onRequestClose: () => { var _a; return (_a = this.modalRef) === null || _a === void 0 ? void 0 : _a.close(); }, labels: this.datesCalendarLabels, ref: (el) => (this.pickerRef = el), startDate: this.startDate, firstDayOfWeek: this.firstDayOfWeek, showHiddenTitle: true, disabled: this.disabledState, showMonthStepper: this.showMonthStepper, showYearStepper: this.showYearStepper, showClearButton: this.showClearButton, showCloseButton: this.showCloseButton, showTodayButton: this.showTodayButton, disableDate: this.disableDate, minDate: this.minDate, maxDate: this.maxDate, inline: this.inline, value: this.value ? this.toDate(this.value) : undefined }, h("div", { key: '20555b87d63d4d9b5ba360345b5a8ce3910bb71a', slot: "after-calendar", class: this.getClassName("time-section") }, h("hr", { key: 'ccea06aa5b2b149aa77739e495cb71eda5d9a14e', class: this.getClassName("divider") }), h("tabworthy-times-picker", { key: '87a3aca5a0f09413fb7b4fb8dd4242f18d5365d7', hours: this.selectedHours, minutes: this.selectedMinutes, seconds: this.selectedSeconds, showSeconds: this.showSeconds, useTwelveHourFormat: this.useTwelveHourFormat, disabled: this.disabledState, onTimeChanged: this.handleTimeChange, labels: this.timesPickerLabels }))))), this.errorState && (h("div", { key: 'd45d1adde84b72bbc8d166f4d087f0fcf732ef99', class: this.getClassName("input-error"), id: this.id ? `${this.id}-error` : undefined, role: "status" }, this.errorMessage))));
+            }, inline: this.inline, appendTo: this.appendTo }, h("div", { key: '716440a779e1e614fbef292c7c1cc801cde57ee6', class: this.getClassName("picker-container") }, h("tabworthy-dates-calendar", { key: '02579a80370918076f36e04f64b6626893acf1cd', range: this.range, locale: this.locale, onSelectDate: (event) => this.handlePickerSelection(event.detail), onChangeMonth: (event) => this.handleChangedMonths(event.detail), onChangeYear: (event) => this.handleYearChange(event.detail), onRequestClose: () => { var _a; return (_a = this.modalRef) === null || _a === void 0 ? void 0 : _a.close(); }, labels: this.datesCalendarLabels, ref: (el) => (this.pickerRef = el), startDate: this.startDate, firstDayOfWeek: this.firstDayOfWeek, showHiddenTitle: true, disabled: this.disabledState, showMonthStepper: this.showMonthStepper, showYearStepper: this.showYearStepper, showClearButton: this.showClearButton, showCloseButton: this.showCloseButton, showTodayButton: this.showTodayButton, disableDate: this.disableDate, minDate: this.minDate, maxDate: this.maxDate, inline: this.inline, value: this.value ? this.toDate(this.value) : undefined }, h("div", { key: 'df629acf66bc6a83c7c0601f6cff39a8a27ddba2', slot: "after-calendar", class: this.getClassName("time-section") }, h("hr", { key: '084ba933dbe96086d9c8f21494e4016eb6d3ac66', class: this.getClassName("divider") }), h("tabworthy-times-picker", { key: '788081745c21b0702fcc0f8d79f0c6fe88b4372d', hours: this.selectedHours, minutes: this.selectedMinutes, seconds: this.selectedSeconds, showSeconds: this.showSeconds, useTwelveHourFormat: this.useTwelveHourFormat, disabled: this.disabledState, onTimeChanged: this.handleTimeChange, labels: this.timesPickerLabels }))))), this.errorState && (h("div", { key: '0742a70dcb66f4523131c29d60f2056c9cf94320', class: this.getClassName("input-error"), id: this.id ? `${this.id}-error` : undefined, role: "status" }, this.errorMessage))));
     }
     get el() { return getElement(this); }
     static get watchers() { return {
