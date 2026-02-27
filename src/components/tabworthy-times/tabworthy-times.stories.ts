@@ -32,6 +32,7 @@ const meta: Meta<Components.TabworthyTimes> = {
       ?show-month-stepper=${args.showMonthStepper}
       ?show-clear-button=${args.showClearButton}
       ?show-today-button=${args.showTodayButton}
+      ?show-close-button=${args.showCloseButton}
       input-should-format=${args.inputShouldFormat}
       calendar-button-content=${ifDefined(args.calendarButtonContent)}
       ?disable-freeform-input=${args.disableFreeformInput}
@@ -58,6 +59,7 @@ export const Default: Story = {
     showYearStepper: false,
     showClearButton: true,
     showTodayButton: true,
+    showCloseButton: true,
     firstDayOfWeek: 1
   }
 };

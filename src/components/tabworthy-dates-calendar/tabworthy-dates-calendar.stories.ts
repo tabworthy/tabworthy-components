@@ -27,6 +27,7 @@ const meta: Meta<Components.TabworthyDatesCalendar> = {
       ?show-today-button=${args.showTodayButton}
       ?show-hidden-title=${args.showHiddenTitle}
       ?show-keyboard-hint=${args.showKeyboardHint}
+      ?show-close-button=${args.showCloseButton}
       ?disabled=${args.disabled}
       .disableDate=${args.disableDate}
       ?inline=${args.inline}
@@ -110,6 +111,7 @@ export const MaxUI: Story = {
     ...Default.args,
     showMonthStepper: true,
     showYearStepper: true,
-    showClearButton: true
+    showClearButton: true,
+    showCloseButton: true
   }
 };

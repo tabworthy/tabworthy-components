@@ -33,6 +33,7 @@ const meta: Meta<Components.TabworthyDates> = {
       ?show-month-stepper=${args.showMonthStepper}
       show-clear-button=${args.showClearButton}
       show-today-button=${args.showTodayButton}
+      show-close-button=${args.showCloseButton}
       ?show-keyboard-hint=${args.showKeyboardHint}
       input-should-format=${args.inputShouldFormat}
       calendar-button-content=${ifDefined(args.calendarButtonContent)}
@@ -142,7 +143,8 @@ export const MaxUI: Story = {
     id: "datepicker-max-ui",
     showMonthStepper: true,
     showYearStepper: true,
-    showClearButton: true
+    showClearButton: true,
+    showCloseButton: true
   }
 };
 
