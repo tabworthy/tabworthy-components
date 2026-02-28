@@ -1,3 +1,10 @@
+## [0.11.3](https://github.com/tabworthy/tabworthy-components/compare/v0.11.2...v0.11.3) (2026-02-28)
+
+
+### Bug Fixes
+
+* trigger actual change ([7f59bc9](https://github.com/tabworthy/tabworthy-components/commit/7f59bc977337059fa3eebe909a9946ebb2464cce))
+
 ## [0.11.2](https://github.com/tabworthy/tabworthy-components/compare/v0.11.1...v0.11.2) (2026-02-28)
 
 
