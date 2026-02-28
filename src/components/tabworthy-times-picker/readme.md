@@ -4,15 +4,17 @@
 
 ## Properties
 
-| Property              | Attribute                | Description | Type                          | Default                    |
-| --------------------- | ------------------------ | ----------- | ----------------------------- | -------------------------- |
-| `disabled`            | `disabled`               |             | `boolean`                     | `false`                    |
-| `elementClassName`    | `element-class-name`     |             | `string`                      | `"tabworthy-times-picker"` |
-| `hours`               | `hours`                  |             | `number`                      | `12`                       |
-| `labels`              | --                       |             | `InclusivekTimesPickerLabels` | `defaultLabels`            |
-| `labelsSrOnly`        | `labels-sr-only`         |             | `boolean`                     | `true`                     |
-| `minutes`             | `minutes`                |             | `number`                      | `0`                        |
-| `useTwelveHourFormat` | `use-twelve-hour-format` |             | `boolean`                     | `false`                    |
+| Property              | Attribute                | Description | Type                | Default                    |
+| --------------------- | ------------------------ | ----------- | ------------------- | -------------------------- |
+| `disabled`            | `disabled`               |             | `boolean`           | `false`                    |
+| `elementClassName`    | `element-class-name`     |             | `string`            | `"tabworthy-times-picker"` |
+| `hours`               | `hours`                  |             | `number`            | `12`                       |
+| `labels`              | --                       |             | `TimesPickerLabels` | `defaultLabels`            |
+| `labelsSrOnly`        | `labels-sr-only`         |             | `boolean`           | `true`                     |
+| `minutes`             | `minutes`                |             | `number`            | `0`                        |
+| `seconds`             | `seconds`                |             | `number`            | `0`                        |
+| `showSeconds`         | `show-seconds`           |             | `boolean`           | `false`                    |
+| `useTwelveHourFormat` | `use-twelve-hour-format` |             | `boolean`           | `false`                    |
 
 ## Events
 
