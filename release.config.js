@@ -16,7 +16,7 @@ export default {
 
     // 4) commit dist + changelog + package.json back to repo
     ["@semantic-release/git", {
-      assets: ["dist/**", "CHANGELOG.md", "package.json"],
+      assets: ["dist/**", "CHANGELOG.md", "package.json", "src/**"],
       message: "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}",
     }],
 
