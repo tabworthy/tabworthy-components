@@ -1,9 +1,14 @@
 name: Deployment
 
 on:
-  push:
+  # Trigger after successful Publish workflow
+  workflow_run:
+    workflows: ["Publish"]
+    types:
+      - completed
     branches: ["main"]
 
+  # Keep manual trigger as fallback
   workflow_dispatch:
 
 permissions:
@@ -17,6 +22,8 @@ concurrency:
 
 jobs:
   build_and_deploy:
+    # Only run if Publish succeeded, or if manually triggered
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
