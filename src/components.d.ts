@@ -6,1362 +6,1040 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { DatesLabels } from "./components/tabworthy-dates/tabworthy-dates";
-import {
-  DatesCalendarLabels,
-  YearChangedEventDetails
-} from "./components/tabworthy-dates-calendar/tabworthy-dates-calendar";
-import {
-  ChronoOptions,
-  ChronoParsedDateString
-} from "../shared/utils/chrono-parser/chrono-parser.type";
-import {
-  DatesCalendarLabels as DatesCalendarLabels1,
-  MonthChangedEventDetails,
-  YearChangedEventDetails as YearChangedEventDetails1
-} from "./components/tabworthy-dates-calendar/tabworthy-dates-calendar";
+import { DatesCalendarLabels, YearChangedEventDetails } from "./components/tabworthy-dates-calendar/tabworthy-dates-calendar";
+import { ChronoOptions, ChronoParsedDateString } from "../shared/utils/chrono-parser/chrono-parser.type";
+import { DatesCalendarLabels as DatesCalendarLabels1, MonthChangedEventDetails, YearChangedEventDetails as YearChangedEventDetails1 } from "./components/tabworthy-dates-calendar/tabworthy-dates-calendar";
 import { Placement } from "@popperjs/core";
 import { TimesLabels } from "./components/tabworthy-times/tabworthy-times";
 import { TimesPickerLabels } from "./components/tabworthy-times-picker/tabworthy-times-picker";
-import {
-  TimesPickerLabels as TimesPickerLabels1,
-  TimeValue
-} from "./components/tabworthy-times-picker/tabworthy-times-picker";
+import { TimesPickerLabels as TimesPickerLabels1, TimeValue } from "./components/tabworthy-times-picker/tabworthy-times-picker";
 export { DatesLabels } from "./components/tabworthy-dates/tabworthy-dates";
-export {
-  DatesCalendarLabels,
-  YearChangedEventDetails
-} from "./components/tabworthy-dates-calendar/tabworthy-dates-calendar";
-export {
-  ChronoOptions,
-  ChronoParsedDateString
-} from "../shared/utils/chrono-parser/chrono-parser.type";
-export {
-  DatesCalendarLabels as DatesCalendarLabels1,
-  MonthChangedEventDetails,
-  YearChangedEventDetails as YearChangedEventDetails1
-} from "./components/tabworthy-dates-calendar/tabworthy-dates-calendar";
+export { DatesCalendarLabels, YearChangedEventDetails } from "./components/tabworthy-dates-calendar/tabworthy-dates-calendar";
+export { ChronoOptions, ChronoParsedDateString } from "../shared/utils/chrono-parser/chrono-parser.type";
+export { DatesCalendarLabels as DatesCalendarLabels1, MonthChangedEventDetails, YearChangedEventDetails as YearChangedEventDetails1 } from "./components/tabworthy-dates-calendar/tabworthy-dates-calendar";
 export { Placement } from "@popperjs/core";
 export { TimesLabels } from "./components/tabworthy-times/tabworthy-times";
 export { TimesPickerLabels } from "./components/tabworthy-times-picker/tabworthy-times-picker";
-export {
-  TimesPickerLabels as TimesPickerLabels1,
-  TimeValue
-} from "./components/tabworthy-times-picker/tabworthy-times-picker";
+export { TimesPickerLabels as TimesPickerLabels1, TimeValue } from "./components/tabworthy-times-picker/tabworthy-times-picker";
 export namespace Components {
-  interface TabworthyDates {
-    /**
-     * Element to append the dropdown to. Use "body" to append to document.body, or pass a CSS selector or HTMLElement. Useful for escaping overflow:hidden containers.
-     */
-    appendTo?: string | HTMLElement;
-    calendarButtonContent?: string;
-    datesCalendarLabels?: DatesCalendarLabels;
-    /**
-     * @default defaultLabels
-     */
-    datesLabels: DatesLabels;
-    /**
-     * @default () =>     false
-     */
-    disableDate: HTMLTabworthyDatesCalendarElement["disableDate"];
-    /**
-     * @default false
-     */
-    disableFreeformInput: boolean;
-    /**
-     * @default false
-     */
-    disabled: boolean;
-    /**
-     * @default "tabworthy-dates"
-     */
-    elementClassName: string;
-    /**
-     * @default 1
-     */
-    firstDayOfWeek?: number;
-    /**
-     * @default "YYYY-MM-DD"
-     */
-    format: string;
-    /**
-     * @default false
-     */
-    hasError: boolean;
-    id: string;
-    /**
-     * @default false
-     */
-    inline: boolean;
-    /**
-     * @default ""
-     */
-    inputClass: string;
-    /**
-     * @default true
-     */
-    inputShouldFormat?: boolean | string;
-    /**
-     * @default this.range     ? "Choose a date range (any way you like)"     : "Choose a date (any way you like)"
-     */
-    label: string;
-    /**
-     * @default navigator?.language || "en-US"
-     */
-    locale: string;
-    maxDate?: string;
-    minDate?: string;
-    nextMonthButtonContent?: string;
-    nextYearButtonContent?: string;
-    parseDate: (
-      text: string,
-      shouldSetValue?: boolean,
-      chronoOptions?: ChronoOptions | undefined
-    ) => Promise<ChronoParsedDateString>;
-    /**
-     * @default this.range     ? `Try "June 8 to 12"`     : `Try "tomorrow" or "in ten days"`
-     */
-    placeholder: string;
-    /**
-     * @default this.range     ? ["Monday to Wednesday", "July 5 to 10"]     : ["Yesterday", "Today", "Tomorrow", "In 10 days"]
-     */
-    quickButtons: string[];
-    /**
-     * @default false
-     */
-    range?: boolean;
-    /**
-     * @default getISODateString(new Date())
-     */
-    referenceDate: string;
-    /**
-     * @default true
-     */
-    showClearButton: boolean;
-    /**
-     * @default false
-     */
-    showCloseButton: boolean;
-    /**
-     * @default false
-     */
-    showKeyboardHint: boolean;
-    /**
-     * @default true
-     */
-    showMonthStepper: boolean;
-    /**
-     * @default true
-     */
-    showQuickButtons: boolean;
-    /**
-     * @default true
-     */
-    showTodayButton: boolean;
-    /**
-     * @default false
-     */
-    showYearStepper: boolean;
-    /**
-     * @default getISODateString(new Date())
-     */
-    startDate: string;
-    todayButtonContent?: string;
-    /**
-     * @default false
-     */
-    useStrictDateParsing: boolean;
-    value?: string | string[];
-  }
-  interface TabworthyDatesCalendar {
-    clearButtonContent?: string;
-    closeButtonContent?: string;
-    /**
-     * @default () => false
-     */
-    disableDate: (date: Date) => boolean;
-    /**
-     * @default false
-     */
-    disabled: boolean;
-    /**
-     * @default "tabworthy-dates-calendar"
-     */
-    elementClassName: string;
-    /**
-     * @default 0
-     */
-    firstDayOfWeek: number;
-    /**
-     * @default false
-     */
-    inline: boolean;
-    /**
-     * @default defaultLabels
-     */
-    labels: DatesCalendarLabels1;
-    /**
-     * @default navigator?.language || "en-US"
-     */
-    locale?: string;
-    maxDate?: string;
-    minDate?: string;
-    /**
-     * @default false
-     */
-    modalIsOpen?: boolean;
-    nextMonthButtonContent?: string;
-    nextYearButtonContent?: string;
-    previousMonthButtonContent?: string;
-    previousYearButtonContent?: string;
-    /**
-     * @default false
-     */
-    range?: boolean;
-    /**
-     * @default false
-     */
-    showClearButton?: boolean;
-    /**
-     * @default false
-     */
-    showCloseButton?: boolean;
-    /**
-     * @default true
-     */
-    showHiddenTitle?: boolean;
-    /**
-     * @default false
-     */
-    showKeyboardHint?: boolean;
-    /**
-     * @default true
-     */
-    showMonthStepper?: boolean;
-    /**
-     * @default true
-     */
-    showTodayButton?: boolean;
-    /**
-     * @default false
-     */
-    showYearStepper?: boolean;
-    /**
-     * @default getISODateString(new Date())
-     */
-    startDate?: string;
-    todayButtonContent?: string;
-    value?: Date | Date[] | null;
-  }
-  interface TabworthyDatesModal {
-    /**
-     * Element to append the dropdown to. Use "body" to append to document.body, or pass a CSS selector or HTMLElement. When set, the dropdown will be portaled to escape overflow:hidden containers.
-     */
-    appendTo?: string | HTMLElement;
-    /**
-     * Close the dialog.
-     */
-    close: () => Promise<void>;
-    getState: () => Promise<boolean>;
-    /**
-     * @default false
-     */
-    inline?: boolean;
-    label: string;
-    /**
-     * Offset from the trigger element [skidding, distance]
-     * @default [0, 8]
-     */
-    offset: [number, number];
-    /**
-     * Open the dialog.
-     */
-    open: () => Promise<void>;
-    /**
-     * Preferred placement of the dropdown (Popper.js placement)
-     * @default "bottom-start"
-     */
-    placement: Placement;
-    setTriggerElement: (element: HTMLElement) => Promise<void>;
-    /**
-     * Force update the popper position
-     */
-    updatePosition: () => Promise<void>;
-  }
-  interface TabworthyTimes {
-    /**
-     * Element to append the dropdown to. Use "body" to append to document.body, or pass a CSS selector or HTMLElement. Useful for escaping overflow:hidden containers.
-     */
-    appendTo?: string | HTMLElement;
-    calendarButtonContent?: string;
-    clearValue: () => Promise<void>;
-    datesCalendarLabels?: DatesCalendarLabels;
-    /**
-     * @default () => false
-     */
-    disableDate: (date: Date) => boolean;
-    /**
-     * @default false
-     */
-    disableFreeformInput: boolean;
-    /**
-     * @default false
-     */
-    disabled: boolean;
-    /**
-     * @default "tabworthy-times"
-     */
-    elementClassName?: string;
-    /**
-     * @default 1
-     */
-    firstDayOfWeek?: number;
-    /**
-     * @default "YYYY-MM-DDTHH:mm:ss"
-     */
-    format: string;
-    /**
-     * @default false
-     */
-    hasError: boolean;
-    id: string;
-    /**
-     * @default false
-     */
-    inline: boolean;
-    /**
-     * @default ""
-     */
-    inputClass: string;
-    /**
-     * @default true
-     */
-    inputShouldFormat?: boolean | string;
-    /**
-     * @default "Choose a date and time"
-     */
-    label: string;
-    /**
-     * @default navigator?.language || "en-US"
-     */
-    locale: string;
-    maxDate?: string;
-    minDate?: string;
-    /**
-     * @default ""
-     */
-    placeholder: string;
-    /**
-     * @default false
-     */
-    range?: boolean;
-    /**
-     * @default getISODateString(new Date())
-     */
-    referenceDate: string;
-    /**
-     * @default true
-     */
-    showClearButton: boolean;
-    /**
-     * @default false
-     */
-    showCloseButton: boolean;
-    /**
-     * @default true
-     */
-    showMonthStepper: boolean;
-    /**
-     * @default false
-     */
-    showSeconds: boolean;
-    /**
-     * @default true
-     */
-    showTodayButton: boolean;
-    /**
-     * @default false
-     */
-    showYearStepper: boolean;
-    /**
-     * @default getISODateString(new Date())
-     */
-    startDate: string;
-    /**
-     * @default defaultLabels
-     */
-    timesLabels: TimesLabels;
-    timesPickerLabels?: TimesPickerLabels;
-    /**
-     * @default true
-     */
-    useTwelveHourFormat: boolean;
-    value?: string | string[];
-  }
-  interface TabworthyTimesPicker {
-    /**
-     * @default false
-     */
-    disabled: boolean;
-    /**
-     * @default "tabworthy-times-picker"
-     */
-    elementClassName: string;
-    /**
-     * @default 12
-     */
-    hours: number;
-    /**
-     * @default defaultLabels
-     */
-    labels: TimesPickerLabels1;
-    /**
-     * @default true
-     */
-    labelsSrOnly: boolean;
-    /**
-     * @default 0
-     */
-    minutes: number;
-    /**
-     * @default 0
-     */
-    seconds: number;
-    /**
-     * @default false
-     */
-    showSeconds: boolean;
-    /**
-     * @default false
-     */
-    useTwelveHourFormat: boolean;
-  }
+    interface TabworthyDates {
+        /**
+          * Element to append the dropdown to. Use "body" to append to document.body, or pass a CSS selector or HTMLElement. Useful for escaping overflow:hidden containers.
+         */
+        "appendTo"?: string | HTMLElement;
+        "calendarButtonContent"?: string;
+        "datesCalendarLabels"?: DatesCalendarLabels;
+        /**
+          * @default defaultLabels
+         */
+        "datesLabels": DatesLabels;
+        /**
+          * @default () =>     false
+         */
+        "disableDate": HTMLTabworthyDatesCalendarElement["disableDate"];
+        /**
+          * @default false
+         */
+        "disableFreeformInput": boolean;
+        /**
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * @default "tabworthy-dates"
+         */
+        "elementClassName": string;
+        /**
+          * @default 1
+         */
+        "firstDayOfWeek"?: number;
+        /**
+          * @default "YYYY-MM-DD"
+         */
+        "format": string;
+        /**
+          * @default false
+         */
+        "hasError": boolean;
+        "id": string;
+        /**
+          * @default false
+         */
+        "inline": boolean;
+        /**
+          * @default ""
+         */
+        "inputClass": string;
+        /**
+          * @default true
+         */
+        "inputShouldFormat"?: | boolean
+    | string;
+        /**
+          * @default this.range     ? "Choose a date range (any way you like)"     : "Choose a date (any way you like)"
+         */
+        "label": string;
+        /**
+          * @default navigator?.language || "en-US"
+         */
+        "locale": string;
+        "maxDate"?: string;
+        "minDate"?: string;
+        "nextMonthButtonContent"?: string;
+        "nextYearButtonContent"?: string;
+        "parseDate": (text: string, shouldSetValue?: boolean, chronoOptions?: ChronoOptions | undefined) => Promise<ChronoParsedDateString>;
+        /**
+          * @default this.range     ? `Try "June 8 to 12"`     : `Try "tomorrow" or "in ten days"`
+         */
+        "placeholder": string;
+        /**
+          * @default this.range     ? ["Monday to Wednesday", "July 5 to 10"]     : ["Yesterday", "Today", "Tomorrow", "In 10 days"]
+         */
+        "quickButtons": string[];
+        /**
+          * @default false
+         */
+        "range"?: boolean;
+        /**
+          * @default getISODateString(new Date())
+         */
+        "referenceDate": string;
+        /**
+          * @default true
+         */
+        "showClearButton": boolean;
+        /**
+          * @default false
+         */
+        "showCloseButton": boolean;
+        /**
+          * @default false
+         */
+        "showKeyboardHint": boolean;
+        /**
+          * @default true
+         */
+        "showMonthStepper": boolean;
+        /**
+          * @default true
+         */
+        "showQuickButtons": boolean;
+        /**
+          * @default true
+         */
+        "showTodayButton": boolean;
+        /**
+          * @default false
+         */
+        "showYearStepper": boolean;
+        /**
+          * @default getISODateString(new Date())
+         */
+        "startDate": string;
+        "todayButtonContent"?: string;
+        /**
+          * @default false
+         */
+        "useStrictDateParsing": boolean;
+        "value"?: string | string[];
+    }
+    interface TabworthyDatesCalendar {
+        "clearButtonContent"?: string;
+        "closeButtonContent"?: string;
+        /**
+          * @default () => false
+         */
+        "disableDate": (date: Date) => boolean;
+        /**
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * @default "tabworthy-dates-calendar"
+         */
+        "elementClassName": string;
+        /**
+          * @default 0
+         */
+        "firstDayOfWeek": number;
+        /**
+          * @default false
+         */
+        "inline": boolean;
+        /**
+          * @default defaultLabels
+         */
+        "labels": DatesCalendarLabels1;
+        /**
+          * @default navigator?.language || "en-US"
+         */
+        "locale"?: string;
+        "maxDate"?: string;
+        "minDate"?: string;
+        /**
+          * @default false
+         */
+        "modalIsOpen"?: boolean;
+        "nextMonthButtonContent"?: string;
+        "nextYearButtonContent"?: string;
+        "previousMonthButtonContent"?: string;
+        "previousYearButtonContent"?: string;
+        /**
+          * @default false
+         */
+        "range"?: boolean;
+        /**
+          * @default false
+         */
+        "showClearButton"?: boolean;
+        /**
+          * @default false
+         */
+        "showCloseButton"?: boolean;
+        /**
+          * @default true
+         */
+        "showHiddenTitle"?: boolean;
+        /**
+          * @default false
+         */
+        "showKeyboardHint"?: boolean;
+        /**
+          * @default true
+         */
+        "showMonthStepper"?: boolean;
+        /**
+          * @default true
+         */
+        "showTodayButton"?: boolean;
+        /**
+          * @default false
+         */
+        "showYearStepper"?: boolean;
+        /**
+          * @default getISODateString(new Date())
+         */
+        "startDate"?: string;
+        "todayButtonContent"?: string;
+        "value"?: Date | Date[] | null;
+    }
+    interface TabworthyDatesModal {
+        /**
+          * Element to append the dropdown to. Use "body" to append to document.body, or pass a CSS selector or HTMLElement. When set, the dropdown will be portaled to escape overflow:hidden containers.
+         */
+        "appendTo"?: string | HTMLElement;
+        /**
+          * Close the dialog.
+         */
+        "close": () => Promise<void>;
+        "getState": () => Promise<boolean>;
+        /**
+          * @default false
+         */
+        "inline"?: boolean;
+        "label": string;
+        /**
+          * Offset from the trigger element [skidding, distance]
+          * @default [0, 8]
+         */
+        "offset": [number, number];
+        /**
+          * Open the dialog.
+         */
+        "open": () => Promise<void>;
+        /**
+          * Preferred placement of the dropdown (Popper.js placement)
+          * @default "bottom-start"
+         */
+        "placement": Placement;
+        "setTriggerElement": (element: HTMLElement) => Promise<void>;
+        /**
+          * Force update the popper position
+         */
+        "updatePosition": () => Promise<void>;
+    }
+    interface TabworthyTimes {
+        /**
+          * Element to append the dropdown to. Use "body" to append to document.body, or pass a CSS selector or HTMLElement. Useful for escaping overflow:hidden containers.
+         */
+        "appendTo"?: string | HTMLElement;
+        "calendarButtonContent"?: string;
+        "clearValue": () => Promise<void>;
+        "datesCalendarLabels"?: DatesCalendarLabels;
+        /**
+          * @default () => false
+         */
+        "disableDate": (date: Date) => boolean;
+        /**
+          * @default false
+         */
+        "disableFreeformInput": boolean;
+        /**
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * @default "tabworthy-times"
+         */
+        "elementClassName"?: string;
+        /**
+          * @default 1
+         */
+        "firstDayOfWeek"?: number;
+        /**
+          * @default "YYYY-MM-DDTHH:mm:ss"
+         */
+        "format": string;
+        /**
+          * @default false
+         */
+        "hasError": boolean;
+        "id": string;
+        /**
+          * @default false
+         */
+        "inline": boolean;
+        /**
+          * @default ""
+         */
+        "inputClass": string;
+        /**
+          * @default true
+         */
+        "inputShouldFormat"?: | boolean
+    | string;
+        /**
+          * @default "Choose a date and time"
+         */
+        "label": string;
+        /**
+          * @default navigator?.language || "en-US"
+         */
+        "locale": string;
+        "maxDate"?: string;
+        "minDate"?: string;
+        /**
+          * @default ""
+         */
+        "placeholder": string;
+        /**
+          * @default false
+         */
+        "range"?: boolean;
+        /**
+          * @default getISODateString(new Date())
+         */
+        "referenceDate": string;
+        /**
+          * @default true
+         */
+        "showClearButton": boolean;
+        /**
+          * @default false
+         */
+        "showCloseButton": boolean;
+        /**
+          * @default true
+         */
+        "showMonthStepper": boolean;
+        /**
+          * @default false
+         */
+        "showSeconds": boolean;
+        /**
+          * @default true
+         */
+        "showTodayButton": boolean;
+        /**
+          * @default false
+         */
+        "showYearStepper": boolean;
+        /**
+          * @default getISODateString(new Date())
+         */
+        "startDate": string;
+        /**
+          * @default defaultLabels
+         */
+        "timesLabels": TimesLabels;
+        "timesPickerLabels"?: TimesPickerLabels;
+        /**
+          * @default true
+         */
+        "useTwelveHourFormat": boolean;
+        "value"?: string | string[];
+    }
+    interface TabworthyTimesPicker {
+        /**
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * @default "tabworthy-times-picker"
+         */
+        "elementClassName": string;
+        /**
+          * @default 12
+         */
+        "hours": number;
+        /**
+          * @default defaultLabels
+         */
+        "labels": TimesPickerLabels1;
+        /**
+          * @default true
+         */
+        "labelsSrOnly": boolean;
+        /**
+          * @default 0
+         */
+        "minutes": number;
+        /**
+          * @default 0
+         */
+        "seconds": number;
+        /**
+          * @default false
+         */
+        "showSeconds": boolean;
+        /**
+          * @default false
+         */
+        "useTwelveHourFormat": boolean;
+    }
 }
 export interface TabworthyDatesCustomEvent<T> extends CustomEvent<T> {
-  detail: T;
-  target: HTMLTabworthyDatesElement;
+    detail: T;
+    target: HTMLTabworthyDatesElement;
 }
 export interface TabworthyDatesCalendarCustomEvent<T> extends CustomEvent<T> {
-  detail: T;
-  target: HTMLTabworthyDatesCalendarElement;
+    detail: T;
+    target: HTMLTabworthyDatesCalendarElement;
 }
 export interface TabworthyDatesModalCustomEvent<T> extends CustomEvent<T> {
-  detail: T;
-  target: HTMLTabworthyDatesModalElement;
+    detail: T;
+    target: HTMLTabworthyDatesModalElement;
 }
 export interface TabworthyTimesCustomEvent<T> extends CustomEvent<T> {
-  detail: T;
-  target: HTMLTabworthyTimesElement;
+    detail: T;
+    target: HTMLTabworthyTimesElement;
 }
 export interface TabworthyTimesPickerCustomEvent<T> extends CustomEvent<T> {
-  detail: T;
-  target: HTMLTabworthyTimesPickerElement;
+    detail: T;
+    target: HTMLTabworthyTimesPickerElement;
 }
 declare global {
-  interface HTMLTabworthyDatesElementEventMap {
-    selectDate: string | string[] | undefined;
-    changeYear: YearChangedEventDetails;
-    componentReady: void;
-  }
-  interface HTMLTabworthyDatesElement
-    extends Components.TabworthyDates,
-      HTMLStencilElement {
-    addEventListener<K extends keyof HTMLTabworthyDatesElementEventMap>(
-      type: K,
-      listener: (
-        this: HTMLTabworthyDatesElement,
-        ev: TabworthyDatesCustomEvent<HTMLTabworthyDatesElementEventMap[K]>
-      ) => any,
-      options?: boolean | AddEventListenerOptions
-    ): void;
-    addEventListener<K extends keyof DocumentEventMap>(
-      type: K,
-      listener: (this: Document, ev: DocumentEventMap[K]) => any,
-      options?: boolean | AddEventListenerOptions
-    ): void;
-    addEventListener<K extends keyof HTMLElementEventMap>(
-      type: K,
-      listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any,
-      options?: boolean | AddEventListenerOptions
-    ): void;
-    addEventListener(
-      type: string,
-      listener: EventListenerOrEventListenerObject,
-      options?: boolean | AddEventListenerOptions
-    ): void;
-    removeEventListener<K extends keyof HTMLTabworthyDatesElementEventMap>(
-      type: K,
-      listener: (
-        this: HTMLTabworthyDatesElement,
-        ev: TabworthyDatesCustomEvent<HTMLTabworthyDatesElementEventMap[K]>
-      ) => any,
-      options?: boolean | EventListenerOptions
-    ): void;
-    removeEventListener<K extends keyof DocumentEventMap>(
-      type: K,
-      listener: (this: Document, ev: DocumentEventMap[K]) => any,
-      options?: boolean | EventListenerOptions
-    ): void;
-    removeEventListener<K extends keyof HTMLElementEventMap>(
-      type: K,
-      listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any,
-      options?: boolean | EventListenerOptions
-    ): void;
-    removeEventListener(
-      type: string,
-      listener: EventListenerOrEventListenerObject,
-      options?: boolean | EventListenerOptions
-    ): void;
-  }
-  var HTMLTabworthyDatesElement: {
-    prototype: HTMLTabworthyDatesElement;
-    new (): HTMLTabworthyDatesElement;
-  };
-  interface HTMLTabworthyDatesCalendarElementEventMap {
-    selectDate: string | string[] | undefined;
-    changeMonth: MonthChangedEventDetails;
-    changeYear: YearChangedEventDetails1;
-    requestClose: void;
-  }
-  interface HTMLTabworthyDatesCalendarElement
-    extends Components.TabworthyDatesCalendar,
-      HTMLStencilElement {
-    addEventListener<K extends keyof HTMLTabworthyDatesCalendarElementEventMap>(
-      type: K,
-      listener: (
-        this: HTMLTabworthyDatesCalendarElement,
-        ev: TabworthyDatesCalendarCustomEvent<
-          HTMLTabworthyDatesCalendarElementEventMap[K]
-        >
-      ) => any,
-      options?: boolean | AddEventListenerOptions
-    ): void;
-    addEventListener<K extends keyof DocumentEventMap>(
-      type: K,
-      listener: (this: Document, ev: DocumentEventMap[K]) => any,
-      options?: boolean | AddEventListenerOptions
-    ): void;
-    addEventListener<K extends keyof HTMLElementEventMap>(
-      type: K,
-      listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any,
-      options?: boolean | AddEventListenerOptions
-    ): void;
-    addEventListener(
-      type: string,
-      listener: EventListenerOrEventListenerObject,
-      options?: boolean | AddEventListenerOptions
-    ): void;
-    removeEventListener<
-      K extends keyof HTMLTabworthyDatesCalendarElementEventMap
-    >(
-      type: K,
-      listener: (
-        this: HTMLTabworthyDatesCalendarElement,
-        ev: TabworthyDatesCalendarCustomEvent<
-          HTMLTabworthyDatesCalendarElementEventMap[K]
-        >
-      ) => any,
-      options?: boolean | EventListenerOptions
-    ): void;
-    removeEventListener<K extends keyof DocumentEventMap>(
-      type: K,
-      listener: (this: Document, ev: DocumentEventMap[K]) => any,
-      options?: boolean | EventListenerOptions
-    ): void;
-    removeEventListener<K extends keyof HTMLElementEventMap>(
-      type: K,
-      listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any,
-      options?: boolean | EventListenerOptions
-    ): void;
-    removeEventListener(
-      type: string,
-      listener: EventListenerOrEventListenerObject,
-      options?: boolean | EventListenerOptions
-    ): void;
-  }
-  var HTMLTabworthyDatesCalendarElement: {
-    prototype: HTMLTabworthyDatesCalendarElement;
-    new (): HTMLTabworthyDatesCalendarElement;
-  };
-  interface HTMLTabworthyDatesModalElementEventMap {
-    opened: any;
-    closed: any;
-  }
-  interface HTMLTabworthyDatesModalElement
-    extends Components.TabworthyDatesModal,
-      HTMLStencilElement {
-    addEventListener<K extends keyof HTMLTabworthyDatesModalElementEventMap>(
-      type: K,
-      listener: (
-        this: HTMLTabworthyDatesModalElement,
-        ev: TabworthyDatesModalCustomEvent<
-          HTMLTabworthyDatesModalElementEventMap[K]
-        >
-      ) => any,
-      options?: boolean | AddEventListenerOptions
-    ): void;
-    addEventListener<K extends keyof DocumentEventMap>(
-      type: K,
-      listener: (this: Document, ev: DocumentEventMap[K]) => any,
-      options?: boolean | AddEventListenerOptions
-    ): void;
-    addEventListener<K extends keyof HTMLElementEventMap>(
-      type: K,
-      listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any,
-      options?: boolean | AddEventListenerOptions
-    ): void;
-    addEventListener(
-      type: string,
-      listener: EventListenerOrEventListenerObject,
-      options?: boolean | AddEventListenerOptions
-    ): void;
-    removeEventListener<K extends keyof HTMLTabworthyDatesModalElementEventMap>(
-      type: K,
-      listener: (
-        this: HTMLTabworthyDatesModalElement,
-        ev: TabworthyDatesModalCustomEvent<
-          HTMLTabworthyDatesModalElementEventMap[K]
-        >
-      ) => any,
-      options?: boolean | EventListenerOptions
-    ): void;
-    removeEventListener<K extends keyof DocumentEventMap>(
-      type: K,
-      listener: (this: Document, ev: DocumentEventMap[K]) => any,
-      options?: boolean | EventListenerOptions
-    ): void;
-    removeEventListener<K extends keyof HTMLElementEventMap>(
-      type: K,
-      listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any,
-      options?: boolean | EventListenerOptions
-    ): void;
-    removeEventListener(
-      type: string,
-      listener: EventListenerOrEventListenerObject,
-      options?: boolean | EventListenerOptions
-    ): void;
-  }
-  var HTMLTabworthyDatesModalElement: {
-    prototype: HTMLTabworthyDatesModalElement;
-    new (): HTMLTabworthyDatesModalElement;
-  };
-  interface HTMLTabworthyTimesElementEventMap {
-    selectDateTime: string | string[] | undefined;
-    changeYear: YearChangedEventDetails;
-    componentReady: void;
-  }
-  interface HTMLTabworthyTimesElement
-    extends Components.TabworthyTimes,
-      HTMLStencilElement {
-    addEventListener<K extends keyof HTMLTabworthyTimesElementEventMap>(
-      type: K,
-      listener: (
-        this: HTMLTabworthyTimesElement,
-        ev: TabworthyTimesCustomEvent<HTMLTabworthyTimesElementEventMap[K]>
-      ) => any,
-      options?: boolean | AddEventListenerOptions
-    ): void;
-    addEventListener<K extends keyof DocumentEventMap>(
-      type: K,
-      listener: (this: Document, ev: DocumentEventMap[K]) => any,
-      options?: boolean | AddEventListenerOptions
-    ): void;
-    addEventListener<K extends keyof HTMLElementEventMap>(
-      type: K,
-      listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any,
-      options?: boolean | AddEventListenerOptions
-    ): void;
-    addEventListener(
-      type: string,
-      listener: EventListenerOrEventListenerObject,
-      options?: boolean | AddEventListenerOptions
-    ): void;
-    removeEventListener<K extends keyof HTMLTabworthyTimesElementEventMap>(
-      type: K,
-      listener: (
-        this: HTMLTabworthyTimesElement,
-        ev: TabworthyTimesCustomEvent<HTMLTabworthyTimesElementEventMap[K]>
-      ) => any,
-      options?: boolean | EventListenerOptions
-    ): void;
-    removeEventListener<K extends keyof DocumentEventMap>(
-      type: K,
-      listener: (this: Document, ev: DocumentEventMap[K]) => any,
-      options?: boolean | EventListenerOptions
-    ): void;
-    removeEventListener<K extends keyof HTMLElementEventMap>(
-      type: K,
-      listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any,
-      options?: boolean | EventListenerOptions
-    ): void;
-    removeEventListener(
-      type: string,
-      listener: EventListenerOrEventListenerObject,
-      options?: boolean | EventListenerOptions
-    ): void;
-  }
-  var HTMLTabworthyTimesElement: {
-    prototype: HTMLTabworthyTimesElement;
-    new (): HTMLTabworthyTimesElement;
-  };
-  interface HTMLTabworthyTimesPickerElementEventMap {
-    timeChanged: TimeValue;
-  }
-  interface HTMLTabworthyTimesPickerElement
-    extends Components.TabworthyTimesPicker,
-      HTMLStencilElement {
-    addEventListener<K extends keyof HTMLTabworthyTimesPickerElementEventMap>(
-      type: K,
-      listener: (
-        this: HTMLTabworthyTimesPickerElement,
-        ev: TabworthyTimesPickerCustomEvent<
-          HTMLTabworthyTimesPickerElementEventMap[K]
-        >
-      ) => any,
-      options?: boolean | AddEventListenerOptions
-    ): void;
-    addEventListener<K extends keyof DocumentEventMap>(
-      type: K,
-      listener: (this: Document, ev: DocumentEventMap[K]) => any,
-      options?: boolean | AddEventListenerOptions
-    ): void;
-    addEventListener<K extends keyof HTMLElementEventMap>(
-      type: K,
-      listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any,
-      options?: boolean | AddEventListenerOptions
-    ): void;
-    addEventListener(
-      type: string,
-      listener: EventListenerOrEventListenerObject,
-      options?: boolean | AddEventListenerOptions
-    ): void;
-    removeEventListener<
-      K extends keyof HTMLTabworthyTimesPickerElementEventMap
-    >(
-      type: K,
-      listener: (
-        this: HTMLTabworthyTimesPickerElement,
-        ev: TabworthyTimesPickerCustomEvent<
-          HTMLTabworthyTimesPickerElementEventMap[K]
-        >
-      ) => any,
-      options?: boolean | EventListenerOptions
-    ): void;
-    removeEventListener<K extends keyof DocumentEventMap>(
-      type: K,
-      listener: (this: Document, ev: DocumentEventMap[K]) => any,
-      options?: boolean | EventListenerOptions
-    ): void;
-    removeEventListener<K extends keyof HTMLElementEventMap>(
-      type: K,
-      listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any,
-      options?: boolean | EventListenerOptions
-    ): void;
-    removeEventListener(
-      type: string,
-      listener: EventListenerOrEventListenerObject,
-      options?: boolean | EventListenerOptions
-    ): void;
-  }
-  var HTMLTabworthyTimesPickerElement: {
-    prototype: HTMLTabworthyTimesPickerElement;
-    new (): HTMLTabworthyTimesPickerElement;
-  };
-  interface HTMLElementTagNameMap {
-    "tabworthy-dates": HTMLTabworthyDatesElement;
-    "tabworthy-dates-calendar": HTMLTabworthyDatesCalendarElement;
-    "tabworthy-dates-modal": HTMLTabworthyDatesModalElement;
-    "tabworthy-times": HTMLTabworthyTimesElement;
-    "tabworthy-times-picker": HTMLTabworthyTimesPickerElement;
-  }
+    interface HTMLTabworthyDatesElementEventMap {
+        "selectDate": string | string[] | undefined;
+        "changeYear": YearChangedEventDetails;
+        "componentReady": void;
+    }
+    interface HTMLTabworthyDatesElement extends Components.TabworthyDates, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLTabworthyDatesElementEventMap>(type: K, listener: (this: HTMLTabworthyDatesElement, ev: TabworthyDatesCustomEvent<HTMLTabworthyDatesElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLTabworthyDatesElementEventMap>(type: K, listener: (this: HTMLTabworthyDatesElement, ev: TabworthyDatesCustomEvent<HTMLTabworthyDatesElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLTabworthyDatesElement: {
+        prototype: HTMLTabworthyDatesElement;
+        new (): HTMLTabworthyDatesElement;
+    };
+    interface HTMLTabworthyDatesCalendarElementEventMap {
+        "selectDate": string | string[] | undefined;
+        "changeMonth": MonthChangedEventDetails;
+        "changeYear": YearChangedEventDetails1;
+        "requestClose": void;
+    }
+    interface HTMLTabworthyDatesCalendarElement extends Components.TabworthyDatesCalendar, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLTabworthyDatesCalendarElementEventMap>(type: K, listener: (this: HTMLTabworthyDatesCalendarElement, ev: TabworthyDatesCalendarCustomEvent<HTMLTabworthyDatesCalendarElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLTabworthyDatesCalendarElementEventMap>(type: K, listener: (this: HTMLTabworthyDatesCalendarElement, ev: TabworthyDatesCalendarCustomEvent<HTMLTabworthyDatesCalendarElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLTabworthyDatesCalendarElement: {
+        prototype: HTMLTabworthyDatesCalendarElement;
+        new (): HTMLTabworthyDatesCalendarElement;
+    };
+    interface HTMLTabworthyDatesModalElementEventMap {
+        "opened": any;
+        "closed": any;
+    }
+    interface HTMLTabworthyDatesModalElement extends Components.TabworthyDatesModal, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLTabworthyDatesModalElementEventMap>(type: K, listener: (this: HTMLTabworthyDatesModalElement, ev: TabworthyDatesModalCustomEvent<HTMLTabworthyDatesModalElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLTabworthyDatesModalElementEventMap>(type: K, listener: (this: HTMLTabworthyDatesModalElement, ev: TabworthyDatesModalCustomEvent<HTMLTabworthyDatesModalElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLTabworthyDatesModalElement: {
+        prototype: HTMLTabworthyDatesModalElement;
+        new (): HTMLTabworthyDatesModalElement;
+    };
+    interface HTMLTabworthyTimesElementEventMap {
+        "selectDateTime": string | string[] | undefined;
+        "changeYear": YearChangedEventDetails;
+        "componentReady": void;
+    }
+    interface HTMLTabworthyTimesElement extends Components.TabworthyTimes, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLTabworthyTimesElementEventMap>(type: K, listener: (this: HTMLTabworthyTimesElement, ev: TabworthyTimesCustomEvent<HTMLTabworthyTimesElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLTabworthyTimesElementEventMap>(type: K, listener: (this: HTMLTabworthyTimesElement, ev: TabworthyTimesCustomEvent<HTMLTabworthyTimesElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLTabworthyTimesElement: {
+        prototype: HTMLTabworthyTimesElement;
+        new (): HTMLTabworthyTimesElement;
+    };
+    interface HTMLTabworthyTimesPickerElementEventMap {
+        "timeChanged": TimeValue;
+    }
+    interface HTMLTabworthyTimesPickerElement extends Components.TabworthyTimesPicker, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLTabworthyTimesPickerElementEventMap>(type: K, listener: (this: HTMLTabworthyTimesPickerElement, ev: TabworthyTimesPickerCustomEvent<HTMLTabworthyTimesPickerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLTabworthyTimesPickerElementEventMap>(type: K, listener: (this: HTMLTabworthyTimesPickerElement, ev: TabworthyTimesPickerCustomEvent<HTMLTabworthyTimesPickerElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLTabworthyTimesPickerElement: {
+        prototype: HTMLTabworthyTimesPickerElement;
+        new (): HTMLTabworthyTimesPickerElement;
+    };
+    interface HTMLElementTagNameMap {
+        "tabworthy-dates": HTMLTabworthyDatesElement;
+        "tabworthy-dates-calendar": HTMLTabworthyDatesCalendarElement;
+        "tabworthy-dates-modal": HTMLTabworthyDatesModalElement;
+        "tabworthy-times": HTMLTabworthyTimesElement;
+        "tabworthy-times-picker": HTMLTabworthyTimesPickerElement;
+    }
 }
 declare namespace LocalJSX {
-  type OneOf<K extends string, PropT, AttrT = PropT> =
-    | ({ [P in K]: PropT } & { [P in `attr:${K}` | `prop:${K}`]?: never })
-    | ({ [P in `attr:${K}`]: AttrT } & { [P in K | `prop:${K}`]?: never })
-    | ({ [P in `prop:${K}`]: PropT } & { [P in K | `attr:${K}`]?: never });
+    type OneOf<K extends string, PropT, AttrT = PropT> = { [P in K]: PropT } & { [P in `attr:${K}` | `prop:${K}`]?: never } | { [P in `attr:${K}`]: AttrT } & { [P in K | `prop:${K}`]?: never } | { [P in `prop:${K}`]: PropT } & { [P in K | `attr:${K}`]?: never };
 
-  interface TabworthyDates {
-    /**
-     * Element to append the dropdown to. Use "body" to append to document.body, or pass a CSS selector or HTMLElement. Useful for escaping overflow:hidden containers.
-     */
-    appendTo?: string | HTMLElement;
-    calendarButtonContent?: string;
-    datesCalendarLabels?: DatesCalendarLabels;
-    /**
-     * @default defaultLabels
-     */
-    datesLabels?: DatesLabels;
-    /**
-     * @default () =>     false
-     */
-    disableDate?: HTMLTabworthyDatesCalendarElement["disableDate"];
-    /**
-     * @default false
-     */
-    disableFreeformInput?: boolean;
-    /**
-     * @default false
-     */
-    disabled?: boolean;
-    /**
-     * @default "tabworthy-dates"
-     */
-    elementClassName?: string;
-    /**
-     * @default 1
-     */
-    firstDayOfWeek?: number;
-    /**
-     * @default "YYYY-MM-DD"
-     */
-    format?: string;
-    /**
-     * @default false
-     */
-    hasError?: boolean;
-    id: string;
-    /**
-     * @default false
-     */
-    inline?: boolean;
-    /**
-     * @default ""
-     */
-    inputClass?: string;
-    /**
-     * @default true
-     */
-    inputShouldFormat?: boolean | string;
-    /**
-     * @default this.range     ? "Choose a date range (any way you like)"     : "Choose a date (any way you like)"
-     */
-    label?: string;
-    /**
-     * @default navigator?.language || "en-US"
-     */
-    locale?: string;
-    maxDate?: string;
-    minDate?: string;
-    nextMonthButtonContent?: string;
-    nextYearButtonContent?: string;
-    onChangeYear?: (
-      event: TabworthyDatesCustomEvent<YearChangedEventDetails>
-    ) => void;
-    onComponentReady?: (event: TabworthyDatesCustomEvent<void>) => void;
-    onSelectDate?: (
-      event: TabworthyDatesCustomEvent<string | string[] | undefined>
-    ) => void;
-    /**
-     * @default this.range     ? `Try "June 8 to 12"`     : `Try "tomorrow" or "in ten days"`
-     */
-    placeholder?: string;
-    /**
-     * @default this.range     ? ["Monday to Wednesday", "July 5 to 10"]     : ["Yesterday", "Today", "Tomorrow", "In 10 days"]
-     */
-    quickButtons?: string[];
-    /**
-     * @default false
-     */
-    range?: boolean;
-    /**
-     * @default getISODateString(new Date())
-     */
-    referenceDate?: string;
-    /**
-     * @default true
-     */
-    showClearButton?: boolean;
-    /**
-     * @default false
-     */
-    showCloseButton?: boolean;
-    /**
-     * @default false
-     */
-    showKeyboardHint?: boolean;
-    /**
-     * @default true
-     */
-    showMonthStepper?: boolean;
-    /**
-     * @default true
-     */
-    showQuickButtons?: boolean;
-    /**
-     * @default true
-     */
-    showTodayButton?: boolean;
-    /**
-     * @default false
-     */
-    showYearStepper?: boolean;
-    /**
-     * @default getISODateString(new Date())
-     */
-    startDate?: string;
-    todayButtonContent?: string;
-    /**
-     * @default false
-     */
-    useStrictDateParsing?: boolean;
-    value?: string | string[];
-  }
-  interface TabworthyDatesCalendar {
-    clearButtonContent?: string;
-    closeButtonContent?: string;
-    /**
-     * @default () => false
-     */
-    disableDate?: (date: Date) => boolean;
-    /**
-     * @default false
-     */
-    disabled?: boolean;
-    /**
-     * @default "tabworthy-dates-calendar"
-     */
-    elementClassName?: string;
-    /**
-     * @default 0
-     */
-    firstDayOfWeek?: number;
-    /**
-     * @default false
-     */
-    inline?: boolean;
-    /**
-     * @default defaultLabels
-     */
-    labels?: DatesCalendarLabels1;
-    /**
-     * @default navigator?.language || "en-US"
-     */
-    locale?: string;
-    maxDate?: string;
-    minDate?: string;
-    /**
-     * @default false
-     */
-    modalIsOpen?: boolean;
-    nextMonthButtonContent?: string;
-    nextYearButtonContent?: string;
-    onChangeMonth?: (
-      event: TabworthyDatesCalendarCustomEvent<MonthChangedEventDetails>
-    ) => void;
-    onChangeYear?: (
-      event: TabworthyDatesCalendarCustomEvent<YearChangedEventDetails1>
-    ) => void;
-    onRequestClose?: (event: TabworthyDatesCalendarCustomEvent<void>) => void;
-    onSelectDate?: (
-      event: TabworthyDatesCalendarCustomEvent<string | string[] | undefined>
-    ) => void;
-    previousMonthButtonContent?: string;
-    previousYearButtonContent?: string;
-    /**
-     * @default false
-     */
-    range?: boolean;
-    /**
-     * @default false
-     */
-    showClearButton?: boolean;
-    /**
-     * @default false
-     */
-    showCloseButton?: boolean;
-    /**
-     * @default true
-     */
-    showHiddenTitle?: boolean;
-    /**
-     * @default false
-     */
-    showKeyboardHint?: boolean;
-    /**
-     * @default true
-     */
-    showMonthStepper?: boolean;
-    /**
-     * @default true
-     */
-    showTodayButton?: boolean;
-    /**
-     * @default false
-     */
-    showYearStepper?: boolean;
-    /**
-     * @default getISODateString(new Date())
-     */
-    startDate?: string;
-    todayButtonContent?: string;
-    value?: Date | Date[] | null;
-  }
-  interface TabworthyDatesModal {
-    /**
-     * Element to append the dropdown to. Use "body" to append to document.body, or pass a CSS selector or HTMLElement. When set, the dropdown will be portaled to escape overflow:hidden containers.
-     */
-    appendTo?: string | HTMLElement;
-    /**
-     * @default false
-     */
-    inline?: boolean;
-    label: string;
-    /**
-     * Offset from the trigger element [skidding, distance]
-     * @default [0, 8]
-     */
-    offset?: [number, number];
-    onClosed?: (event: TabworthyDatesModalCustomEvent<any>) => void;
-    onOpened?: (event: TabworthyDatesModalCustomEvent<any>) => void;
-    /**
-     * Preferred placement of the dropdown (Popper.js placement)
-     * @default "bottom-start"
-     */
-    placement?: Placement;
-  }
-  interface TabworthyTimes {
-    /**
-     * Element to append the dropdown to. Use "body" to append to document.body, or pass a CSS selector or HTMLElement. Useful for escaping overflow:hidden containers.
-     */
-    appendTo?: string | HTMLElement;
-    calendarButtonContent?: string;
-    datesCalendarLabels?: DatesCalendarLabels;
-    /**
-     * @default () => false
-     */
-    disableDate?: (date: Date) => boolean;
-    /**
-     * @default false
-     */
-    disableFreeformInput?: boolean;
-    /**
-     * @default false
-     */
-    disabled?: boolean;
-    /**
-     * @default "tabworthy-times"
-     */
-    elementClassName?: string;
-    /**
-     * @default 1
-     */
-    firstDayOfWeek?: number;
-    /**
-     * @default "YYYY-MM-DDTHH:mm:ss"
-     */
-    format?: string;
-    /**
-     * @default false
-     */
-    hasError?: boolean;
-    id: string;
-    /**
-     * @default false
-     */
-    inline?: boolean;
-    /**
-     * @default ""
-     */
-    inputClass?: string;
-    /**
-     * @default true
-     */
-    inputShouldFormat?: boolean | string;
-    /**
-     * @default "Choose a date and time"
-     */
-    label?: string;
-    /**
-     * @default navigator?.language || "en-US"
-     */
-    locale?: string;
-    maxDate?: string;
-    minDate?: string;
-    onChangeYear?: (
-      event: TabworthyTimesCustomEvent<YearChangedEventDetails>
-    ) => void;
-    onComponentReady?: (event: TabworthyTimesCustomEvent<void>) => void;
-    onSelectDateTime?: (
-      event: TabworthyTimesCustomEvent<string | string[] | undefined>
-    ) => void;
-    /**
-     * @default ""
-     */
-    placeholder?: string;
-    /**
-     * @default false
-     */
-    range?: boolean;
-    /**
-     * @default getISODateString(new Date())
-     */
-    referenceDate?: string;
-    /**
-     * @default true
-     */
-    showClearButton?: boolean;
-    /**
-     * @default false
-     */
-    showCloseButton?: boolean;
-    /**
-     * @default true
-     */
-    showMonthStepper?: boolean;
-    /**
-     * @default false
-     */
-    showSeconds?: boolean;
-    /**
-     * @default true
-     */
-    showTodayButton?: boolean;
-    /**
-     * @default false
-     */
-    showYearStepper?: boolean;
-    /**
-     * @default getISODateString(new Date())
-     */
-    startDate?: string;
-    /**
-     * @default defaultLabels
-     */
-    timesLabels?: TimesLabels;
-    timesPickerLabels?: TimesPickerLabels;
-    /**
-     * @default true
-     */
-    useTwelveHourFormat?: boolean;
-    value?: string | string[];
-  }
-  interface TabworthyTimesPicker {
-    /**
-     * @default false
-     */
-    disabled?: boolean;
-    /**
-     * @default "tabworthy-times-picker"
-     */
-    elementClassName?: string;
-    /**
-     * @default 12
-     */
-    hours?: number;
-    /**
-     * @default defaultLabels
-     */
-    labels?: TimesPickerLabels1;
-    /**
-     * @default true
-     */
-    labelsSrOnly?: boolean;
-    /**
-     * @default 0
-     */
-    minutes?: number;
-    onTimeChanged?: (event: TabworthyTimesPickerCustomEvent<TimeValue>) => void;
-    /**
-     * @default 0
-     */
-    seconds?: number;
-    /**
-     * @default false
-     */
-    showSeconds?: boolean;
-    /**
-     * @default false
-     */
-    useTwelveHourFormat?: boolean;
-  }
+    interface TabworthyDates {
+        /**
+          * Element to append the dropdown to. Use "body" to append to document.body, or pass a CSS selector or HTMLElement. Useful for escaping overflow:hidden containers.
+         */
+        "appendTo"?: string | HTMLElement;
+        "calendarButtonContent"?: string;
+        "datesCalendarLabels"?: DatesCalendarLabels;
+        /**
+          * @default defaultLabels
+         */
+        "datesLabels"?: DatesLabels;
+        /**
+          * @default () =>     false
+         */
+        "disableDate"?: HTMLTabworthyDatesCalendarElement["disableDate"];
+        /**
+          * @default false
+         */
+        "disableFreeformInput"?: boolean;
+        /**
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * @default "tabworthy-dates"
+         */
+        "elementClassName"?: string;
+        /**
+          * @default 1
+         */
+        "firstDayOfWeek"?: number;
+        /**
+          * @default "YYYY-MM-DD"
+         */
+        "format"?: string;
+        /**
+          * @default false
+         */
+        "hasError"?: boolean;
+        "id": string;
+        /**
+          * @default false
+         */
+        "inline"?: boolean;
+        /**
+          * @default ""
+         */
+        "inputClass"?: string;
+        /**
+          * @default true
+         */
+        "inputShouldFormat"?: | boolean
+    | string;
+        /**
+          * @default this.range     ? "Choose a date range (any way you like)"     : "Choose a date (any way you like)"
+         */
+        "label"?: string;
+        /**
+          * @default navigator?.language || "en-US"
+         */
+        "locale"?: string;
+        "maxDate"?: string;
+        "minDate"?: string;
+        "nextMonthButtonContent"?: string;
+        "nextYearButtonContent"?: string;
+        "onChangeYear"?: (event: TabworthyDatesCustomEvent<YearChangedEventDetails>) => void;
+        "onComponentReady"?: (event: TabworthyDatesCustomEvent<void>) => void;
+        "onSelectDate"?: (event: TabworthyDatesCustomEvent<string | string[] | undefined>) => void;
+        /**
+          * @default this.range     ? `Try "June 8 to 12"`     : `Try "tomorrow" or "in ten days"`
+         */
+        "placeholder"?: string;
+        /**
+          * @default this.range     ? ["Monday to Wednesday", "July 5 to 10"]     : ["Yesterday", "Today", "Tomorrow", "In 10 days"]
+         */
+        "quickButtons"?: string[];
+        /**
+          * @default false
+         */
+        "range"?: boolean;
+        /**
+          * @default getISODateString(new Date())
+         */
+        "referenceDate"?: string;
+        /**
+          * @default true
+         */
+        "showClearButton"?: boolean;
+        /**
+          * @default false
+         */
+        "showCloseButton"?: boolean;
+        /**
+          * @default false
+         */
+        "showKeyboardHint"?: boolean;
+        /**
+          * @default true
+         */
+        "showMonthStepper"?: boolean;
+        /**
+          * @default true
+         */
+        "showQuickButtons"?: boolean;
+        /**
+          * @default true
+         */
+        "showTodayButton"?: boolean;
+        /**
+          * @default false
+         */
+        "showYearStepper"?: boolean;
+        /**
+          * @default getISODateString(new Date())
+         */
+        "startDate"?: string;
+        "todayButtonContent"?: string;
+        /**
+          * @default false
+         */
+        "useStrictDateParsing"?: boolean;
+        "value"?: string | string[];
+    }
+    interface TabworthyDatesCalendar {
+        "clearButtonContent"?: string;
+        "closeButtonContent"?: string;
+        /**
+          * @default () => false
+         */
+        "disableDate"?: (date: Date) => boolean;
+        /**
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * @default "tabworthy-dates-calendar"
+         */
+        "elementClassName"?: string;
+        /**
+          * @default 0
+         */
+        "firstDayOfWeek"?: number;
+        /**
+          * @default false
+         */
+        "inline"?: boolean;
+        /**
+          * @default defaultLabels
+         */
+        "labels"?: DatesCalendarLabels1;
+        /**
+          * @default navigator?.language || "en-US"
+         */
+        "locale"?: string;
+        "maxDate"?: string;
+        "minDate"?: string;
+        /**
+          * @default false
+         */
+        "modalIsOpen"?: boolean;
+        "nextMonthButtonContent"?: string;
+        "nextYearButtonContent"?: string;
+        "onChangeMonth"?: (event: TabworthyDatesCalendarCustomEvent<MonthChangedEventDetails>) => void;
+        "onChangeYear"?: (event: TabworthyDatesCalendarCustomEvent<YearChangedEventDetails1>) => void;
+        "onRequestClose"?: (event: TabworthyDatesCalendarCustomEvent<void>) => void;
+        "onSelectDate"?: (event: TabworthyDatesCalendarCustomEvent<string | string[] | undefined>) => void;
+        "previousMonthButtonContent"?: string;
+        "previousYearButtonContent"?: string;
+        /**
+          * @default false
+         */
+        "range"?: boolean;
+        /**
+          * @default false
+         */
+        "showClearButton"?: boolean;
+        /**
+          * @default false
+         */
+        "showCloseButton"?: boolean;
+        /**
+          * @default true
+         */
+        "showHiddenTitle"?: boolean;
+        /**
+          * @default false
+         */
+        "showKeyboardHint"?: boolean;
+        /**
+          * @default true
+         */
+        "showMonthStepper"?: boolean;
+        /**
+          * @default true
+         */
+        "showTodayButton"?: boolean;
+        /**
+          * @default false
+         */
+        "showYearStepper"?: boolean;
+        /**
+          * @default getISODateString(new Date())
+         */
+        "startDate"?: string;
+        "todayButtonContent"?: string;
+        "value"?: Date | Date[] | null;
+    }
+    interface TabworthyDatesModal {
+        /**
+          * Element to append the dropdown to. Use "body" to append to document.body, or pass a CSS selector or HTMLElement. When set, the dropdown will be portaled to escape overflow:hidden containers.
+         */
+        "appendTo"?: string | HTMLElement;
+        /**
+          * @default false
+         */
+        "inline"?: boolean;
+        "label": string;
+        /**
+          * Offset from the trigger element [skidding, distance]
+          * @default [0, 8]
+         */
+        "offset"?: [number, number];
+        "onClosed"?: (event: TabworthyDatesModalCustomEvent<any>) => void;
+        "onOpened"?: (event: TabworthyDatesModalCustomEvent<any>) => void;
+        /**
+          * Preferred placement of the dropdown (Popper.js placement)
+          * @default "bottom-start"
+         */
+        "placement"?: Placement;
+    }
+    interface TabworthyTimes {
+        /**
+          * Element to append the dropdown to. Use "body" to append to document.body, or pass a CSS selector or HTMLElement. Useful for escaping overflow:hidden containers.
+         */
+        "appendTo"?: string | HTMLElement;
+        "calendarButtonContent"?: string;
+        "datesCalendarLabels"?: DatesCalendarLabels;
+        /**
+          * @default () => false
+         */
+        "disableDate"?: (date: Date) => boolean;
+        /**
+          * @default false
+         */
+        "disableFreeformInput"?: boolean;
+        /**
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * @default "tabworthy-times"
+         */
+        "elementClassName"?: string;
+        /**
+          * @default 1
+         */
+        "firstDayOfWeek"?: number;
+        /**
+          * @default "YYYY-MM-DDTHH:mm:ss"
+         */
+        "format"?: string;
+        /**
+          * @default false
+         */
+        "hasError"?: boolean;
+        "id": string;
+        /**
+          * @default false
+         */
+        "inline"?: boolean;
+        /**
+          * @default ""
+         */
+        "inputClass"?: string;
+        /**
+          * @default true
+         */
+        "inputShouldFormat"?: | boolean
+    | string;
+        /**
+          * @default "Choose a date and time"
+         */
+        "label"?: string;
+        /**
+          * @default navigator?.language || "en-US"
+         */
+        "locale"?: string;
+        "maxDate"?: string;
+        "minDate"?: string;
+        "onChangeYear"?: (event: TabworthyTimesCustomEvent<YearChangedEventDetails>) => void;
+        "onComponentReady"?: (event: TabworthyTimesCustomEvent<void>) => void;
+        "onSelectDateTime"?: (event: TabworthyTimesCustomEvent<string | string[] | undefined>) => void;
+        /**
+          * @default ""
+         */
+        "placeholder"?: string;
+        /**
+          * @default false
+         */
+        "range"?: boolean;
+        /**
+          * @default getISODateString(new Date())
+         */
+        "referenceDate"?: string;
+        /**
+          * @default true
+         */
+        "showClearButton"?: boolean;
+        /**
+          * @default false
+         */
+        "showCloseButton"?: boolean;
+        /**
+          * @default true
+         */
+        "showMonthStepper"?: boolean;
+        /**
+          * @default false
+         */
+        "showSeconds"?: boolean;
+        /**
+          * @default true
+         */
+        "showTodayButton"?: boolean;
+        /**
+          * @default false
+         */
+        "showYearStepper"?: boolean;
+        /**
+          * @default getISODateString(new Date())
+         */
+        "startDate"?: string;
+        /**
+          * @default defaultLabels
+         */
+        "timesLabels"?: TimesLabels;
+        "timesPickerLabels"?: TimesPickerLabels;
+        /**
+          * @default true
+         */
+        "useTwelveHourFormat"?: boolean;
+        "value"?: string | string[];
+    }
+    interface TabworthyTimesPicker {
+        /**
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * @default "tabworthy-times-picker"
+         */
+        "elementClassName"?: string;
+        /**
+          * @default 12
+         */
+        "hours"?: number;
+        /**
+          * @default defaultLabels
+         */
+        "labels"?: TimesPickerLabels1;
+        /**
+          * @default true
+         */
+        "labelsSrOnly"?: boolean;
+        /**
+          * @default 0
+         */
+        "minutes"?: number;
+        "onTimeChanged"?: (event: TabworthyTimesPickerCustomEvent<TimeValue>) => void;
+        /**
+          * @default 0
+         */
+        "seconds"?: number;
+        /**
+          * @default false
+         */
+        "showSeconds"?: boolean;
+        /**
+          * @default false
+         */
+        "useTwelveHourFormat"?: boolean;
+    }
 
-  interface TabworthyDatesAttributes {
-    id: string;
-    value: string | string[];
-    range: boolean;
-    label: string;
-    placeholder: string;
-    locale: string;
-    disabled: boolean;
-    minDate: string;
-    maxDate: string;
-    startDate: string;
-    referenceDate: string;
-    useStrictDateParsing: boolean;
-    inline: boolean;
-    hasError: boolean;
-    nextMonthButtonContent: string;
-    nextYearButtonContent: string;
-    showYearStepper: boolean;
-    showMonthStepper: boolean;
-    showClearButton: boolean;
-    showCloseButton: boolean;
-    showTodayButton: boolean;
-    inputShouldFormat: string;
-    showKeyboardHint: boolean;
-    elementClassName: string;
-    firstDayOfWeek: number;
-    format: string;
-    todayButtonContent: string;
-    calendarButtonContent: string;
-    showQuickButtons: boolean;
-    disableFreeformInput: boolean;
-    inputClass: string;
-    appendTo: string | HTMLElement;
-  }
-  interface TabworthyDatesCalendarAttributes {
-    clearButtonContent: string;
-    closeButtonContent: string;
-    disabled: boolean;
-    modalIsOpen: boolean;
-    elementClassName: string;
-    firstDayOfWeek: number;
-    range: boolean;
-    locale: string;
-    nextMonthButtonContent: string;
-    nextYearButtonContent: string;
-    previousMonthButtonContent: string;
-    previousYearButtonContent: string;
-    minDate: string;
-    maxDate: string;
-    inline: boolean;
-    showClearButton: boolean;
-    showCloseButton: boolean;
-    showMonthStepper: boolean;
-    showTodayButton: boolean;
-    showYearStepper: boolean;
-    showKeyboardHint: boolean;
-    showHiddenTitle: boolean;
-    startDate: string;
-    todayButtonContent: string;
-  }
-  interface TabworthyDatesModalAttributes {
-    label: string;
-    inline: boolean;
-    placement: Placement;
-    appendTo: string | HTMLElement;
-  }
-  interface TabworthyTimesAttributes {
-    id: string;
-    value: string | string[];
-    range: boolean;
-    label: string;
-    placeholder: string;
-    locale: string;
-    disabled: boolean;
-    minDate: string;
-    maxDate: string;
-    startDate: string;
-    referenceDate: string;
-    useTwelveHourFormat: boolean;
-    showSeconds: boolean;
-    inline: boolean;
-    hasError: boolean;
-    showYearStepper: boolean;
-    showMonthStepper: boolean;
-    showClearButton: boolean;
-    showCloseButton: boolean;
-    showTodayButton: boolean;
-    calendarButtonContent: string;
-    elementClassName: string;
-    firstDayOfWeek: number;
-    format: string;
-    inputShouldFormat: string;
-    disableFreeformInput: boolean;
-    inputClass: string;
-    appendTo: string | HTMLElement;
-  }
-  interface TabworthyTimesPickerAttributes {
-    hours: number;
-    minutes: number;
-    seconds: number;
-    useTwelveHourFormat: boolean;
-    showSeconds: boolean;
-    labelsSrOnly: boolean;
-    disabled: boolean;
-    elementClassName: string;
-  }
+    interface TabworthyDatesAttributes {
+        "id": string;
+        "value": string | string[];
+        "range": boolean;
+        "label": string;
+        "placeholder": string;
+        "locale": string;
+        "disabled": boolean;
+        "minDate": string;
+        "maxDate": string;
+        "startDate": string;
+        "referenceDate": string;
+        "useStrictDateParsing": boolean;
+        "inline": boolean;
+        "hasError": boolean;
+        "nextMonthButtonContent": string;
+        "nextYearButtonContent": string;
+        "showYearStepper": boolean;
+        "showMonthStepper": boolean;
+        "showClearButton": boolean;
+        "showCloseButton": boolean;
+        "showTodayButton": boolean;
+        "inputShouldFormat": string;
+        "showKeyboardHint": boolean;
+        "elementClassName": string;
+        "firstDayOfWeek": number;
+        "format": string;
+        "todayButtonContent": string;
+        "calendarButtonContent": string;
+        "showQuickButtons": boolean;
+        "disableFreeformInput": boolean;
+        "inputClass": string;
+        "appendTo": string | HTMLElement;
+    }
+    interface TabworthyDatesCalendarAttributes {
+        "clearButtonContent": string;
+        "closeButtonContent": string;
+        "disabled": boolean;
+        "modalIsOpen": boolean;
+        "elementClassName": string;
+        "firstDayOfWeek": number;
+        "range": boolean;
+        "locale": string;
+        "nextMonthButtonContent": string;
+        "nextYearButtonContent": string;
+        "previousMonthButtonContent": string;
+        "previousYearButtonContent": string;
+        "minDate": string;
+        "maxDate": string;
+        "inline": boolean;
+        "showClearButton": boolean;
+        "showCloseButton": boolean;
+        "showMonthStepper": boolean;
+        "showTodayButton": boolean;
+        "showYearStepper": boolean;
+        "showKeyboardHint": boolean;
+        "showHiddenTitle": boolean;
+        "startDate": string;
+        "todayButtonContent": string;
+    }
+    interface TabworthyDatesModalAttributes {
+        "label": string;
+        "inline": boolean;
+        "placement": Placement;
+        "appendTo": string | HTMLElement;
+    }
+    interface TabworthyTimesAttributes {
+        "id": string;
+        "value": string | string[];
+        "range": boolean;
+        "label": string;
+        "placeholder": string;
+        "locale": string;
+        "disabled": boolean;
+        "minDate": string;
+        "maxDate": string;
+        "startDate": string;
+        "referenceDate": string;
+        "useTwelveHourFormat": boolean;
+        "showSeconds": boolean;
+        "inline": boolean;
+        "hasError": boolean;
+        "showYearStepper": boolean;
+        "showMonthStepper": boolean;
+        "showClearButton": boolean;
+        "showCloseButton": boolean;
+        "showTodayButton": boolean;
+        "calendarButtonContent": string;
+        "elementClassName": string;
+        "firstDayOfWeek": number;
+        "format": string;
+        "inputShouldFormat": string;
+        "disableFreeformInput": boolean;
+        "inputClass": string;
+        "appendTo": string | HTMLElement;
+    }
+    interface TabworthyTimesPickerAttributes {
+        "hours": number;
+        "minutes": number;
+        "seconds": number;
+        "useTwelveHourFormat": boolean;
+        "showSeconds": boolean;
+        "labelsSrOnly": boolean;
+        "disabled": boolean;
+        "elementClassName": string;
+    }
 
-  interface IntrinsicElements {
-    "tabworthy-dates": Omit<TabworthyDates, keyof TabworthyDatesAttributes> & {
-      [K in keyof TabworthyDates &
-        keyof TabworthyDatesAttributes]?: TabworthyDates[K];
-    } & {
-      [K in keyof TabworthyDates &
-        keyof TabworthyDatesAttributes as `attr:${K}`]?: TabworthyDatesAttributes[K];
-    } & {
-      [K in keyof TabworthyDates &
-        keyof TabworthyDatesAttributes as `prop:${K}`]?: TabworthyDates[K];
-    } & OneOf<"id", TabworthyDates["id"], TabworthyDatesAttributes["id"]>;
-    "tabworthy-dates-calendar": Omit<
-      TabworthyDatesCalendar,
-      keyof TabworthyDatesCalendarAttributes
-    > & {
-      [K in keyof TabworthyDatesCalendar &
-        keyof TabworthyDatesCalendarAttributes]?: TabworthyDatesCalendar[K];
-    } & {
-      [K in keyof TabworthyDatesCalendar &
-        keyof TabworthyDatesCalendarAttributes as `attr:${K}`]?: TabworthyDatesCalendarAttributes[K];
-    } & {
-      [K in keyof TabworthyDatesCalendar &
-        keyof TabworthyDatesCalendarAttributes as `prop:${K}`]?: TabworthyDatesCalendar[K];
-    };
-    "tabworthy-dates-modal": Omit<
-      TabworthyDatesModal,
-      keyof TabworthyDatesModalAttributes
-    > & {
-      [K in keyof TabworthyDatesModal &
-        keyof TabworthyDatesModalAttributes]?: TabworthyDatesModal[K];
-    } & {
-      [K in keyof TabworthyDatesModal &
-        keyof TabworthyDatesModalAttributes as `attr:${K}`]?: TabworthyDatesModalAttributes[K];
-    } & {
-      [K in keyof TabworthyDatesModal &
-        keyof TabworthyDatesModalAttributes as `prop:${K}`]?: TabworthyDatesModal[K];
-    } & OneOf<
-        "label",
-        TabworthyDatesModal["label"],
-        TabworthyDatesModalAttributes["label"]
-      >;
-    "tabworthy-times": Omit<TabworthyTimes, keyof TabworthyTimesAttributes> & {
-      [K in keyof TabworthyTimes &
-        keyof TabworthyTimesAttributes]?: TabworthyTimes[K];
-    } & {
-      [K in keyof TabworthyTimes &
-        keyof TabworthyTimesAttributes as `attr:${K}`]?: TabworthyTimesAttributes[K];
-    } & {
-      [K in keyof TabworthyTimes &
-        keyof TabworthyTimesAttributes as `prop:${K}`]?: TabworthyTimes[K];
-    } & OneOf<"id", TabworthyTimes["id"], TabworthyTimesAttributes["id"]>;
-    "tabworthy-times-picker": Omit<
-      TabworthyTimesPicker,
-      keyof TabworthyTimesPickerAttributes
-    > & {
-      [K in keyof TabworthyTimesPicker &
-        keyof TabworthyTimesPickerAttributes]?: TabworthyTimesPicker[K];
-    } & {
-      [K in keyof TabworthyTimesPicker &
-        keyof TabworthyTimesPickerAttributes as `attr:${K}`]?: TabworthyTimesPickerAttributes[K];
-    } & {
-      [K in keyof TabworthyTimesPicker &
-        keyof TabworthyTimesPickerAttributes as `prop:${K}`]?: TabworthyTimesPicker[K];
-    };
-  }
+    interface IntrinsicElements {
+        "tabworthy-dates": Omit<TabworthyDates, keyof TabworthyDatesAttributes> & { [K in keyof TabworthyDates & keyof TabworthyDatesAttributes]?: TabworthyDates[K] } & { [K in keyof TabworthyDates & keyof TabworthyDatesAttributes as `attr:${K}`]?: TabworthyDatesAttributes[K] } & { [K in keyof TabworthyDates & keyof TabworthyDatesAttributes as `prop:${K}`]?: TabworthyDates[K] } & OneOf<"id", TabworthyDates["id"], TabworthyDatesAttributes["id"]>;
+        "tabworthy-dates-calendar": Omit<TabworthyDatesCalendar, keyof TabworthyDatesCalendarAttributes> & { [K in keyof TabworthyDatesCalendar & keyof TabworthyDatesCalendarAttributes]?: TabworthyDatesCalendar[K] } & { [K in keyof TabworthyDatesCalendar & keyof TabworthyDatesCalendarAttributes as `attr:${K}`]?: TabworthyDatesCalendarAttributes[K] } & { [K in keyof TabworthyDatesCalendar & keyof TabworthyDatesCalendarAttributes as `prop:${K}`]?: TabworthyDatesCalendar[K] };
+        "tabworthy-dates-modal": Omit<TabworthyDatesModal, keyof TabworthyDatesModalAttributes> & { [K in keyof TabworthyDatesModal & keyof TabworthyDatesModalAttributes]?: TabworthyDatesModal[K] } & { [K in keyof TabworthyDatesModal & keyof TabworthyDatesModalAttributes as `attr:${K}`]?: TabworthyDatesModalAttributes[K] } & { [K in keyof TabworthyDatesModal & keyof TabworthyDatesModalAttributes as `prop:${K}`]?: TabworthyDatesModal[K] } & OneOf<"label", TabworthyDatesModal["label"], TabworthyDatesModalAttributes["label"]>;
+        "tabworthy-times": Omit<TabworthyTimes, keyof TabworthyTimesAttributes> & { [K in keyof TabworthyTimes & keyof TabworthyTimesAttributes]?: TabworthyTimes[K] } & { [K in keyof TabworthyTimes & keyof TabworthyTimesAttributes as `attr:${K}`]?: TabworthyTimesAttributes[K] } & { [K in keyof TabworthyTimes & keyof TabworthyTimesAttributes as `prop:${K}`]?: TabworthyTimes[K] } & OneOf<"id", TabworthyTimes["id"], TabworthyTimesAttributes["id"]>;
+        "tabworthy-times-picker": Omit<TabworthyTimesPicker, keyof TabworthyTimesPickerAttributes> & { [K in keyof TabworthyTimesPicker & keyof TabworthyTimesPickerAttributes]?: TabworthyTimesPicker[K] } & { [K in keyof TabworthyTimesPicker & keyof TabworthyTimesPickerAttributes as `attr:${K}`]?: TabworthyTimesPickerAttributes[K] } & { [K in keyof TabworthyTimesPicker & keyof TabworthyTimesPickerAttributes as `prop:${K}`]?: TabworthyTimesPicker[K] };
+    }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
-  export namespace JSX {
-    interface IntrinsicElements {
-      "tabworthy-dates": LocalJSX.IntrinsicElements["tabworthy-dates"] &
-        JSXBase.HTMLAttributes<HTMLTabworthyDatesElement>;
-      "tabworthy-dates-calendar": LocalJSX.IntrinsicElements["tabworthy-dates-calendar"] &
-        JSXBase.HTMLAttributes<HTMLTabworthyDatesCalendarElement>;
-      "tabworthy-dates-modal": LocalJSX.IntrinsicElements["tabworthy-dates-modal"] &
-        JSXBase.HTMLAttributes<HTMLTabworthyDatesModalElement>;
-      "tabworthy-times": LocalJSX.IntrinsicElements["tabworthy-times"] &
-        JSXBase.HTMLAttributes<HTMLTabworthyTimesElement>;
-      "tabworthy-times-picker": LocalJSX.IntrinsicElements["tabworthy-times-picker"] &
-        JSXBase.HTMLAttributes<HTMLTabworthyTimesPickerElement>;
+    export namespace JSX {
+        interface IntrinsicElements {
+            "tabworthy-dates": LocalJSX.IntrinsicElements["tabworthy-dates"] & JSXBase.HTMLAttributes<HTMLTabworthyDatesElement>;
+            "tabworthy-dates-calendar": LocalJSX.IntrinsicElements["tabworthy-dates-calendar"] & JSXBase.HTMLAttributes<HTMLTabworthyDatesCalendarElement>;
+            "tabworthy-dates-modal": LocalJSX.IntrinsicElements["tabworthy-dates-modal"] & JSXBase.HTMLAttributes<HTMLTabworthyDatesModalElement>;
+            "tabworthy-times": LocalJSX.IntrinsicElements["tabworthy-times"] & JSXBase.HTMLAttributes<HTMLTabworthyTimesElement>;
+            "tabworthy-times-picker": LocalJSX.IntrinsicElements["tabworthy-times-picker"] & JSXBase.HTMLAttributes<HTMLTabworthyTimesPickerElement>;
+        }
     }
-  }
 }

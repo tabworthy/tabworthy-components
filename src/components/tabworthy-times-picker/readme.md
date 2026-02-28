@@ -2,6 +2,7 @@
 
 <!-- Auto Generated Below -->
 
+
 ## Properties
 
 | Property              | Attribute                | Description | Type                | Default                    |
@@ -16,26 +17,27 @@
 | `showSeconds`         | `show-seconds`           |             | `boolean`           | `false`                    |
 | `useTwelveHourFormat` | `use-twelve-hour-format` |             | `boolean`           | `false`                    |
 
+
 ## Events
 
 | Event         | Description | Type                     |
 | ------------- | ----------- | ------------------------ |
 | `timeChanged` |             | `CustomEvent<TimeValue>` |
 
+
 ## Dependencies
 
 ### Used by
 
-- [tabworthy-times](../tabworthy-times)
+ - [tabworthy-times](../tabworthy-times)
 
 ### Graph
-
 ```mermaid
 graph TD;
   tabworthy-times --> tabworthy-times-picker
   style tabworthy-times-picker fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
----
+----------------------------------------------
 
-_Built with [StencilJS](https://stenciljs.com/)_
+*Built with [StencilJS](https://stenciljs.com/)*

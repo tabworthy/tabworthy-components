@@ -717,7 +717,7 @@ export class TabworthyDates {
                     "references": {
                         "DatesLabels": {
                             "location": "local",
-                            "path": "/Users/damirbogdanov_1/work/tabworthy-components/src/components/tabworthy-dates/tabworthy-dates.tsx",
+                            "path": "/home/runner/work/tabworthy-components/tabworthy-components/src/components/tabworthy-dates/tabworthy-dates.tsx",
                             "id": "src/components/tabworthy-dates/tabworthy-dates.tsx::DatesLabels"
                         }
                     }

@@ -308,7 +308,7 @@ export class TabworthyTimesPicker {
                     "references": {
                         "TimesPickerLabels": {
                             "location": "local",
-                            "path": "/Users/damirbogdanov_1/work/tabworthy-components/src/components/tabworthy-times-picker/tabworthy-times-picker.tsx",
+                            "path": "/home/runner/work/tabworthy-components/tabworthy-components/src/components/tabworthy-times-picker/tabworthy-times-picker.tsx",
                             "id": "src/components/tabworthy-times-picker/tabworthy-times-picker.tsx::TimesPickerLabels"
                         }
                     }
@@ -410,7 +410,7 @@ export class TabworthyTimesPicker {
                     "references": {
                         "TimeValue": {
                             "location": "local",
-                            "path": "/Users/damirbogdanov_1/work/tabworthy-components/src/components/tabworthy-times-picker/tabworthy-times-picker.tsx",
+                            "path": "/home/runner/work/tabworthy-components/tabworthy-components/src/components/tabworthy-times-picker/tabworthy-times-picker.tsx",
                             "id": "src/components/tabworthy-times-picker/tabworthy-times-picker.tsx::TimeValue"
                         }
                     }

@@ -2,6 +2,7 @@
 
 <!-- Auto Generated Below -->
 
+
 ## Properties
 
 | Property                     | Attribute                       | Description | Type                                                                                                                                                                                                                                                                                                                                | Default                            |
@@ -34,6 +35,7 @@
 | `todayButtonContent`         | `today-button-content`          |             | `string`                                                                                                                                                                                                                                                                                                                            | `undefined`                        |
 | `value`                      | --                              |             | `Date \| Date[]`                                                                                                                                                                                                                                                                                                                    | `undefined`                        |
 
+
 ## Events
 
 | Event          | Description | Type                                    |
@@ -43,15 +45,15 @@
 | `requestClose` |             | `CustomEvent<void>`                     |
 | `selectDate`   |             | `CustomEvent<string \| string[]>`       |
 
+
 ## Dependencies
 
 ### Used by
 
-- [tabworthy-dates](../tabworthy-dates)
-- [tabworthy-times](../tabworthy-times)
+ - [tabworthy-dates](../tabworthy-dates)
+ - [tabworthy-times](../tabworthy-times)
 
 ### Graph
-
 ```mermaid
 graph TD;
   tabworthy-dates --> tabworthy-dates-calendar
@@ -59,6 +61,6 @@ graph TD;
   style tabworthy-dates-calendar fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
----
+----------------------------------------------
 
-_Built with [StencilJS](https://stenciljs.com/)_
+*Built with [StencilJS](https://stenciljs.com/)*

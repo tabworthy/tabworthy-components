@@ -2,6 +2,7 @@
 
 <!-- Auto Generated Below -->
 
+
 ## Properties
 
 | Property                | Attribute                 | Description                                                                                                                                                      | Type                                                                                                                                                                                                                                                                                                                                | Default                            |
@@ -39,6 +40,7 @@
 | `useTwelveHourFormat`   | `use-twelve-hour-format`  |                                                                                                                                                                  | `boolean`                                                                                                                                                                                                                                                                                                                           | `true`                             |
 | `value`                 | `value`                   |                                                                                                                                                                  | `string \| string[]`                                                                                                                                                                                                                                                                                                                | `undefined`                        |
 
+
 ## Events
 
 | Event            | Description | Type                                   |
@@ -47,13 +49,19 @@
 | `componentReady` |             | `CustomEvent<void>`                    |
 | `selectDateTime` |             | `CustomEvent<string \| string[]>`      |
 
+
 ## Methods
 
 ### `clearValue() => Promise<void>`
 
+
+
 #### Returns
 
 Type: `Promise<void>`
+
+
+
 
 ## Dependencies
 
@@ -64,7 +72,6 @@ Type: `Promise<void>`
 - [tabworthy-times-picker](../tabworthy-times-picker)
 
 ### Graph
-
 ```mermaid
 graph TD;
   tabworthy-times --> tabworthy-dates-modal
@@ -73,6 +80,6 @@ graph TD;
   style tabworthy-times fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
----
+----------------------------------------------
 
-_Built with [StencilJS](https://stenciljs.com/)_
+*Built with [StencilJS](https://stenciljs.com/)*

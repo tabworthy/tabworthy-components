@@ -1,3 +1,10 @@
+## [0.11.2](https://github.com/tabworthy/tabworthy-components/compare/v0.11.1...v0.11.2) (2026-02-28)
+
+
+### Bug Fixes
+
+* **dates,times:** docs out of sync ([c2c9fc6](https://github.com/tabworthy/tabworthy-components/commit/c2c9fc6e80e4be55012ef922f16a8b53e0ce4796))
+
 ## [0.11.1](https://github.com/tabworthy/tabworthy-components/compare/v0.11.0...v0.11.1) (2026-02-27)
 
 

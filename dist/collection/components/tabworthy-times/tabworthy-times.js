@@ -527,7 +527,7 @@ export class InclusiveTimes {
                     "references": {
                         "TimesLabels": {
                             "location": "local",
-                            "path": "/Users/damirbogdanov_1/work/tabworthy-components/src/components/tabworthy-times/tabworthy-times.tsx",
+                            "path": "/home/runner/work/tabworthy-components/tabworthy-components/src/components/tabworthy-times/tabworthy-times.tsx",
                             "id": "src/components/tabworthy-times/tabworthy-times.tsx::TimesLabels"
                         }
                     }

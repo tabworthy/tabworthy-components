@@ -581,7 +581,7 @@ export class InclusiveDatesCalendar {
                     "references": {
                         "DatesCalendarLabels": {
                             "location": "local",
-                            "path": "/Users/damirbogdanov_1/work/tabworthy-components/src/components/tabworthy-dates-calendar/tabworthy-dates-calendar.tsx",
+                            "path": "/home/runner/work/tabworthy-components/tabworthy-components/src/components/tabworthy-dates-calendar/tabworthy-dates-calendar.tsx",
                             "id": "src/components/tabworthy-dates-calendar/tabworthy-dates-calendar.tsx::DatesCalendarLabels"
                         }
                     }
@@ -992,7 +992,7 @@ export class InclusiveDatesCalendar {
                     "references": {
                         "MonthChangedEventDetails": {
                             "location": "local",
-                            "path": "/Users/damirbogdanov_1/work/tabworthy-components/src/components/tabworthy-dates-calendar/tabworthy-dates-calendar.tsx",
+                            "path": "/home/runner/work/tabworthy-components/tabworthy-components/src/components/tabworthy-dates-calendar/tabworthy-dates-calendar.tsx",
                             "id": "src/components/tabworthy-dates-calendar/tabworthy-dates-calendar.tsx::MonthChangedEventDetails"
                         }
                     }
@@ -1013,7 +1013,7 @@ export class InclusiveDatesCalendar {
                     "references": {
                         "YearChangedEventDetails": {
                             "location": "local",
-                            "path": "/Users/damirbogdanov_1/work/tabworthy-components/src/components/tabworthy-dates-calendar/tabworthy-dates-calendar.tsx",
+                            "path": "/home/runner/work/tabworthy-components/tabworthy-components/src/components/tabworthy-dates-calendar/tabworthy-dates-calendar.tsx",
                             "id": "src/components/tabworthy-dates-calendar/tabworthy-dates-calendar.tsx::YearChangedEventDetails"
                         }
                     }

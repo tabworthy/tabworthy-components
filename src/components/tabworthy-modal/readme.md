@@ -2,6 +2,7 @@
 
 <!-- Auto Generated Below -->
 
+
 ## Properties
 
 | Property             | Attribute   | Description                                                                                                                                                                                    | Type                                                                                                                                                                                                         | Default          |
@@ -12,12 +13,14 @@
 | `offset`             | --          | Offset from the trigger element [skidding, distance]                                                                                                                                           | `[number, number]`                                                                                                                                                                                           | `[0, 8]`         |
 | `placement`          | `placement` | Preferred placement of the dropdown (Popper.js placement)                                                                                                                                      | `"auto" \| "auto-end" \| "auto-start" \| "bottom" \| "bottom-end" \| "bottom-start" \| "left" \| "left-end" \| "left-start" \| "right" \| "right-end" \| "right-start" \| "top" \| "top-end" \| "top-start"` | `"bottom-start"` |
 
+
 ## Events
 
 | Event    | Description | Type               |
 | -------- | ----------- | ------------------ |
 | `closed` |             | `CustomEvent<any>` |
 | `opened` |             | `CustomEvent<any>` |
+
 
 ## Methods
 
@@ -29,11 +32,17 @@ Close the dialog.
 
 Type: `Promise<void>`
 
+
+
 ### `getState() => Promise<boolean>`
+
+
 
 #### Returns
 
 Type: `Promise<boolean>`
+
+
 
 ### `open() => Promise<void>`
 
@@ -43,7 +52,11 @@ Open the dialog.
 
 Type: `Promise<void>`
 
+
+
 ### `setTriggerElement(element: HTMLElement) => Promise<void>`
+
+
 
 #### Parameters
 
@@ -55,6 +68,8 @@ Type: `Promise<void>`
 
 Type: `Promise<void>`
 
+
+
 ### `updatePosition() => Promise<void>`
 
 Force update the popper position
@@ -63,11 +78,15 @@ Force update the popper position
 
 Type: `Promise<void>`
 
+
+
+
 ## Slots
 
 | Slot     | Description        |
 | -------- | ------------------ |
 | `"slot"` | The dialog content |
+
 
 ## Shadow Parts
 
@@ -76,15 +95,15 @@ Type: `Promise<void>`
 | `"body"`    |             |
 | `"content"` |             |
 
+
 ## Dependencies
 
 ### Used by
 
-- [tabworthy-dates](../tabworthy-dates)
-- [tabworthy-times](../tabworthy-times)
+ - [tabworthy-dates](../tabworthy-dates)
+ - [tabworthy-times](../tabworthy-times)
 
 ### Graph
-
 ```mermaid
 graph TD;
   tabworthy-dates --> tabworthy-dates-modal
@@ -92,6 +111,6 @@ graph TD;
   style tabworthy-dates-modal fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
----
+----------------------------------------------
 
-_Built with [StencilJS](https://stenciljs.com/)_
+*Built with [StencilJS](https://stenciljs.com/)*
