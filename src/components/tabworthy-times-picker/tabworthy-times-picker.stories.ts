@@ -1,24 +1,27 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { html } from "lit-html";
-import { Components } from "../../components";
+import type { JSX } from "../../components";
 
 const defaultLabels = {
   hours: "Hours",
   minutes: "Minutes",
+  seconds: "Seconds",
   am: "AM",
   pm: "PM",
   timePicker: "Time picker",
   incrementHours: "Increment hours",
   decrementHours: "Decrement hours",
   incrementMinutes: "Increment minutes",
-  decrementMinutes: "Decrement minutes"
+  decrementMinutes: "Decrement minutes",
+  incrementSeconds: "Increment seconds",
+  decrementSeconds: "Decrement seconds"
 };
 
-const meta: Meta<Components.TabworthyTimesPicker> = {
+const meta: Meta<JSX.TabworthyTimesPicker> = {
   title: "Building Blocks/TabworthyTimesPicker",
   tags: ["autodocs"],
   argTypes: {
-    timeChanged: { action: "timeChanged" }
+    onTimeChanged: { action: "timeChanged" }
   },
   render: (args) => html`
     <tabworthy-times-picker
@@ -29,13 +32,13 @@ const meta: Meta<Components.TabworthyTimesPicker> = {
       .labelsSrOnly=${args.labelsSrOnly}
       .disabled=${args.disabled}
       .elementClassName=${args.elementClassName}
-      @timeChanged=${(e: CustomEvent) => args.timeChanged?.(e.detail)}
+      @timeChanged=${(e: CustomEvent) => args.onTimeChanged?.(e.detail)}
     ></tabworthy-times-picker>
   `
 };
 
 export default meta;
-type Story = StoryObj<Components.TabworthyTimesPicker>;
+type Story = StoryObj<JSX.TabworthyTimesPicker>;
 
 export const Default: Story = {
   args: {

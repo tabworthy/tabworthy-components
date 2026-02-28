@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { html } from "lit-html";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { userEvent, within } from "@storybook/test";
-import { Components } from "../../components";
+import type { JSX } from "../../components";
 
 // Common args for all positioning stories
 const commonArgs = {
@@ -35,7 +35,7 @@ const openCalendar = async ({
 };
 
 const meta: Meta<
-  Components.TabworthyDates & { wrapperStyle?: string; style?: string }
+  JSX.TabworthyDates & { wrapperStyle?: string; style?: string }
 > = {
   title: "TabworthyDates/Positioning",
   tags: ["autodocs"],
@@ -78,7 +78,7 @@ const Template = (args: any) => html`
 `;
 
 type Story = StoryObj<
-  Components.TabworthyDates & { wrapperStyle?: string; style?: string }
+  JSX.TabworthyDates & { wrapperStyle?: string; style?: string }
 >;
 
 // Top Left positioning

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { html } from "lit-html";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { userEvent, within } from "@storybook/test";
-import { Components } from "../../components";
+import type { JSX } from "../../components";
 
 // Common args for all positioning stories
 const commonArgs = {
@@ -33,7 +33,7 @@ const openPicker = async ({
 };
 
 const meta: Meta<
-  Components.TabworthyTimes & { wrapperStyle?: string; style?: string }
+  JSX.TabworthyTimes & { wrapperStyle?: string; style?: string }
 > = {
   title: "TabworthyTimes/Positioning",
   tags: ["autodocs"],
@@ -74,7 +74,7 @@ const Template = (args: any) => html`
 `;
 
 type Story = StoryObj<
-  Components.TabworthyTimes & { wrapperStyle?: string; style?: string }
+  JSX.TabworthyTimes & { wrapperStyle?: string; style?: string }
 >;
 
 // Top Left positioning

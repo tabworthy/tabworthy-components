@@ -1,16 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { html } from "lit-html";
 import { ifDefined } from "lit/directives/if-defined.js";
-import { Components } from "../../components";
+import type { JSX } from "../../components";
 import { getISODateString } from "@shared/utils/utils";
 
-const meta: Meta<Components.TabworthyDatesCalendar> = {
+const meta: Meta<JSX.TabworthyDatesCalendar> = {
   title: "Building Blocks/TabworthyDatesCalendar",
   tags: ["autodocs"],
   argTypes: {
-    selectDate: { action: "selectDate" },
-    changeMonth: { action: "changeMonth" },
-    changeYear: { action: "changeYear" }
+    onSelectDate: { action: "selectDate" },
+    onChangeMonth: { action: "changeMonth" },
+    onChangeYear: { action: "changeYear" }
   },
   render: (args) => html`
     <tabworthy-dates-calendar
@@ -31,15 +31,15 @@ const meta: Meta<Components.TabworthyDatesCalendar> = {
       ?disabled=${args.disabled}
       .disableDate=${args.disableDate}
       ?inline=${args.inline}
-      @selectDate=${(e: CustomEvent) => args.selectDate?.(e.detail)}
-      @changeMonth=${(e: CustomEvent) => args.changeMonth?.(e.detail)}
-      @changeYear=${(e: CustomEvent) => args.changeYear?.(e.detail)}
+      @selectDate=${(e: CustomEvent) => args.onSelectDate?.(e.detail)}
+      @changeMonth=${(e: CustomEvent) => args.onChangeMonth?.(e.detail)}
+      @changeYear=${(e: CustomEvent) => args.onChangeYear?.(e.detail)}
     ></tabworthy-dates-calendar>
   `
 };
 
 export default meta;
-type Story = StoryObj<Components.TabworthyDatesCalendar>;
+type Story = StoryObj<JSX.TabworthyDatesCalendar>;
 
 export const Default: Story = {
   args: {

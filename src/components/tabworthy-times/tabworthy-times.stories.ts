@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { html } from "lit-html";
 import { ifDefined } from "lit/directives/if-defined.js";
-import { Components } from "../../components";
+import type { JSX } from "../../components";
 
-const meta: Meta<Components.TabworthyTimes> = {
+const meta: Meta<JSX.TabworthyTimes> = {
   title: "TabworthyTimes",
   tags: ["autodocs"],
   argTypes: {
-    selectDateTime: { action: "selectDateTime" },
-    changeYear: { action: "changeYear" },
-    componentReady: { action: "componentReady" }
+    onSelectDateTime: { action: "selectDateTime" },
+    onChangeYear: { action: "changeYear" },
+    onComponentReady: { action: "componentReady" }
   },
   render: (args) => html`
     <tabworthy-times
@@ -38,15 +38,15 @@ const meta: Meta<Components.TabworthyTimes> = {
       calendar-button-content=${ifDefined(args.calendarButtonContent)}
       ?disable-freeform-input=${args.disableFreeformInput}
       input-class=${ifDefined(args.inputClass)}
-      @selectDateTime=${(e: CustomEvent) => args.selectDateTime?.(e.detail)}
-      @changeYear=${(e: CustomEvent) => args.changeYear?.(e.detail)}
-      @componentReady=${(e: CustomEvent) => args.componentReady?.(e.detail)}
+      @selectDateTime=${(e: CustomEvent) => args.onSelectDateTime?.(e.detail)}
+      @changeYear=${(e: CustomEvent) => args.onChangeYear?.(e.detail)}
+      @componentReady=${(e: CustomEvent) => args.onComponentReady?.(e.detail)}
     ></tabworthy-times>
   `
 };
 
 export default meta;
-type Story = StoryObj<Components.TabworthyTimes>;
+type Story = StoryObj<JSX.TabworthyTimes>;
 
 export const Default: Story = {
   args: {
