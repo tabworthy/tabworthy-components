@@ -61,7 +61,6 @@ export class TabworthyTimesPicker {
   @Prop({ mutable: true }) seconds: number = 0;
 
   @Prop() useTwelveHourFormat: boolean = false;
-  // Show seconds control
   @Prop() showSeconds: boolean = false;
   // Labels for accessibility and i18n
   @Prop() labels: TimesPickerLabels = defaultLabels;
