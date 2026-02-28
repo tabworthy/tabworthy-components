@@ -9,10 +9,10 @@ export default {
     ["@semantic-release/changelog", { changelogFile: "CHANGELOG.md" }],
 
     // 2) bump package.json version for the release + publish to npm
-    ["@semantic-release/npm", { npmPublish: false }],
+    "@semantic-release/npm",
 
-    // 3) build your dist BEFORE committing/publishing
-    ["@semantic-release/exec", { prepareCmd: "yarn build:stencil" }],
+    // 3) build your dist BEFORE committing/publishing (moved before npm publish)
+    // Note: build now happens in CI before semantic-release runs
 
     // 4) commit dist + changelog + package.json back to repo
     ["@semantic-release/git", {

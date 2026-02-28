@@ -1,32 +1,55 @@
 name: Publish
 
 on:
-  push:
-    branches:
-      - main
+  # Manual trigger - go to Actions tab → "Publish" → "Run workflow"
   workflow_dispatch:
+    inputs:
+      dry-run:
+        description: 'Dry run (no actual publish)'
+        required: false
+        default: false
+        type: boolean
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
   release:
-    if: false  # Temporarily disabled
     name: Build and publish
     runs-on: ubuntu-latest
+    # Required for npm provenance (OIDC trusted publishing)
+    permissions:
+      contents: write      # to push release commits and tags
+      issues: write        # to comment on issues
+      pull-requests: write # to comment on PRs
+      id-token: write      # required for npm provenance
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: yarn
-      - name: Publish to npm
-        id: changesets
-        uses: changesets/action@v1
-        with:
-          version: yarn version-packages
-          publish: yarn release
-          commit: "chore: publish"
-          title: "Publish package"
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build
+        run: yarn build:stencil
+
+      - name: Run tests
+        run: yarn test
+
+      - name: Semantic Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
+        run: |
+          if [ "${{ inputs.dry-run }}" == "true" ]; then
+            npx semantic-release@24 --dry-run
+          else
+            npx semantic-release@24
+          fi
