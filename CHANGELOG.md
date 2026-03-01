@@ -1,3 +1,10 @@
+## [0.11.4](https://github.com/tabworthy/tabworthy-components/compare/v0.11.3...v0.11.4) (2026-03-01)
+
+
+### Bug Fixes
+
+* replace moment with dayjs ([43b8d63](https://github.com/tabworthy/tabworthy-components/commit/43b8d6384bc2278ff525ea9fd2ebd9f0344ba56f))
+
 ## [0.11.3](https://github.com/tabworthy/tabworthy-components/compare/v0.11.2...v0.11.3) (2026-02-28)
 
 

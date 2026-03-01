@@ -1,6 +1,6 @@
 {
   "name": "@tabworthy/components",
-  "version": "0.11.3",
+  "version": "0.11.4",
   "description": "Small, accessible datepicker and datetimepicker Web Components with natural language date input.",
   "repository": {
     "type": "git",

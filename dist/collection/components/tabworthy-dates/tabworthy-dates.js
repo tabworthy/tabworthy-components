@@ -1,6 +1,8 @@
 import { h, Host } from "@stencil/core";
 import { announce } from "@react-aria/live-announcer";
-import moment from "moment";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+dayjs.extend(customParseFormat);
 import { getISODateString, removeTimezoneOffset } from "../../../../shared/utils/utils";
 import { chronoParseDate, chronoParseRange } from "../../../../shared/utils/chrono-parser/chrono-parser";
 const defaultLabels = {
@@ -259,7 +261,7 @@ export class TabworthyDates {
         }
         return {
             value: parsedDate && parsedDate.value instanceof Date
-                ? moment(parsedDate.value).format(this.format)
+                ? dayjs(parsedDate.value).format(this.format)
                 : undefined,
             reason: parsedDate && parsedDate.reason ? parsedDate.reason : undefined
         };
@@ -274,11 +276,11 @@ export class TabworthyDates {
     updateValue(newValue) {
         // Range
         if (Array.isArray(newValue)) {
-            this.internalValue = newValue.map((date) => moment(date).format(this.format));
+            this.internalValue = newValue.map((date) => dayjs(date).format(this.format));
         }
         // Single
         else {
-            this.internalValue = moment(newValue).format(this.format);
+            this.internalValue = dayjs(newValue).format(this.format);
         }
         if (this.pickerRef) {
             this.pickerRef.value = newValue;
@@ -307,7 +309,7 @@ export class TabworthyDates {
                     return; // Range date is invalid, leave the text field as is
                 let output = "";
                 this.internalValue.forEach((value, index) => {
-                    const parsedDate = moment(useInputValue ? this.inputRef.value : value, this.format, true);
+                    const parsedDate = dayjs(useInputValue ? this.inputRef.value : value, this.format, true);
                     const dateToFormat = parsedDate.isValid()
                         ? parsedDate.toDate()
                         : removeTimezoneOffset(new Date(useInputValue ? this.inputRef.value : value));
@@ -320,7 +322,7 @@ export class TabworthyDates {
                 this.inputRef.value = output;
             }
             else {
-                const parsedDate = moment(useInputValue ? this.inputRef.value : this.internalValue, this.format, true);
+                const parsedDate = dayjs(useInputValue ? this.inputRef.value : this.internalValue, this.format, true);
                 const dateToFormat = parsedDate.isValid()
                     ? parsedDate.toDate()
                     : removeTimezoneOffset(new Date(useInputValue ? this.inputRef.value : this.internalValue));
@@ -339,7 +341,7 @@ export class TabworthyDates {
             if (newValue.length === 2)
                 (_a = this.modalRef) === null || _a === void 0 ? void 0 : _a.close();
             // Convert ISO dates to specified format
-            this.internalValue = newValue.map((date) => moment(date).format(this.format));
+            this.internalValue = newValue.map((date) => dayjs(date).format(this.format));
             this.errorState = false;
             if (document.activeElement !== this.inputRef) {
                 this.formatInput(true, false);
@@ -350,7 +352,7 @@ export class TabworthyDates {
             (_b = this.modalRef) === null || _b === void 0 ? void 0 : _b.close();
             // Convert ISO date to specified format
             const formattedDate = newValue
-                ? moment(newValue).format(this.format)
+                ? dayjs(newValue).format(this.format)
                 : "";
             this.inputRef.value = formattedDate;
             this.internalValue = formattedDate;
@@ -368,8 +370,8 @@ export class TabworthyDates {
             return;
         }
         const newValueInIsoFormat = Array.isArray(newValue)
-            ? newValue.map((date) => moment(date, this.format).toISOString())
-            : moment(newValue, this.format).toISOString();
+            ? newValue.map((date) => dayjs(date, this.format).toISOString())
+            : dayjs(newValue, this.format).toISOString();
         let content = "";
         if (Array.isArray(newValueInIsoFormat)) {
             if (newValueInIsoFormat.length === 1) {
@@ -412,7 +414,7 @@ export class TabworthyDates {
         if (this.pickerRef) {
             if (Array.isArray(value)) {
                 const dates = value.reduce((acc, v) => {
-                    const d = moment(v, this.format, true);
+                    const d = dayjs(v, this.format, true);
                     if (d.isValid())
                         acc.push(d.toDate());
                     return acc;
@@ -421,7 +423,7 @@ export class TabworthyDates {
             }
             else {
                 if (value) {
-                    const parsedDate = moment(value, this.format, true);
+                    const parsedDate = dayjs(value, this.format, true);
                     if (parsedDate.isValid()) {
                         this.pickerRef.value = parsedDate.toDate();
                     }
@@ -441,10 +443,10 @@ export class TabworthyDates {
     }
     render() {
         var _a;
-        return (h(Host, { key: '9d80f0d44dddf8ba4f44d6a3206b96a3411ffc68' }, h("label", { key: 'c293bc7f2718b88b907e451e2bdb02933ac5878c', htmlFor: this.id ? `${this.id}-input` : undefined, class: this.getClassName("label") }, this.label), h("br", { key: '5d4ce271aeda614d205b67766ca1c001038a9d6b' }), h("div", { key: '841882938ec083cd67559ebe855041c396f35039', class: this.getClassName("input-container"), ref: (r) => (this.inputContainerRef = r) }, h("input", { key: '1ae0436ee9ca4c612ee8d24833e8fec42095e06b', disabled: this.disabledState || this.disableFreeformInput, id: this.id ? `${this.id}-input` : undefined, type: "text", placeholder: this.placeholder, class: {
+        return (h(Host, { key: '7dc37ffe7603f9c65f674910f5e1de3fec6d13f7' }, h("label", { key: '240bdaf77226608e88efc0bf810ed0d08090927a', htmlFor: this.id ? `${this.id}-input` : undefined, class: this.getClassName("label") }, this.label), h("br", { key: 'd37a77330ffabc8b8565c5c058ee4c5ee32e755b' }), h("div", { key: 'db290a3f753694a073ab8dd779b90e06fabe3b25', class: this.getClassName("input-container"), ref: (r) => (this.inputContainerRef = r) }, h("input", { key: 'd51dcd7f6abc15bd605a5d8c5b77da97eec76ed8', disabled: this.disabledState || this.disableFreeformInput, id: this.id ? `${this.id}-input` : undefined, type: "text", placeholder: this.placeholder, class: {
                 [this.getClassName("input")]: true,
                 [this.inputClass]: !!this.inputClass
-            }, ref: (r) => (this.inputRef = r), onChange: this.handleChange, onFocus: () => this.formatInput(false), onBlur: () => this.formatInput(true, false), "aria-describedby": this.errorState ? `${this.id}-error` : undefined, "aria-invalid": this.errorState }), !this.inline && (h("button", { key: '590b29444493815f6b8e5d22419ad16b0a335b7d', type: "button", onClick: this.handleCalendarButtonClick, class: this.getClassName("calendar-button"), disabled: this.disabledState }, this.calendarButtonContent ? (h("span", { innerHTML: this.calendarButtonContent })) : (this.datesLabels.openCalendar)))), h("tabworthy-dates-modal", { key: '59490c29908650b7473dd71e6f9aaf2f42eeaf95', label: this.datesLabels.calendar, ref: (el) => (this.modalRef = el), onOpened: () => {
+            }, ref: (r) => (this.inputRef = r), onChange: this.handleChange, onFocus: () => this.formatInput(false), onBlur: () => this.formatInput(true, false), "aria-describedby": this.errorState ? `${this.id}-error` : undefined, "aria-invalid": this.errorState }), !this.inline && (h("button", { key: '41527ddd0ae71c44a645c887cd395957dc22252c', type: "button", onClick: this.handleCalendarButtonClick, class: this.getClassName("calendar-button"), disabled: this.disabledState }, this.calendarButtonContent ? (h("span", { innerHTML: this.calendarButtonContent })) : (this.datesLabels.openCalendar)))), h("tabworthy-dates-modal", { key: '9356c01fadb2450a04664dcd4c4b3a1fce278394', label: this.datesLabels.calendar, ref: (el) => (this.modalRef = el), onOpened: () => {
                 if (!this.pickerRef)
                     return;
                 this.pickerRef.modalIsOpen = true;
@@ -452,11 +454,11 @@ export class TabworthyDates {
                 if (!this.pickerRef)
                     return;
                 this.pickerRef.modalIsOpen = false;
-            }, inline: this.inline, appendTo: this.appendTo }, h("tabworthy-dates-calendar", { key: '4cea83a2e8bf63f0d06b64af8e3a489be5eaee5e', range: this.range, locale: this.locale, onSelectDate: (event) => this.handlePickerSelection(event.detail), onChangeMonth: (event) => this.handleChangedMonths(event.detail), onChangeYear: (event) => this.handleYearChange(event.detail), onRequestClose: () => { var _a; return (_a = this.modalRef) === null || _a === void 0 ? void 0 : _a.close(); }, labels: this.datesCalendarLabels ? this.datesCalendarLabels : undefined, ref: (el) => (this.pickerRef = el), startDate: this.startDate, firstDayOfWeek: this.firstDayOfWeek, showHiddenTitle: true, disabled: this.disabledState, showMonthStepper: this.showMonthStepper, showYearStepper: this.showYearStepper, showClearButton: this.showClearButton, showCloseButton: this.showCloseButton, showKeyboardHint: this.showKeyboardHint, showTodayButton: this.showTodayButton, disableDate: this.disableDate, minDate: this.minDate, maxDate: this.maxDate, inline: this.inline })), this.showQuickButtons &&
+            }, inline: this.inline, appendTo: this.appendTo }, h("tabworthy-dates-calendar", { key: '371f6b079a3dc3d42d84e0ce0d301a4121747130', range: this.range, locale: this.locale, onSelectDate: (event) => this.handlePickerSelection(event.detail), onChangeMonth: (event) => this.handleChangedMonths(event.detail), onChangeYear: (event) => this.handleYearChange(event.detail), onRequestClose: () => { var _a; return (_a = this.modalRef) === null || _a === void 0 ? void 0 : _a.close(); }, labels: this.datesCalendarLabels ? this.datesCalendarLabels : undefined, ref: (el) => (this.pickerRef = el), startDate: this.startDate, firstDayOfWeek: this.firstDayOfWeek, showHiddenTitle: true, disabled: this.disabledState, showMonthStepper: this.showMonthStepper, showYearStepper: this.showYearStepper, showClearButton: this.showClearButton, showCloseButton: this.showCloseButton, showKeyboardHint: this.showKeyboardHint, showTodayButton: this.showTodayButton, disableDate: this.disableDate, minDate: this.minDate, maxDate: this.maxDate, inline: this.inline })), this.showQuickButtons &&
             ((_a = this.quickButtons) === null || _a === void 0 ? void 0 : _a.length) > 0 &&
-            this.chronoSupportedLocale && (h("div", { key: 'fcb7eba4dddc78de7f2f7487c9390ec0f6774374', class: this.getClassName("quick-group"), role: "group", "aria-label": this.datesLabels.quickSelection }, this.quickButtons.map((buttonText) => {
+            this.chronoSupportedLocale && (h("div", { key: 'afadda0a46a2e3224c940d27ba884edc45487bf3', class: this.getClassName("quick-group"), role: "group", "aria-label": this.datesLabels.quickSelection }, this.quickButtons.map((buttonText) => {
             return (h("button", { class: this.getClassName("quick-button"), onClick: this.handleQuickButtonClick, disabled: this.disabledState, type: "button" }, buttonText));
-        }))), this.errorState && (h("div", { key: '74c2226e378f9e2254ca52de3e519874e47f0c21', class: this.getClassName("input-error"), id: this.id ? `${this.id}-error` : undefined, role: "status" }, this.errorMessage))));
+        }))), this.errorState && (h("div", { key: '7caa060a5da1846323cc161cbf9cff4b5275b90f', class: this.getClassName("input-error"), id: this.id ? `${this.id}-error` : undefined, role: "status" }, this.errorMessage))));
     }
     static get is() { return "tabworthy-dates"; }
     static get encapsulation() { return "scoped"; }
