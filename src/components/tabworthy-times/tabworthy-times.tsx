@@ -10,7 +10,12 @@ import {
   State,
   Watch
 } from "@stencil/core";
-import moment from "moment";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+
+dayjs.extend(customParseFormat);
+dayjs.extend(localizedFormat);
 import {
   TimesPickerLabels,
   TimeValue
@@ -196,12 +201,12 @@ export class InclusiveTimes {
       // Parse the first datetime value to set time picker
       const firstValue = Array.isArray(this.value) ? this.value[0] : this.value;
       if (firstValue) {
-        const parsed = moment(firstValue, this.format);
+        const parsed = dayjs(firstValue, this.format);
         if (parsed.isValid()) {
           this.selectedDate = parsed.toDate();
-          this.selectedHours = parsed.hours();
-          this.selectedMinutes = parsed.minutes();
-          this.selectedSeconds = parsed.seconds();
+          this.selectedHours = parsed.hour();
+          this.selectedMinutes = parsed.minute();
+          this.selectedSeconds = parsed.second();
         }
       }
     } else {
@@ -213,10 +218,10 @@ export class InclusiveTimes {
     if (Array.isArray(date)) {
       // Range mode
       const formattedDates = date.map((d) => {
-        const m = moment(d);
-        m.hours(this.selectedHours);
-        m.minutes(this.selectedMinutes);
-        m.seconds(this.selectedSeconds);
+        const m = dayjs(d)
+          .hour(this.selectedHours)
+          .minute(this.selectedMinutes)
+          .second(this.selectedSeconds);
         return m.format(this.format);
       });
       this.internalValue = formattedDates;
@@ -224,10 +229,10 @@ export class InclusiveTimes {
       this.selectDateTime.emit(formattedDates);
     } else {
       // Single date mode
-      const m = moment(date);
-      m.hours(this.selectedHours);
-      m.minutes(this.selectedMinutes);
-      m.seconds(this.selectedSeconds);
+      const m = dayjs(date)
+        .hour(this.selectedHours)
+        .minute(this.selectedMinutes)
+        .second(this.selectedSeconds);
       const formatted = m.format(this.format);
       this.internalValue = formatted;
       this.value = formatted;
@@ -312,10 +317,10 @@ export class InclusiveTimes {
     const value = (event.target as HTMLInputElement).value;
 
     // Try to parse the input value as a datetime
-    const parsed = moment(value);
+    const parsed = dayjs(value);
     if (parsed.isValid()) {
-      this.selectedHours = parsed.hours();
-      this.selectedMinutes = parsed.minutes();
+      this.selectedHours = parsed.hour();
+      this.selectedMinutes = parsed.minute();
       this.updateValue(parsed.toDate());
     }
   };
@@ -326,12 +331,12 @@ export class InclusiveTimes {
     if (Array.isArray(this.internalValue)) {
       // Format range
       const formatted = this.internalValue
-        .map((v) => moment(v, this.format).format("lll"))
+        .map((v) => dayjs(v, this.format).format("lll"))
         .join(` ${this.timesLabels.to} `);
       this.inputRef.value = formatted;
     } else {
       // Format single datetime
-      this.inputRef.value = moment(this.internalValue, this.format).format(
+      this.inputRef.value = dayjs(this.internalValue, this.format).format(
         "lll"
       );
     }
@@ -347,8 +352,8 @@ export class InclusiveTimes {
     if (!dateString) return null;
 
     const date = Array.isArray(dateString)
-      ? dateString.map((d) => moment(d, this.format).toDate())
-      : moment(dateString, this.format).toDate();
+      ? dateString.map((d) => dayjs(d, this.format).toDate())
+      : dayjs(dateString, this.format).toDate();
 
     return date;
   }

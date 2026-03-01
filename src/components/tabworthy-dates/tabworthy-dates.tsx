@@ -11,7 +11,10 @@ import {
   Watch
 } from "@stencil/core";
 import { announce } from "@react-aria/live-announcer";
-import moment from "moment";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+
+dayjs.extend(customParseFormat);
 
 import { getISODateString, removeTimezoneOffset } from "@shared/utils/utils";
 import {
@@ -212,7 +215,7 @@ export class TabworthyDates {
     return {
       value:
         parsedDate && parsedDate.value instanceof Date
-          ? moment(parsedDate.value).format(this.format)
+          ? dayjs(parsedDate.value).format(this.format)
           : undefined,
       reason: parsedDate && parsedDate.reason ? parsedDate.reason : undefined
     };
@@ -232,12 +235,12 @@ export class TabworthyDates {
     // Range
     if (Array.isArray(newValue)) {
       this.internalValue = newValue.map((date) =>
-        moment(date).format(this.format)
+        dayjs(date).format(this.format)
       );
     }
     // Single
     else {
-      this.internalValue = moment(newValue).format(this.format);
+      this.internalValue = dayjs(newValue).format(this.format);
     }
     if (this.pickerRef) {
       this.pickerRef.value = newValue;
@@ -432,7 +435,7 @@ export class TabworthyDates {
         if (this.internalValue.length === 0) return; // Range date is invalid, leave the text field as is
         let output = "";
         this.internalValue.forEach((value, index) => {
-          const parsedDate = moment(
+          const parsedDate = dayjs(
             useInputValue ? this.inputRef.value : value,
             this.format,
             true
@@ -452,7 +455,7 @@ export class TabworthyDates {
         });
         this.inputRef.value = output;
       } else {
-        const parsedDate = moment(
+        const parsedDate = dayjs(
           useInputValue ? this.inputRef.value : this.internalValue,
           this.format,
           true
@@ -477,7 +480,7 @@ export class TabworthyDates {
       if (newValue.length === 2) this.modalRef?.close();
       // Convert ISO dates to specified format
       this.internalValue = newValue.map((date) =>
-        moment(date).format(this.format)
+        dayjs(date).format(this.format)
       );
       this.errorState = false;
       if (document.activeElement !== this.inputRef) {
@@ -488,7 +491,7 @@ export class TabworthyDates {
       this.modalRef?.close();
       // Convert ISO date to specified format
       const formattedDate = newValue
-        ? moment(newValue).format(this.format)
+        ? dayjs(newValue as string).format(this.format)
         : "";
       this.inputRef.value = formattedDate;
       this.internalValue = formattedDate;
@@ -508,8 +511,8 @@ export class TabworthyDates {
     }
 
     const newValueInIsoFormat = Array.isArray(newValue)
-      ? newValue.map((date) => moment(date, this.format).toISOString())
-      : moment(newValue, this.format).toISOString();
+      ? newValue.map((date) => dayjs(date, this.format).toISOString())
+      : dayjs(newValue, this.format).toISOString();
 
     let content = "";
     if (Array.isArray(newValueInIsoFormat)) {
@@ -563,14 +566,14 @@ export class TabworthyDates {
     if (this.pickerRef) {
       if (Array.isArray(value)) {
         const dates = value.reduce((acc: Date[], v) => {
-          const d = moment(v, this.format, true);
+          const d = dayjs(v, this.format, true);
           if (d.isValid()) acc.push(d.toDate());
           return acc;
         }, [] as Date[]);
         this.pickerRef.value = dates.length ? dates : null;
       } else {
         if (value) {
-          const parsedDate = moment(value, this.format, true);
+          const parsedDate = dayjs(value, this.format, true);
           if (parsedDate.isValid()) {
             this.pickerRef.value = parsedDate.toDate();
           }
