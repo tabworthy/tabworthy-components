@@ -316,8 +316,15 @@ export class InclusiveTimes {
   private handleInputChange = (event: Event) => {
     const value = (event.target as HTMLInputElement).value;
 
-    // Try to parse the input value as a datetime
-    const parsed = dayjs(value);
+    // Try to parse the input value using the component's format first (strict mode)
+    // This prevents dayjs from misinterpreting date formats (e.g., DD/MM/YYYY as MM/DD/YYYY)
+    let parsed = dayjs(value, this.format, true);
+
+    // Fall back to loose parsing if strict format doesn't match
+    if (!parsed.isValid()) {
+      parsed = dayjs(value);
+    }
+
     if (parsed.isValid()) {
       this.selectedHours = parsed.hour();
       this.selectedMinutes = parsed.minute();

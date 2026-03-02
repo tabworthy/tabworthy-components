@@ -214,6 +214,43 @@ describe("tabworthy-times", () => {
     expect(instance.inputRef.value).toBeTruthy();
   });
 
+  it("parses input using component format prop (DD/MM/YYYY should not swap day/month)", async () => {
+    const page = await createPage(
+      '<tabworthy-times id="time" format="DD/MM/YYYY h:mm A" input-should-format="false"></tabworthy-times>'
+    );
+    const instance = page.rootInstance as any;
+
+    instance.inputRef = { value: "" } as HTMLInputElement;
+    instance.selectedSeconds = 0;
+
+    // Set initial value to July 5th, 2023 at 12:00 AM
+    instance.handleInputChange({
+      target: { value: "05/07/2023 12:00 AM" }
+    } as any);
+
+    // Verify it parsed as July 5th (month = 6 in JS, as months are 0-indexed)
+    expect(instance.selectedDate.getDate()).toBe(5);
+    expect(instance.selectedDate.getMonth()).toBe(6); // July = 6
+    expect(instance.selectedDate.getFullYear()).toBe(2023);
+    expect(instance.selectedHours).toBe(0);
+    expect(instance.selectedMinutes).toBe(0);
+
+    // Now change time to 1:00 AM - date should remain July 5th
+    instance.handleInputChange({
+      target: { value: "05/07/2023 1:00 AM" }
+    } as any);
+
+    // Date should still be July 5th, NOT May 7th (swapped)
+    expect(instance.selectedDate.getDate()).toBe(5);
+    expect(instance.selectedDate.getMonth()).toBe(6); // July = 6, NOT May = 4
+    expect(instance.selectedDate.getFullYear()).toBe(2023);
+    expect(instance.selectedHours).toBe(1);
+    expect(instance.selectedMinutes).toBe(0);
+
+    // Verify the formatted value maintains DD/MM/YYYY format
+    expect(instance.internalValue).toBe("05/07/2023 1:00 AM");
+  });
+
   it("formats range and single values in the input", async () => {
     const page = await createPage(
       '<tabworthy-times id="time"></tabworthy-times>'
