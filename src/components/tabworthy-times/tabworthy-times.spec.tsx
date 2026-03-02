@@ -1,6 +1,6 @@
 import { newSpecPage } from "@stencil/core/testing";
-import { InclusiveTimes } from "./tabworthy-times";
-import { InclusiveDatesCalendar } from "../tabworthy-dates-calendar/tabworthy-dates-calendar";
+import { TabworthyTimes } from "./tabworthy-times";
+import { TabworthyDatesCalendar } from "../tabworthy-dates-calendar/tabworthy-dates-calendar";
 
 describe("tabworthy-times", () => {
   const originalError = console.error;
@@ -18,7 +18,7 @@ describe("tabworthy-times", () => {
     html = `<tabworthy-times id="time-test"></tabworthy-times>`
   ) => {
     return newSpecPage({
-      components: [InclusiveTimes],
+      components: [TabworthyTimes],
       html
     });
   };
@@ -501,7 +501,7 @@ describe("tabworthy-times", () => {
 
   it("should format input on blur if input-should-format is true", async () => {
     const page = await newSpecPage({
-      components: [InclusiveTimes],
+      components: [TabworthyTimes],
       html: `<tabworthy-times id="test-times" value="2026-02-19T15:30:00" format="YYYY-MM-DDTHH:mm:ss"></tabworthy-times>`
     });
     const input = page.root?.shadowRoot
@@ -519,7 +519,7 @@ describe("tabworthy-times", () => {
 
   it("should NOT format input on blur if input-should-format is false", async () => {
     const page = await newSpecPage({
-      components: [InclusiveTimes],
+      components: [TabworthyTimes],
       html: `<tabworthy-times id="test-times" value="2026-02-19T15:30:00" format="YYYY-MM-DDTHH:mm:ss" input-should-format="false"></tabworthy-times>`
     });
     const input = page.root?.shadowRoot
@@ -559,7 +559,7 @@ describe("tabworthy-times", () => {
 
   it("shows selected date class in calendar when value is preselected", async () => {
     const page = await newSpecPage({
-      components: [InclusiveTimes, InclusiveDatesCalendar],
+      components: [TabworthyTimes, TabworthyDatesCalendar],
       html: `<tabworthy-times id="test-times" value="2024-03-15T14:30:00" format="YYYY-MM-DDTHH:mm:ss"></tabworthy-times>`
     });
 

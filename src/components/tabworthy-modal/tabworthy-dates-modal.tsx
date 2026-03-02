@@ -27,7 +27,7 @@ import {
   styleUrl: "tabworthy-dates-modal.css",
   tag: "tabworthy-dates-modal"
 })
-export class InclusiveDatesModal {
+export class TabworthyDatesModal {
   // Mandatory for accessibility
   @Prop() label!: string;
   @Prop() inline?: boolean = false;

@@ -51,7 +51,7 @@ const defaultLabels: TimesLabels = {
   shadow: false,
   tag: "tabworthy-times"
 })
-export class InclusiveTimes {
+export class TabworthyTimes {
   @Element() el!: HTMLElement;
 
   // A unique ID for the datetime picker. Mandatory for accessibility

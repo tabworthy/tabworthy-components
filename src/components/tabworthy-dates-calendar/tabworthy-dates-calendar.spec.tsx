@@ -1,12 +1,12 @@
 import { newSpecPage } from "@stencil/core/testing";
-import { InclusiveDatesCalendar } from "./tabworthy-dates-calendar";
+import { TabworthyDatesCalendar } from "./tabworthy-dates-calendar";
 
 describe("tabworthy-dates-calendar", () => {
   const createPage = async (
     html = `<tabworthy-dates-calendar></tabworthy-dates-calendar>`
   ) => {
     return newSpecPage({
-      components: [InclusiveDatesCalendar],
+      components: [TabworthyDatesCalendar],
       html
     });
   };
@@ -34,7 +34,7 @@ describe("tabworthy-dates-calendar", () => {
 
   it("initializes currentDate to today when startDate is not provided", async () => {
     const page = await newSpecPage({
-      components: [InclusiveDatesCalendar],
+      components: [TabworthyDatesCalendar],
       html: `<tabworthy-dates-calendar></tabworthy-dates-calendar>`,
       supportsShadowDom: false
     });
@@ -371,9 +371,9 @@ describe("tabworthy-dates-calendar", () => {
 
   it("renders custom year stepper button content when provided", async () => {
     const page = await createPage(
-      `<tabworthy-dates-calendar 
-        show-year-stepper 
-        previous-year-button-content="<span>PREV</span>" 
+      `<tabworthy-dates-calendar
+        show-year-stepper
+        previous-year-button-content="<span>PREV</span>"
         next-year-button-content="<span>NEXT</span>"
       ></tabworthy-dates-calendar>`
     );

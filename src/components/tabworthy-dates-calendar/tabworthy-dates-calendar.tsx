@@ -84,7 +84,7 @@ export interface YearChangedEventDetails {
   styleUrl: "tabworthy-dates-calendar.css",
   tag: "tabworthy-dates-calendar"
 })
-export class InclusiveDatesCalendar {
+export class TabworthyDatesCalendar {
   @Element() el!: HTMLElement;
 
   @Prop() clearButtonContent?: string;

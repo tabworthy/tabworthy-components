@@ -5,26 +5,26 @@ jest.mock("aria-hidden", () => ({
 }));
 
 import { newSpecPage } from "@stencil/core/testing";
-import { InclusiveDatesModal } from "./tabworthy-dates-modal";
+import { TabworthyDatesModal } from "./tabworthy-dates-modal";
 import { hideOthers } from "aria-hidden";
 
 /**
- * Component tests for InclusiveDatesModal
+ * Component tests for TabworthyDatesModal
  */
 describe("tabworthy-dates-modal", () => {
   it("should render with default props", async () => {
     const page = await newSpecPage({
-      components: [InclusiveDatesModal],
+      components: [TabworthyDatesModal],
       html: `<tabworthy-dates-modal label="Test modal"></tabworthy-dates-modal>`
     });
 
     expect(page.root).toBeTruthy();
-    expect(page.rootInstance).toBeInstanceOf(InclusiveDatesModal);
+    expect(page.rootInstance).toBeInstanceOf(TabworthyDatesModal);
   });
 
   it("should open when open method is called", async () => {
     const page = await newSpecPage({
-      components: [InclusiveDatesModal],
+      components: [TabworthyDatesModal],
       html: `<tabworthy-dates-modal label="Test modal"></tabworthy-dates-modal>`
     });
 
@@ -37,7 +37,7 @@ describe("tabworthy-dates-modal", () => {
 
   it("should be closed by default", async () => {
     const page = await newSpecPage({
-      components: [InclusiveDatesModal],
+      components: [TabworthyDatesModal],
       html: `<tabworthy-dates-modal label="Test modal"></tabworthy-dates-modal>`
     });
 
@@ -47,7 +47,7 @@ describe("tabworthy-dates-modal", () => {
 
   it("should handle label prop", async () => {
     const page = await newSpecPage({
-      components: [InclusiveDatesModal],
+      components: [TabworthyDatesModal],
       html: `<tabworthy-dates-modal label="Select Dates"></tabworthy-dates-modal>`
     });
 
@@ -56,7 +56,7 @@ describe("tabworthy-dates-modal", () => {
 
   it("should toggle state with open and close methods", async () => {
     const page = await newSpecPage({
-      components: [InclusiveDatesModal],
+      components: [TabworthyDatesModal],
       html: `<tabworthy-dates-modal label="Test modal"></tabworthy-dates-modal>`
     });
 
@@ -76,7 +76,7 @@ describe("tabworthy-dates-modal", () => {
 
   it("should support inline mode", async () => {
     const page = await newSpecPage({
-      components: [InclusiveDatesModal],
+      components: [TabworthyDatesModal],
       html: `<tabworthy-dates-modal label="Test modal" inline></tabworthy-dates-modal>`
     });
 
@@ -91,7 +91,7 @@ describe("tabworthy-dates-modal", () => {
 
   it("should set trigger element and focus it when closing", async () => {
     const page = await newSpecPage({
-      components: [InclusiveDatesModal],
+      components: [TabworthyDatesModal],
       html: `<tabworthy-dates-modal label="Test modal"></tabworthy-dates-modal>`
     });
 
@@ -107,7 +107,7 @@ describe("tabworthy-dates-modal", () => {
 
   it("closes on escape key and outside click", async () => {
     const page = await newSpecPage({
-      components: [InclusiveDatesModal],
+      components: [TabworthyDatesModal],
       html: `<tabworthy-dates-modal label="Test modal"><div class="inside"></div></tabworthy-dates-modal>`
     });
 
@@ -128,7 +128,7 @@ describe("tabworthy-dates-modal", () => {
 
   it("calls aria-hidden undo function after opening", async () => {
     const page = await newSpecPage({
-      components: [InclusiveDatesModal],
+      components: [TabworthyDatesModal],
       html: `<tabworthy-dates-modal label="Test modal"></tabworthy-dates-modal>`
     });
 
