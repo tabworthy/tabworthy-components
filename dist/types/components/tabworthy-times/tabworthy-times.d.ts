@@ -5,7 +5,7 @@ import { DatesCalendarLabels, YearChangedEventDetails } from "../tabworthy-dates
 export interface TimesLabels extends Omit<DatesLabels, "quickSelection"> {
     timeLabel: string;
 }
-export declare class InclusiveTimes {
+export declare class TabworthyTimes {
     el: HTMLElement;
     id: string;
     value?: string | string[];

@@ -17,7 +17,7 @@ const defaultLabels = {
     chooseAsStartDate: "choose as start date",
     chooseAsEndDate: "choose as end date"
 };
-export class InclusiveDatesCalendar {
+export class TabworthyDatesCalendar {
     constructor() {
         this.disabled = false;
         this.modalIsOpen = false;

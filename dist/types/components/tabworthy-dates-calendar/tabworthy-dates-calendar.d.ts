@@ -22,7 +22,7 @@ export interface MonthChangedEventDetails {
 export interface YearChangedEventDetails {
     year: number;
 }
-export declare class InclusiveDatesCalendar {
+export declare class TabworthyDatesCalendar {
     el: HTMLElement;
     clearButtonContent?: string;
     closeButtonContent?: string;

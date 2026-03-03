@@ -14,12 +14,14 @@ export interface DatesLabels {
     to: string;
     startDate: string;
     quickSelection: string;
+    yearSelect: string;
 }
 export declare class TabworthyDates {
     el: HTMLElement;
     id: string;
     value?: string | string[];
     range?: boolean;
+    yearOnly?: boolean;
     label: string;
     placeholder: string;
     locale: string;
@@ -78,6 +80,7 @@ export declare class TabworthyDates {
     private handleQuickButtonClick;
     private handleChangedMonths;
     private handleYearChange;
+    private handleYearInputChange;
     private handleRangeChange;
     private handleSingleDateChange;
     private handleChange;

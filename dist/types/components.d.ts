@@ -142,6 +142,10 @@ export namespace Components {
          */
         "useStrictDateParsing": boolean;
         "value"?: string | string[];
+        /**
+          * @default false
+         */
+        "yearOnly"?: boolean;
     }
     interface TabworthyDatesCalendar {
         "clearButtonContent"?: string;
@@ -655,6 +659,10 @@ declare namespace LocalJSX {
          */
         "useStrictDateParsing"?: boolean;
         "value"?: string | string[];
+        /**
+          * @default false
+         */
+        "yearOnly"?: boolean;
     }
     interface TabworthyDatesCalendar {
         "clearButtonContent"?: string;
@@ -920,6 +928,7 @@ declare namespace LocalJSX {
         "id": string;
         "value": string | string[];
         "range": boolean;
+        "yearOnly": boolean;
         "label": string;
         "placeholder": string;
         "locale": string;

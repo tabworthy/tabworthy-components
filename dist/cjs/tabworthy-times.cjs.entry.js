@@ -35,9 +35,10 @@ const defaultLabels = {
     disabledDateError: `Please choose an available date`,
     to: "to",
     startDate: "Start date",
+    yearSelect: "Select year",
     timeLabel: "Time"
 };
-const InclusiveTimes = class {
+const TabworthyTimes = class {
     constructor(hostRef) {
         index.registerInstance(this, hostRef);
         this.selectDateTime = index.createEvent(this, "selectDateTime", 7);
@@ -151,8 +152,13 @@ const InclusiveTimes = class {
         };
         this.handleInputChange = (event) => {
             const value = event.target.value;
-            // Try to parse the input value as a datetime
-            const parsed = customParseFormat.dayjs(value);
+            // Try to parse the input value using the component's format first (strict mode)
+            // This prevents dayjs from misinterpreting date formats (e.g., DD/MM/YYYY as MM/DD/YYYY)
+            let parsed = customParseFormat.dayjs(value, this.format, true);
+            // Fall back to loose parsing if strict format doesn't match
+            if (!parsed.isValid()) {
+                parsed = customParseFormat.dayjs(value);
+            }
             if (parsed.isValid()) {
                 this.selectedHours = parsed.hour();
                 this.selectedMinutes = parsed.minute();
@@ -272,10 +278,10 @@ const InclusiveTimes = class {
     }
     render() {
         var _a;
-        return (index.h(index.Host, { key: '03aaff051aa6af4a7606b64056336c4f597ffaeb', class: this.elementClassName, "has-error": this.errorState, disabled: this.disabledState }, index.h("label", { key: 'd05264d3b32741ccfeca0be4473f9323b4934071', htmlFor: `${this.id}-input`, class: this.getClassName("label") }, this.label), index.h("div", { key: '7a4306a4863ffffe35a0d33c80ebfc19298c2182', class: this.getClassName("input-container"), ref: (r) => (this.inputContainerRef = r) }, index.h("input", { key: '03080dc8619d396347b831b307c8fa9070434b35', id: `${this.id}-input`, ref: (r) => (this.inputRef = r), type: "text", class: {
+        return (index.h(index.Host, { key: '16801875a7a022afd2db87e489ff69133e27773d', class: this.elementClassName, "has-error": this.errorState, disabled: this.disabledState }, index.h("label", { key: 'f0aa269a9677dbda54d31ea0fa32e69f6ef19114', htmlFor: `${this.id}-input`, class: this.getClassName("label") }, this.label), index.h("div", { key: 'a3fa49e1735adb2e32d0dbd4b5fe21d1b1e9ba9c', class: this.getClassName("input-container"), ref: (r) => (this.inputContainerRef = r) }, index.h("input", { key: 'dab0c8ff6a9f941b1e3c8a801b2e0de8262beda2', id: `${this.id}-input`, ref: (r) => (this.inputRef = r), type: "text", class: {
                 [this.getClassName("input")]: true,
                 [this.inputClass]: !!this.inputClass
-            }, placeholder: this.placeholder, disabled: this.disabledState || this.disableFreeformInput, value: (_a = this.internalValue) === null || _a === void 0 ? void 0 : _a.toString(), onBlur: this.handleInputBlur, onChange: this.handleInputChange, "aria-describedby": this.errorState ? `${this.id}-error` : undefined, "aria-invalid": this.errorState }), !this.inline && (index.h("button", { key: 'cc384691007bc6eb4044098ab79ba38809375de7', type: "button", onClick: this.handleCalendarButtonClick, class: this.getClassName("calendar-button"), disabled: this.disabledState }, this.calendarButtonContent ? (index.h("span", { innerHTML: this.calendarButtonContent })) : (this.timesLabels.openCalendar)))), index.h("tabworthy-dates-modal", { key: '14290fe8ca21e0027c384bd56d913d2cdda55380', label: this.timesLabels.calendar, ref: (el) => (this.modalRef = el), onOpened: () => {
+            }, placeholder: this.placeholder, disabled: this.disabledState || this.disableFreeformInput, value: (_a = this.internalValue) === null || _a === void 0 ? void 0 : _a.toString(), onBlur: this.handleInputBlur, onChange: this.handleInputChange, "aria-describedby": this.errorState ? `${this.id}-error` : undefined, "aria-invalid": this.errorState }), !this.inline && (index.h("button", { key: 'c072cedad6d4567b3688e434a7173441b4a11026', type: "button", onClick: this.handleCalendarButtonClick, class: this.getClassName("calendar-button"), disabled: this.disabledState }, this.calendarButtonContent ? (index.h("span", { innerHTML: this.calendarButtonContent })) : (this.timesLabels.openCalendar)))), index.h("tabworthy-dates-modal", { key: '4a4e37ff7f76d51389153b52d281fdc1a8f861d5', label: this.timesLabels.calendar, ref: (el) => (this.modalRef = el), onOpened: () => {
                 if (this.pickerRef) {
                     this.pickerRef.modalIsOpen = true;
                 }
@@ -283,7 +289,7 @@ const InclusiveTimes = class {
                 if (this.pickerRef) {
                     this.pickerRef.modalIsOpen = false;
                 }
-            }, inline: this.inline, appendTo: this.appendTo }, index.h("div", { key: '83c1e85f688a0ff213872e54a96702429f00869b', class: this.getClassName("picker-container") }, index.h("tabworthy-dates-calendar", { key: '6afcc9ddb6fcedf07127c933ad1ed192a4c88eaf', range: this.range, locale: this.locale, onSelectDate: (event) => this.handlePickerSelection(event.detail), onChangeMonth: (event) => this.handleChangedMonths(event.detail), onChangeYear: (event) => this.handleYearChange(event.detail), onRequestClose: () => { var _a; return (_a = this.modalRef) === null || _a === void 0 ? void 0 : _a.close(); }, labels: this.datesCalendarLabels, ref: (el) => (this.pickerRef = el), startDate: this.startDate, firstDayOfWeek: this.firstDayOfWeek, showHiddenTitle: true, disabled: this.disabledState, showMonthStepper: this.showMonthStepper, showYearStepper: this.showYearStepper, showClearButton: this.showClearButton, showCloseButton: this.showCloseButton, showTodayButton: this.showTodayButton, disableDate: this.disableDate, minDate: this.minDate, maxDate: this.maxDate, inline: this.inline, value: this.value ? this.toDate(this.value) : undefined }, index.h("div", { key: '7e47f4b63a85d6431f8019a8725acbf79fb44d67', slot: "after-calendar", class: this.getClassName("time-section") }, index.h("hr", { key: '8b72711de0422f1b1848bb22a72ed363b1c63ebb', class: this.getClassName("divider") }), index.h("tabworthy-times-picker", { key: '29f47e57c4f3f94232345bbe602d0278b5f53fa4', hours: this.selectedHours, minutes: this.selectedMinutes, seconds: this.selectedSeconds, showSeconds: this.showSeconds, useTwelveHourFormat: this.useTwelveHourFormat, disabled: this.disabledState, onTimeChanged: this.handleTimeChange, labels: this.timesPickerLabels }))))), this.errorState && (index.h("div", { key: 'aa6f743bc35538f6271a45bb2564e89164e5a909', class: this.getClassName("input-error"), id: this.id ? `${this.id}-error` : undefined, role: "status" }, this.errorMessage))));
+            }, inline: this.inline, appendTo: this.appendTo }, index.h("div", { key: '9b03ffb9df5a041d802647d66af53eafec187c7f', class: this.getClassName("picker-container") }, index.h("tabworthy-dates-calendar", { key: '0caab550470b253542d93e29ddadcde85fe7caad', range: this.range, locale: this.locale, onSelectDate: (event) => this.handlePickerSelection(event.detail), onChangeMonth: (event) => this.handleChangedMonths(event.detail), onChangeYear: (event) => this.handleYearChange(event.detail), onRequestClose: () => { var _a; return (_a = this.modalRef) === null || _a === void 0 ? void 0 : _a.close(); }, labels: this.datesCalendarLabels, ref: (el) => (this.pickerRef = el), startDate: this.startDate, firstDayOfWeek: this.firstDayOfWeek, showHiddenTitle: true, disabled: this.disabledState, showMonthStepper: this.showMonthStepper, showYearStepper: this.showYearStepper, showClearButton: this.showClearButton, showCloseButton: this.showCloseButton, showTodayButton: this.showTodayButton, disableDate: this.disableDate, minDate: this.minDate, maxDate: this.maxDate, inline: this.inline, value: this.value ? this.toDate(this.value) : undefined }, index.h("div", { key: '655aa9bb049f76dba44f18684fec6550ab8aac22', slot: "after-calendar", class: this.getClassName("time-section") }, index.h("hr", { key: 'b695207bda87835f57240f72bea88dc57470c170', class: this.getClassName("divider") }), index.h("tabworthy-times-picker", { key: 'f17bf595f1df723dc04d87ef86a5f5a6152b506a', hours: this.selectedHours, minutes: this.selectedMinutes, seconds: this.selectedSeconds, showSeconds: this.showSeconds, useTwelveHourFormat: this.useTwelveHourFormat, disabled: this.disabledState, onTimeChanged: this.handleTimeChange, labels: this.timesPickerLabels }))))), this.errorState && (index.h("div", { key: '8bf64ca388076cd5f1ad73b763993dbc7736b08c', class: this.getClassName("input-error"), id: this.id ? `${this.id}-error` : undefined, role: "status" }, this.errorMessage))));
     }
     get el() { return index.getElement(this); }
     static get watchers() { return {
@@ -299,4 +305,4 @@ const InclusiveTimes = class {
     }; }
 };
 
-exports.tabworthy_times = InclusiveTimes;
+exports.tabworthy_times = TabworthyTimes;

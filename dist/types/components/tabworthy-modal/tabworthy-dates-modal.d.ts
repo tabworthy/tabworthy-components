@@ -4,7 +4,7 @@ import { Placement } from "@popperjs/core";
 /**
  * @slot slot - The dialog content
  */
-export declare class InclusiveDatesModal {
+export declare class TabworthyDatesModal {
     label: string;
     inline?: boolean;
     /** Preferred placement of the dropdown (Popper.js placement) */

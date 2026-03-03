@@ -21,7 +21,7 @@ const defaultLabels = {
     chooseAsStartDate: "choose as start date",
     chooseAsEndDate: "choose as end date"
 };
-const InclusiveDatesCalendar = class {
+const TabworthyDatesCalendar = class {
     constructor(hostRef) {
         index.registerInstance(this, hostRef);
         this.selectDate = index.createEvent(this, "selectDate", 3);
@@ -428,7 +428,7 @@ const InclusiveDatesCalendar = class {
             }]
     }; }
 };
-InclusiveDatesCalendar.style = tabworthyDatesCalendarCss();
+TabworthyDatesCalendar.style = tabworthyDatesCalendarCss();
 
 /**
  * Traverses the slots of the open shadowroots and returns all children matching the query.
@@ -2637,7 +2637,7 @@ var createPopper = /*#__PURE__*/popperGenerator({
 
 const tabworthyDatesModalCss = () => `:host::part(body){position:absolute;top:0;left:0;width:-moz-fit-content;width:fit-content;z-index:1200}:host::part(backdrop){}:host::part(content){}`;
 
-const InclusiveDatesModal = class {
+const TabworthyDatesModal = class {
     constructor(hostRef) {
         index.registerInstance(this, hostRef);
         this.opened = index.createEvent(this, "opened", 7);
@@ -2825,7 +2825,7 @@ const InclusiveDatesModal = class {
         }
     }
     render() {
-        return (index.h(index.Host, { key: 'bf48e957915fbc2975d7ba2f2ca6844e2c14270e', showing: this.showing, ref: (r) => r && (this.el = r) }, !this.inline && this.showing && (index.h("div", { key: '87fd577d1289e3c6f888b614d127e729003b1fe6', part: "body", ref: (r) => {
+        return (index.h(index.Host, { key: '488fb845bb3a168c45f715b5f7315a80e1857589', showing: this.showing, ref: (r) => r && (this.el = r) }, !this.inline && this.showing && (index.h("div", { key: 'd6263beffa3dbeaa7f0e5e65c1f2627c07164648', part: "body", ref: (r) => {
                 if (r) {
                     this.bodyRef = r;
                     // Setup portal and create popper when ref is set
@@ -2842,7 +2842,7 @@ const InclusiveDatesModal = class {
                         });
                     }
                 }
-            }, style: { visibility: this.positioned ? "visible" : "hidden" }, onKeyDown: this.onKeyDown, role: "dialog", tabindex: -1, "aria-hidden": !this.showing, "aria-label": this.label, "aria-modal": this.showing }, index.h("focus-trap", { key: '5f994a20957137ce8e95d17191cb9436ae4c2315' }, index.h("div", { key: '6ab5e6990d04e9e6b0905971b52b33410608759e', part: "content" }, index.h("slot", { key: '9d99fbd7f47ee014277fe4493f86a90b3929103c' }))))), this.inline && (index.h("div", { key: 'fc1766214d1727cc2865a17da6661f06bd67429f', part: "content" }, index.h("slot", { key: '28d41dba4356ce3bd0aa7db06943296de4372695' })))));
+            }, style: { visibility: this.positioned ? "visible" : "hidden" }, onKeyDown: this.onKeyDown, role: "dialog", tabindex: -1, "aria-hidden": !this.showing, "aria-label": this.label, "aria-modal": this.showing }, index.h("focus-trap", { key: '7ffb9cc684198ab9f3b127a4abe5f60f3241cd49' }, index.h("div", { key: 'c6c7c14220c01969f3a5c92dda882685f4c43268', part: "content" }, index.h("slot", { key: 'a1e6ce7ed152f61b3970e20b40e36bb13ee7580a' }))))), this.inline && (index.h("div", { key: '632750cfce76139771642e03051f5c4a654db56a', part: "content" }, index.h("slot", { key: 'c1aa297a6ffdeee55840a9e05adddb7220e7f954' })))));
     }
     get hostElement() { return index.getElement(this); }
     static get watchers() { return {
@@ -2851,7 +2851,7 @@ const InclusiveDatesModal = class {
             }]
     }; }
 };
-InclusiveDatesModal.style = tabworthyDatesModalCss();
+TabworthyDatesModal.style = tabworthyDatesModalCss();
 
-exports.tabworthy_dates_calendar = InclusiveDatesCalendar;
-exports.tabworthy_dates_modal = InclusiveDatesModal;
+exports.tabworthy_dates_calendar = TabworthyDatesCalendar;
+exports.tabworthy_dates_modal = TabworthyDatesModal;

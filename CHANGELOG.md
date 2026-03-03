@@ -1,3 +1,16 @@
+# [0.12.0](https://github.com/tabworthy/tabworthy-components/compare/v0.11.4...v0.12.0) (2026-03-03)
+
+
+### Bug Fixes
+
+* change component name ([0da3309](https://github.com/tabworthy/tabworthy-components/commit/0da33098d887f36a6448e9390e8a317702cf4759))
+* **times:** format using component's format first and fall back to loose parsing ([562e3f8](https://github.com/tabworthy/tabworthy-components/commit/562e3f87a2626b11b1b7b76280091b87af5111e3))
+
+
+### Features
+
+* **dates:** yearOnly mode ([9802a18](https://github.com/tabworthy/tabworthy-components/commit/9802a187a6b44255b7d33f589b0bb6926d665efd))
+
 ## [0.11.4](https://github.com/tabworthy/tabworthy-components/compare/v0.11.3...v0.11.4) (2026-03-01)
 
 
