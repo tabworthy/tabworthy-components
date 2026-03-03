@@ -1,3 +1,10 @@
+## [0.12.2](https://github.com/tabworthy/tabworthy-components/compare/v0.12.1...v0.12.2) (2026-03-03)
+
+
+### Bug Fixes
+
+* **times:** adjust TimesLabels type ([6cfb8bd](https://github.com/tabworthy/tabworthy-components/commit/6cfb8bd6aa5128566930d3a77a0e41ae444b7306))
+
 ## [0.12.1](https://github.com/tabworthy/tabworthy-components/compare/v0.12.0...v0.12.1) (2026-03-03)
 
 

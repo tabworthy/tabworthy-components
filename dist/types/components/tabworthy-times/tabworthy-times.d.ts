@@ -2,7 +2,7 @@ import { EventEmitter } from "../../stencil-public-runtime";
 import { TimesPickerLabels } from "../tabworthy-times-picker/tabworthy-times-picker";
 import { DatesLabels } from "../tabworthy-dates/tabworthy-dates";
 import { DatesCalendarLabels, YearChangedEventDetails } from "../tabworthy-dates-calendar/tabworthy-dates-calendar";
-export interface TimesLabels extends Omit<DatesLabels, "quickSelection"> {
+export interface TimesLabels extends Omit<DatesLabels, "quickSelection" | "yearSelect"> {
     timeLabel: string;
 }
 export declare class TabworthyTimes {
