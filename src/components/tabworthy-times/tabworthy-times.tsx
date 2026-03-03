@@ -317,6 +317,17 @@ export class TabworthyTimes {
   private handleInputChange = (event: Event) => {
     const value = (event.target as HTMLInputElement).value;
 
+    // Handle empty input
+    if (value.length === 0) {
+      this.errorState = false;
+      this.internalValue = "";
+      if (this.pickerRef) {
+        this.pickerRef.value = null;
+      }
+      this.value = this.internalValue;
+      return this.selectDateTime.emit(this.internalValue);
+    }
+
     // Try to parse the input value using the component's format first (strict mode)
     // This prevents dayjs from misinterpreting date formats (e.g., DD/MM/YYYY as MM/DD/YYYY)
     let parsed = dayjs(value, this.format, true);
@@ -327,9 +338,15 @@ export class TabworthyTimes {
     }
 
     if (parsed.isValid()) {
+      this.errorState = false;
       this.selectedHours = parsed.hour();
       this.selectedMinutes = parsed.minute();
+      this.selectedSeconds = parsed.second();
       this.updateValue(parsed.toDate());
+    } else {
+      // Set error state for invalid/garbage input
+      this.errorState = true;
+      this.errorMessage = this.timesLabels.invalidDateError;
     }
   };
 

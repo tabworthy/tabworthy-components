@@ -535,6 +535,37 @@ describe("tabworthy-times", () => {
     expect(input?.value).toBe("2026-02-19T15:30:00");
   });
 
+  it("should set error state when valid input is changed to garbage (invalid datetime)", async () => {
+    const page = await createPage(
+      '<tabworthy-times id="test-times" format="YYYY-MM-DDTHH:mm:ss"></tabworthy-times>'
+    );
+    const instance = page.rootInstance as any;
+    instance.inputRef = { value: "" } as HTMLInputElement;
+    instance.selectedSeconds = 0;
+
+    // First, enter a valid datetime
+    instance.handleInputChange({
+      target: { value: "2026-02-19T15:30:00" }
+    } as any);
+    await page.waitForChanges();
+
+    // Verify valid input is accepted
+    expect(instance.errorState).toBe(false);
+    expect(instance.selectedHours).toBe(15);
+    expect(instance.selectedMinutes).toBe(30);
+    expect(instance.internalValue).toContain("2026-02-19T15:30:00");
+
+    // Now change a number to a letter (garbage input)
+    instance.handleInputChange({
+      target: { value: "2026-02-19T1X:30:00" }
+    } as any);
+    await page.waitForChanges();
+
+    // Verify error state is set
+    expect(instance.errorState).toBe(true);
+    expect(instance.errorMessage).toBe(instance.timesLabels.invalidDateError);
+  });
+
   it("handlePickerSelection mutates internalValue correctly based on specified format", async () => {
     const page = await createPage(
       "<tabworthy-times id='test' value='01/01/2024 14:30:00' format='DD/MM/YYYY HH:mm:ss'></tabworthy-times>"
