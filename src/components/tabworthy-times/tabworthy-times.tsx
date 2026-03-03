@@ -28,7 +28,8 @@ import {
 } from "../tabworthy-dates-calendar/tabworthy-dates-calendar";
 import { getISODateString, removeTimezoneOffset } from "@shared/utils/utils";
 
-export interface TimesLabels extends Omit<DatesLabels, "quickSelection"> {
+export interface TimesLabels
+  extends Omit<DatesLabels, "quickSelection" | "yearSelect"> {
   timeLabel: string;
 }
 
@@ -43,7 +44,6 @@ const defaultLabels: TimesLabels = {
   disabledDateError: `Please choose an available date`,
   to: "to",
   startDate: "Start date",
-  yearSelect: "Select year",
   timeLabel: "Time"
 };
 
