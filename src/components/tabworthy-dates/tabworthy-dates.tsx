@@ -44,6 +44,7 @@ export interface DatesLabels {
   to: string;
   startDate: string;
   quickSelection: string;
+  yearSelect: string;
 }
 
 const defaultLabels: DatesLabels = {
@@ -53,6 +54,7 @@ const defaultLabels: DatesLabels = {
   invalidDateError: "We could not find a matching date",
   minDateError: `Please fill in a date after `,
   maxDateError: `Please fill in a date before `,
+  yearSelect: "Select year",
   rangeOutOfBoundsError: `Please enter a valid range of dates`,
   disabledDateError: `Please choose an available date`,
   to: "to",
@@ -74,6 +76,8 @@ export class TabworthyDates {
   @Prop({ mutable: true }) value?: string | string[];
   // Enable or disable range mode
   @Prop() range?: boolean = false;
+  // Enable year-only mode (shows only year input, no calendar)
+  @Prop() yearOnly?: boolean = false;
   // A label for the text field
   @Prop() label: string = this.range
     ? "Choose a date range (any way you like)"
@@ -309,6 +313,24 @@ export class TabworthyDates {
 
   private handleYearChange = (yearDetail: YearChangedEventDetails) => {
     this.changeYear?.emit(yearDetail);
+  };
+
+  private handleYearInputChange = (event: Event) => {
+    const year = +(event.target as HTMLInputElement).value;
+    if (!year || isNaN(year)) return;
+
+    const minYear = this.minDate ? parseInt(this.minDate.slice(0, 4), 10) : 1;
+    const maxYear = this.maxDate
+      ? parseInt(this.maxDate.slice(0, 4), 10)
+      : 9999;
+
+    if (year < minYear || year > maxYear) return;
+
+    const newValue = dayjs().year(year).startOf("year").format(this.format);
+    this.internalValue = newValue;
+    this.value = newValue;
+    this.changeYear?.emit({ year });
+    this.selectDate.emit(newValue);
   };
 
   private handleRangeChange = async (value: string) => {
@@ -594,6 +616,60 @@ export class TabworthyDates {
   }
 
   render() {
+    // Year-only mode: show just a year number input
+    if (this.yearOnly) {
+      const currentYear = this.value
+        ? parseInt(String(this.value).slice(0, 4), 10)
+        : new Date().getFullYear();
+
+      return (
+        <Host>
+          <label
+            htmlFor={this.id ? `${this.id}-input` : undefined}
+            class={this.getClassName("label")}
+          >
+            {this.label}
+          </label>
+          <br />
+          <div
+            class={this.getClassName("input-container")}
+            ref={(r) => (this.inputContainerRef = r)}
+          >
+            <input
+              aria-label={this.datesLabels.yearSelect}
+              class={{
+                [this.getClassName("year-select")]: true,
+                [this.getClassName("input")]: true,
+                [this.inputClass]: !!this.inputClass
+              }}
+              aria-disabled={this.disabledState}
+              disabled={this.disabledState}
+              max={this.maxDate ? this.maxDate.slice(0, 4) : 9999}
+              min={this.minDate ? this.minDate.slice(0, 4) : 1}
+              name="year"
+              id={this.id ? `${this.id}-input` : undefined}
+              onChange={this.handleYearInputChange}
+              type="number"
+              value={currentYear}
+              aria-describedby={
+                this.errorState ? `${this.id}-error` : undefined
+              }
+              aria-invalid={this.errorState}
+            />
+          </div>
+          {this.errorState && (
+            <div
+              class={this.getClassName("input-error")}
+              id={this.id ? `${this.id}-error` : undefined}
+              role="status"
+            >
+              {this.errorMessage}
+            </div>
+          )}
+        </Host>
+      );
+    }
+
     return (
       <Host>
         <label

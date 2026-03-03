@@ -43,6 +43,7 @@ const defaultLabels: TimesLabels = {
   disabledDateError: `Please choose an available date`,
   to: "to",
   startDate: "Start date",
+  yearSelect: "Select year",
   timeLabel: "Time"
 };
 

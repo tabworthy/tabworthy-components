@@ -34,6 +34,7 @@ const meta: Meta<JSX.TabworthyDates> = {
       show-clear-button=${args.showClearButton}
       show-today-button=${args.showTodayButton}
       show-close-button=${args.showCloseButton}
+      ?year-only=${args.yearOnly}
       ?show-keyboard-hint=${args.showKeyboardHint}
       input-should-format=${args.inputShouldFormat}
       calendar-button-content=${ifDefined(args.calendarButtonContent)}
@@ -166,5 +167,15 @@ export const WithoutFreeFormInput: Story = {
     showQuickButtons: false,
     disableFreeformInput: true,
     value: "2024-06-15"
+  }
+};
+
+export const YearOnly: Story = {
+  args: {
+    ...Default.args,
+    id: "datepicker-no-freeform",
+    label: "Choose a year",
+    placeholder: "Select a year from the picker",
+    yearOnly: true
   }
 };

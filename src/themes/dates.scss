@@ -373,6 +373,37 @@ tabworthy-dates *:focus-visible {
   }
 }
 
+.tabworthy-dates__year-select {
+  box-sizing: border-box;
+  display: inline-flex;
+  height: 2.5em;
+  padding-right: 0.5em;
+  padding-left: 0.5em;
+  align-items: center;
+  border-radius: 0.25em;
+  color: var(--tw-dates-text-color);
+  background: var(--tw-dates-bg2-color);
+  line-height: 1;
+  border: 1px solid var(--tw-dates-border-color);
+  font-size: var(--tw-dates-font-size, 1em);
+  max-width: 8em;
+
+  &:hover:not(:disabled) {
+    background-color: var(--tw-dates-hover-color);
+  }
+  &:focus-visible {
+    outline: var(--tw-dates-focus-outline-width) solid
+      var(--tw-dates-focus-color);
+  }
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  @media screen and (forced-colors: active) {
+    border: 1px solid transparent;
+  }
+}
+
 .tabworthy-dates-calendar__keyboard-hint {
   color: var(--tw-dates-secondary-color);
   display: flex;
