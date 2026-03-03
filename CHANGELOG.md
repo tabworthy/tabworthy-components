@@ -1,3 +1,10 @@
+## [0.12.1](https://github.com/tabworthy/tabworthy-components/compare/v0.12.0...v0.12.1) (2026-03-03)
+
+
+### Bug Fixes
+
+* **times:** validation should be shown ([9d8112e](https://github.com/tabworthy/tabworthy-components/commit/9d8112ed896f359a341a29e5a196d6d9c1a90ecd))
+
 # [0.12.0](https://github.com/tabworthy/tabworthy-components/compare/v0.11.4...v0.12.0) (2026-03-03)
 
 
