@@ -1,3 +1,10 @@
+## [0.12.3](https://github.com/tabworthy/tabworthy-components/compare/v0.12.2...v0.12.3) (2026-04-08)
+
+
+### Bug Fixes
+
+* **calendar:** avoid layout shifting by always presenting 6 rows of weeks ([8504c9f](https://github.com/tabworthy/tabworthy-components/commit/8504c9f772736fc82a974bc25415d7e37332f557))
+
 ## [0.12.2](https://github.com/tabworthy/tabworthy-components/compare/v0.12.1...v0.12.2) (2026-03-03)
 
 
