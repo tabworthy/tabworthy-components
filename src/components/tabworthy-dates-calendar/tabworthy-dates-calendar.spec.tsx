@@ -121,6 +121,34 @@ describe("tabworthy-dates-calendar", () => {
     expect(rows.length).toBeGreaterThan(3);
   });
 
+  it("pads compact months to six calendar rows to avoid layout shifting", async () => {
+    const page = await createPage(
+      '<tabworthy-dates-calendar start-date="2021-02-15"></tabworthy-dates-calendar>'
+    );
+    const instance = page.rootInstance as any;
+
+    const rows = instance.getCalendarRows();
+    const renderedRows = page.root?.querySelectorAll("tbody tr");
+    const lastRowDates = rows[5].map((date: Date) => ({
+      day: date.getDate(),
+      month: date.getMonth(),
+      year: date.getFullYear()
+    }));
+
+    expect(rows).toHaveLength(6);
+    rows.forEach((row: Date[]) => expect(row).toHaveLength(7));
+    expect(renderedRows).toHaveLength(6);
+    expect(lastRowDates).toEqual([
+      { day: 7, month: 2, year: 2021 },
+      { day: 8, month: 2, year: 2021 },
+      { day: 9, month: 2, year: 2021 },
+      { day: 10, month: 2, year: 2021 },
+      { day: 11, month: 2, year: 2021 },
+      { day: 12, month: 2, year: 2021 },
+      { day: 13, month: 2, year: 2021 }
+    ]);
+  });
+
   it("returns undefined title when current date is missing", async () => {
     const page = await createPage();
     const instance = page.rootInstance as any;

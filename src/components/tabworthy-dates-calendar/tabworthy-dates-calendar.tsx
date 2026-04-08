@@ -223,6 +223,20 @@ export class TabworthyDatesCalendar {
       calendarRows.push(row);
     }
 
+    const lastRow = calendarRows[calendarRows.length - 1];
+    let lastDay = lastRow?.[lastRow.length - 1];
+
+    while (calendarRows.length < 6 && lastDay) {
+      const row: Date[] = [];
+
+      for (let i = 0; i < 7; i += 1) {
+        lastDay = addDays(lastDay, 1);
+        row.push(lastDay);
+      }
+
+      calendarRows.push(row);
+    }
+
     return calendarRows;
   }
 
