@@ -47,7 +47,6 @@
     "test:storybook": "TZ=UTC vitest --project=storybook",
     "generate": "stencil generate",
     "release": "yarn build:stencil && npm publish",
-    "publish": "npm publish",
     "prepare": "husky install",
     "sass:watch": "sass src/themes/base.scss:src/themes/base.css src/themes/light.scss:src/themes/light.css --watch --style compressed",
     "sass": "sass src/themes/light.scss:src/themes/light.css --style compressed --no-source-map"
