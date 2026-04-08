@@ -8,6 +8,17 @@ import { newSpecPage } from "@stencil/core/testing";
 import { TabworthyDatesModal } from "./tabworthy-dates-modal";
 import { hideOthers } from "aria-hidden";
 
+const setAppendTo = (
+  modal: TabworthyDatesModal,
+  value: string | HTMLElement
+) => {
+  Object.defineProperty(modal, "appendTo", {
+    configurable: true,
+    value,
+    writable: true
+  });
+};
+
 /**
  * Component tests for TabworthyDatesModal
  */
@@ -126,6 +137,27 @@ describe("tabworthy-dates-modal", () => {
     expect(closeSpy).toHaveBeenCalledTimes(2);
   });
 
+  it("ignores non-escape keys and clicks inside the original parent", async () => {
+    const page = await newSpecPage({
+      components: [TabworthyDatesModal],
+      html: `<tabworthy-dates-modal label="Test modal"></tabworthy-dates-modal>`
+    });
+
+    const closeSpy = jest.spyOn(page.rootInstance, "close");
+    const originalParent = page.doc.createElement("div");
+    const insideOriginalParent = page.doc.createElement("button");
+    originalParent.appendChild(insideOriginalParent);
+    (page.rootInstance as any).originalParent = originalParent;
+    (page.rootInstance as any).showing = true;
+
+    page.rootInstance.onKeyDown({ code: "Enter" } as KeyboardEvent);
+    page.rootInstance.handleClick({
+      target: insideOriginalParent
+    } as MouseEvent);
+
+    expect(closeSpy).not.toHaveBeenCalled();
+  });
+
   it("calls aria-hidden undo function after opening", async () => {
     const page = await newSpecPage({
       components: [TabworthyDatesModal],
@@ -140,5 +172,316 @@ describe("tabworthy-dates-modal", () => {
 
     expect(hideOthers).toHaveBeenCalled();
     expect(undo).toHaveBeenCalled();
+  });
+
+  describe("getAppendToElement", () => {
+    it("returns null when appendTo is not set", async () => {
+      const page = await newSpecPage({
+        components: [TabworthyDatesModal],
+        html: `<tabworthy-dates-modal label="Test modal"></tabworthy-dates-modal>`
+      });
+
+      const result = (page.rootInstance as any).getAppendToElement();
+      expect(result).toBeNull();
+    });
+
+    it('returns document.body when appendTo is "body"', async () => {
+      const page = await newSpecPage({
+        components: [TabworthyDatesModal],
+        html: `<tabworthy-dates-modal label="Test modal"></tabworthy-dates-modal>`
+      });
+
+      setAppendTo(page.rootInstance, "body");
+      const result = (page.rootInstance as any).getAppendToElement();
+      expect(result).toBe(document.body);
+    });
+
+    it("returns element matching CSS selector", async () => {
+      const page = await newSpecPage({
+        components: [TabworthyDatesModal],
+        html: `<tabworthy-dates-modal label="Test modal"></tabworthy-dates-modal>`
+      });
+
+      const container = page.doc.createElement("div");
+      container.id = "portal-target";
+      page.doc.body.appendChild(container);
+
+      setAppendTo(page.rootInstance, "#portal-target");
+      const result = (page.rootInstance as any).getAppendToElement();
+      expect(result).toBe(container);
+
+      page.doc.body.removeChild(container);
+    });
+
+    it("returns HTMLElement directly when appendTo is an element", async () => {
+      const page = await newSpecPage({
+        components: [TabworthyDatesModal],
+        html: `<tabworthy-dates-modal label="Test modal"></tabworthy-dates-modal>`
+      });
+
+      const container = page.doc.createElement("div");
+      setAppendTo(page.rootInstance, container);
+      const result = (page.rootInstance as any).getAppendToElement();
+      expect(result).toBe(container);
+    });
+  });
+
+  describe("setupPortal", () => {
+    it("moves host element to appendTo target", async () => {
+      const page = await newSpecPage({
+        components: [TabworthyDatesModal],
+        html: `<tabworthy-dates-modal label="Test modal"></tabworthy-dates-modal>`
+      });
+
+      const container = page.doc.createElement("div");
+      page.doc.body.appendChild(container);
+
+      setAppendTo(page.rootInstance, container);
+      const host = page.root as HTMLElement;
+      const originalParent = host.parentElement;
+
+      (page.rootInstance as any).setupPortal();
+
+      expect(container.contains(host)).toBe(true);
+      expect((page.rootInstance as any).originalParent).toBe(originalParent);
+
+      // Cleanup
+      (page.rootInstance as any).cleanupPortal();
+      page.doc.body.removeChild(container);
+    });
+
+    it("stores original next sibling", async () => {
+      const page = await newSpecPage({
+        components: [TabworthyDatesModal],
+        html: `<tabworthy-dates-modal label="Test modal"></tabworthy-dates-modal>`
+      });
+
+      const wrapper = page.doc.createElement("div");
+      const sibling = page.doc.createElement("span");
+      page.doc.body.appendChild(wrapper);
+
+      const host = page.root as HTMLElement;
+      wrapper.appendChild(host);
+      wrapper.appendChild(sibling);
+
+      const container = page.doc.createElement("div");
+      page.doc.body.appendChild(container);
+
+      setAppendTo(page.rootInstance, container);
+      (page.rootInstance as any).setupPortal();
+
+      expect((page.rootInstance as any).originalNextSibling).toBe(sibling);
+
+      // Cleanup
+      (page.rootInstance as any).cleanupPortal();
+      page.doc.body.removeChild(container);
+      page.doc.body.removeChild(wrapper);
+    });
+
+    it("does nothing when appendTo is not set", async () => {
+      const page = await newSpecPage({
+        components: [TabworthyDatesModal],
+        html: `<tabworthy-dates-modal label="Test modal"></tabworthy-dates-modal>`
+      });
+
+      const host = page.root as HTMLElement;
+      const originalParent = host.parentElement;
+
+      (page.rootInstance as any).setupPortal();
+
+      expect(host.parentElement).toBe(originalParent);
+      expect((page.rootInstance as any).originalParent).toBeNull();
+    });
+
+    it("restores the host with appendChild when no original next sibling exists", async () => {
+      const page = await newSpecPage({
+        components: [TabworthyDatesModal],
+        html: `<tabworthy-dates-modal label="Test modal"></tabworthy-dates-modal>`
+      });
+
+      const host = page.root as HTMLElement;
+      const container = page.doc.createElement("div");
+      page.doc.body.appendChild(container);
+      container.appendChild(host);
+
+      const appendSpy = jest.spyOn(page.doc.body, "appendChild");
+      (page.rootInstance as any).originalParent = page.doc.body;
+      (page.rootInstance as any).originalNextSibling = null;
+
+      (page.rootInstance as any).cleanupPortal();
+
+      expect(appendSpy).toHaveBeenCalledWith(host);
+      expect(host.parentElement).toBe(page.doc.body);
+      page.doc.body.removeChild(container);
+    });
+  });
+
+  describe("createPopperInstance", () => {
+    it("creates a popper instance and sets positioned when trigger and body exist", async () => {
+      const page = await newSpecPage({
+        components: [TabworthyDatesModal],
+        html: `<tabworthy-dates-modal label="Test modal"></tabworthy-dates-modal>`
+      });
+
+      const trigger = document.createElement("button");
+      await page.rootInstance.setTriggerElement(trigger);
+      (page.rootInstance as any).bodyRef = document.createElement("div");
+
+      (page.rootInstance as any).createPopperInstance();
+
+      expect((page.rootInstance as any).popperInstance).toBeTruthy();
+      expect(page.rootInstance.positioned).toBe(true);
+    });
+
+    it("uses fixed strategy when appendTo is set", async () => {
+      const page = await newSpecPage({
+        components: [TabworthyDatesModal],
+        html: `<tabworthy-dates-modal label="Test modal"></tabworthy-dates-modal>`
+      });
+
+      const trigger = document.createElement("button");
+      await page.rootInstance.setTriggerElement(trigger);
+      (page.rootInstance as any).bodyRef = document.createElement("div");
+      setAppendTo(page.rootInstance, "body");
+
+      (page.rootInstance as any).createPopperInstance();
+
+      expect((page.rootInstance as any).popperInstance).toBeTruthy();
+      expect(page.rootInstance.positioned).toBe(true);
+    });
+
+    it("does not create popper when triggerElement is missing", async () => {
+      const page = await newSpecPage({
+        components: [TabworthyDatesModal],
+        html: `<tabworthy-dates-modal label="Test modal"></tabworthy-dates-modal>`
+      });
+
+      (page.rootInstance as any).bodyRef = document.createElement("div");
+      (page.rootInstance as any).createPopperInstance();
+
+      expect((page.rootInstance as any).popperInstance).toBeNull();
+    });
+
+    it("does not create popper when bodyRef is missing", async () => {
+      const page = await newSpecPage({
+        components: [TabworthyDatesModal],
+        html: `<tabworthy-dates-modal label="Test modal"></tabworthy-dates-modal>`
+      });
+
+      const trigger = document.createElement("button");
+      await page.rootInstance.setTriggerElement(trigger);
+      (page.rootInstance as any).createPopperInstance();
+
+      expect((page.rootInstance as any).popperInstance).toBeNull();
+    });
+  });
+
+  describe("destroyPopperInstance", () => {
+    it("destroys an existing popper instance and sets to null", async () => {
+      const page = await newSpecPage({
+        components: [TabworthyDatesModal],
+        html: `<tabworthy-dates-modal label="Test modal"></tabworthy-dates-modal>`
+      });
+
+      const mockDestroy = jest.fn();
+      (page.rootInstance as any).popperInstance = {
+        destroy: mockDestroy,
+        forceUpdate: jest.fn(),
+        update: jest.fn()
+      };
+
+      (page.rootInstance as any).destroyPopperInstance();
+
+      expect(mockDestroy).toHaveBeenCalled();
+      expect((page.rootInstance as any).popperInstance).toBeNull();
+    });
+
+    it("does nothing when no popper instance exists", async () => {
+      const page = await newSpecPage({
+        components: [TabworthyDatesModal],
+        html: `<tabworthy-dates-modal label="Test modal"></tabworthy-dates-modal>`
+      });
+
+      // popperInstance is null by default
+      (page.rootInstance as any).destroyPopperInstance();
+
+      expect((page.rootInstance as any).popperInstance).toBeNull();
+    });
+  });
+
+  describe("updatePosition", () => {
+    it("calls popper update when instance exists", async () => {
+      const page = await newSpecPage({
+        components: [TabworthyDatesModal],
+        html: `<tabworthy-dates-modal label="Test modal"></tabworthy-dates-modal>`
+      });
+
+      const mockUpdate = jest.fn().mockResolvedValue(undefined);
+      (page.rootInstance as any).popperInstance = {
+        destroy: jest.fn(),
+        forceUpdate: jest.fn(),
+        update: mockUpdate
+      };
+
+      await page.rootInstance.updatePosition();
+
+      expect(mockUpdate).toHaveBeenCalled();
+    });
+  });
+
+  describe("lifecycle", () => {
+    it("skips disconnected cleanup while the portal is moving", async () => {
+      const page = await newSpecPage({
+        components: [TabworthyDatesModal],
+        html: `<tabworthy-dates-modal label="Test modal"></tabworthy-dates-modal>`
+      });
+
+      const destroySpy = jest.spyOn(
+        page.rootInstance as any,
+        "destroyPopperInstance"
+      );
+      const cleanupSpy = jest.spyOn(page.rootInstance as any, "cleanupPortal");
+      (page.rootInstance as any).isMovingPortal = true;
+
+      page.rootInstance.disconnectedCallback();
+
+      expect(destroySpy).not.toHaveBeenCalled();
+      expect(cleanupSpy).not.toHaveBeenCalled();
+    });
+
+    it("sets up the portal and schedules popper creation when the dialog body renders", async () => {
+      const originalRaf = global.requestAnimationFrame;
+      global.requestAnimationFrame = jest.fn(
+        (callback: FrameRequestCallback) => {
+          callback(0);
+          return 1;
+        }
+      ) as typeof requestAnimationFrame;
+
+      const page = await newSpecPage({
+        components: [TabworthyDatesModal],
+        html: `<tabworthy-dates-modal label="Test modal"></tabworthy-dates-modal>`
+      });
+
+      const instance = page.rootInstance as any;
+      const setupSpy = jest.spyOn(instance, "setupPortal");
+      const createSpy = jest
+        .spyOn(instance, "createPopperInstance")
+        .mockImplementation(() => undefined);
+
+      try {
+        await page.rootInstance.setTriggerElement(
+          document.createElement("button")
+        );
+        await page.rootInstance.open();
+        await page.waitForChanges();
+
+        expect(setupSpy).toHaveBeenCalled();
+        expect(global.requestAnimationFrame).toHaveBeenCalledTimes(2);
+        expect(createSpy).toHaveBeenCalled();
+      } finally {
+        global.requestAnimationFrame = originalRaf;
+      }
+    });
   });
 });

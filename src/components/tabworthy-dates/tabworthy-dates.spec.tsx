@@ -486,6 +486,20 @@ describe("tabworthy-dates", () => {
     expect(yearSpy).toHaveBeenCalledWith({ year: 2027 });
   });
 
+  it("closes the modal when the calendar requests close", async () => {
+    const page = await createPage();
+    const instance = page.rootInstance as any;
+    const closeSpy = jest.fn();
+    instance.modalRef = { close: closeSpy };
+
+    const calendar = page.root?.querySelector(
+      "tabworthy-dates-calendar"
+    ) as HTMLElement;
+    calendar.dispatchEvent(new CustomEvent("requestClose"));
+
+    expect(closeSpy).toHaveBeenCalled();
+  });
+
   it("uses default disableDate callback", async () => {
     const page = await createPage();
     const instance = page.rootInstance as any;
@@ -620,6 +634,57 @@ describe("tabworthy-dates", () => {
       ".tabworthy-dates__calendar-button"
     );
     expect(calendarButton?.innerHTML).toContain("OPEN");
+  });
+
+  it("renders year-only mode using the selected value year", async () => {
+    const page = await createPage(
+      '<tabworthy-dates id="test" year-only label="Pick a year" value="2027-06-15"></tabworthy-dates>'
+    );
+    const instance = page.rootInstance as any;
+
+    const input = page.root?.querySelector('input[type="number"]');
+    const button = page.root?.querySelector(
+      ".tabworthy-dates__calendar-button"
+    );
+
+    expect(page.root?.textContent).toContain("Pick a year");
+    expect(input?.getAttribute("value")).toBe("2027");
+    expect(button).toBeFalsy();
+    expect(instance.inputContainerRef).toBeTruthy();
+  });
+
+  it("renders year-only mode with the current year when value is missing", async () => {
+    const instance = new TabworthyDates() as any;
+    instance.id = "test";
+    instance.yearOnly = true;
+    instance.label = "Pick a year";
+
+    expect(() => instance.render()).not.toThrow();
+  });
+
+  it("handles year-only input changes within min/max bounds", async () => {
+    const page = await createPage(
+      '<tabworthy-dates id="test" year-only value="2024-01-01" min-date="2020-01-01" max-date="2030-12-31"></tabworthy-dates>'
+    );
+    const instance = page.rootInstance as any;
+    const yearSpy = jest.fn();
+    const selectSpy = jest.spyOn(instance.selectDate, "emit");
+    instance.changeYear = { emit: yearSpy };
+
+    instance.handleYearInputChange({ target: { value: "nope" } } as any);
+    instance.handleYearInputChange({ target: { value: "2019" } } as any);
+    instance.handleYearInputChange({ target: { value: "2031" } } as any);
+
+    expect(instance.value).toBe("2024-01-01");
+    expect(yearSpy).not.toHaveBeenCalled();
+    expect(selectSpy).not.toHaveBeenCalled();
+
+    instance.handleYearInputChange({ target: { value: "2025" } } as any);
+
+    expect(instance.internalValue).toBe("2025-01-01");
+    expect(instance.value).toBe("2025-01-01");
+    expect(yearSpy).toHaveBeenCalledWith({ year: 2025 });
+    expect(selectSpy).toHaveBeenCalledWith("2025-01-01");
   });
 
   it("getClassName returns base class name when no element is provided", async () => {

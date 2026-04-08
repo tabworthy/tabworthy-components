@@ -214,6 +214,23 @@ describe("tabworthy-times", () => {
     expect(instance.inputRef.value).toBeTruthy();
   });
 
+  it("clears state when the input is emptied", async () => {
+    const page = await createPage(
+      '<tabworthy-times id="time" value="2024-03-15T10:30:00"></tabworthy-times>'
+    );
+    const instance = page.rootInstance as any;
+    instance.pickerRef = { value: new Date("2024-03-15") };
+    const emitSpy = jest.spyOn(instance.selectDateTime, "emit");
+
+    instance.handleInputChange({ target: { value: "" } } as any);
+
+    expect(instance.errorState).toBe(false);
+    expect(instance.internalValue).toBeNull();
+    expect(instance.value).toBe("");
+    expect(instance.pickerRef.value).toBeNull();
+    expect(emitSpy).toHaveBeenCalled();
+  });
+
   it("parses input using component format prop (DD/MM/YYYY should not swap day/month)", async () => {
     const page = await createPage(
       '<tabworthy-times id="time" format="DD/MM/YYYY h:mm A" input-should-format="false"></tabworthy-times>'
@@ -487,6 +504,22 @@ describe("tabworthy-times", () => {
     expect(yearSpy).toHaveBeenCalledWith({ year: 2030 });
   });
 
+  it("closes the modal when the calendar requests close", async () => {
+    const page = await createPage(
+      '<tabworthy-times id="time" value="2024-03-15T14:30:00"></tabworthy-times>'
+    );
+    const instance = page.rootInstance as any;
+    const closeSpy = jest.fn();
+    instance.modalRef = { close: closeSpy };
+
+    const calendar = page.root?.querySelector(
+      "tabworthy-dates-calendar"
+    ) as HTMLElement;
+    calendar.dispatchEvent(new CustomEvent("requestClose"));
+
+    expect(closeSpy).toHaveBeenCalled();
+  });
+
   it("renders error block without id attribute when id is missing", async () => {
     const page = await createPage("<tabworthy-times></tabworthy-times>");
     const instance = page.rootInstance as any;
@@ -586,6 +619,20 @@ describe("tabworthy-times", () => {
     );
     const input = page.root?.querySelector("input") as HTMLInputElement;
     expect(input.disabled).toBe(true);
+  });
+
+  it("toDate converts arrays and empty values", async () => {
+    const page = await createPage();
+    const instance = page.rootInstance as any;
+    const range = instance.toDate([
+      "2024-03-15T10:30:00",
+      "2024-03-16T11:45:00"
+    ]);
+
+    expect(Array.isArray(range)).toBe(true);
+    expect((range as Date[])[0]).toBeInstanceOf(Date);
+    expect((range as Date[])[1]).toBeInstanceOf(Date);
+    expect(instance.toDate(undefined)).toBeNull();
   });
 
   it("shows selected date class in calendar when value is preselected", async () => {
