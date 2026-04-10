@@ -114,6 +114,10 @@ export class TabworthyDates {
   @Prop() nextMonthButtonContent?: string;
   // Text label for next year button
   @Prop() nextYearButtonContent?: string;
+  // Text label for previous month button
+  @Prop() previousMonthButtonContent?: string;
+  // Text label for previous year button
+  @Prop() previousYearButtonContent?: string;
   // Show or hide the next/previous year buttons
   @Prop() showYearStepper: boolean = false;
   // Show or hide the next/previous month buttons
@@ -145,6 +149,10 @@ export class TabworthyDates {
     : ["Yesterday", "Today", "Tomorrow", "In 10 days"];
   // Text content for the today button in the calendar
   @Prop() todayButtonContent?: string;
+  // Text content for the clear button in the calendar
+  @Prop() clearButtonContent?: string;
+  // Text content for the close button in the calendar
+  @Prop() closeButtonContent?: string;
   // HTML content for the calendar button (allows custom icons/SVG)
   @Prop() calendarButtonContent?: string;
   // Show or hide the quick buttons
@@ -705,6 +713,11 @@ export class TabworthyDates {
               onClick={this.handleCalendarButtonClick}
               class={this.getClassName("calendar-button")}
               disabled={this.disabledState}
+              aria-label={
+                this.calendarButtonContent
+                  ? this.datesLabels.openCalendar
+                  : undefined
+              }
             >
               {this.calendarButtonContent ? (
                 <span innerHTML={this.calendarButtonContent}></span>
@@ -761,6 +774,13 @@ export class TabworthyDates {
             minDate={this.minDate}
             maxDate={this.maxDate}
             inline={this.inline}
+            nextMonthButtonContent={this.nextMonthButtonContent}
+            nextYearButtonContent={this.nextYearButtonContent}
+            previousMonthButtonContent={this.previousMonthButtonContent}
+            previousYearButtonContent={this.previousYearButtonContent}
+            todayButtonContent={this.todayButtonContent}
+            clearButtonContent={this.clearButtonContent}
+            closeButtonContent={this.closeButtonContent}
           />
         </tabworthy-dates-modal>
         {this.showQuickButtons &&

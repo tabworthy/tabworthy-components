@@ -120,6 +120,20 @@ export class TabworthyTimes {
 
   // HTML content for the calendar button (allows custom icons/SVG)
   @Prop() calendarButtonContent?: string;
+  // Text label for next month button
+  @Prop() nextMonthButtonContent?: string;
+  // Text label for next year button
+  @Prop() nextYearButtonContent?: string;
+  // Text label for previous month button
+  @Prop() previousMonthButtonContent?: string;
+  // Text label for previous year button
+  @Prop() previousYearButtonContent?: string;
+  // Text content for the today button in the calendar
+  @Prop() todayButtonContent?: string;
+  // Text content for the clear button in the calendar
+  @Prop() clearButtonContent?: string;
+  // Text content for the close button in the calendar
+  @Prop() closeButtonContent?: string;
 
   // Function to disable individual dates
   @Prop() disableDate: (date: Date) => boolean = () => false;
@@ -435,6 +449,11 @@ export class TabworthyTimes {
               onClick={this.handleCalendarButtonClick}
               class={this.getClassName("calendar-button")}
               disabled={this.disabledState}
+              aria-label={
+                this.calendarButtonContent
+                  ? this.timesLabels.openCalendar
+                  : undefined
+              }
             >
               {this.calendarButtonContent ? (
                 <span innerHTML={this.calendarButtonContent}></span>
@@ -493,6 +512,13 @@ export class TabworthyTimes {
               maxDate={this.maxDate}
               inline={this.inline}
               value={this.value ? this.toDate(this.value) : undefined}
+              nextMonthButtonContent={this.nextMonthButtonContent}
+              nextYearButtonContent={this.nextYearButtonContent}
+              previousMonthButtonContent={this.previousMonthButtonContent}
+              previousYearButtonContent={this.previousYearButtonContent}
+              todayButtonContent={this.todayButtonContent}
+              clearButtonContent={this.clearButtonContent}
+              closeButtonContent={this.closeButtonContent}
             >
               <div
                 slot="after-calendar"

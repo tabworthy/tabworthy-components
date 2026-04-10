@@ -821,35 +821,50 @@ export class TabworthyDatesCalendar {
                 <div class={this.getClassName("footer-buttons")}>
                   {this.showTodayButton && (
                     <button
+                      aria-label={
+                        this.todayButtonContent
+                          ? this.labels.todayButton
+                          : undefined
+                      }
                       class={this.getClassName("today-button")}
                       disabled={this.disabled}
                       innerHTML={this.todayButtonContent || undefined}
                       onClick={this.showToday}
                       type="button"
                     >
-                      {this.labels.todayButton}
+                      {!this.todayButtonContent && this.labels.todayButton}
                     </button>
                   )}
                   {this.showClearButton && (
                     <button
+                      aria-label={
+                        this.clearButtonContent
+                          ? this.labels.clearButton
+                          : undefined
+                      }
                       class={this.getClassName("clear-button")}
                       disabled={this.disabled}
                       innerHTML={this.clearButtonContent || undefined}
                       onClick={this.clear}
                       type="button"
                     >
-                      {this.labels.clearButton}
+                      {!this.clearButtonContent && this.labels.clearButton}
                     </button>
                   )}
                   {this.showCloseButton && (
                     <button
+                      aria-label={
+                        this.closeButtonContent
+                          ? this.labels.closeButton
+                          : undefined
+                      }
                       class={this.getClassName("close-button")}
                       disabled={this.disabled}
                       innerHTML={this.closeButtonContent || undefined}
                       onClick={this.close}
                       type="button"
                     >
-                      {this.labels.closeButton}
+                      {!this.closeButtonContent && this.labels.closeButton}
                     </button>
                   )}
                 </div>
