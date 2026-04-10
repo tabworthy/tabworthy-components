@@ -451,6 +451,11 @@ describe("tabworthy-times", () => {
     );
     const instance = page.rootInstance as any;
 
+    const calendarButton = page.root?.querySelector(
+      ".tabworthy-times__calendar-button"
+    );
+    expect(calendarButton?.getAttribute("aria-label")).toBe("Choose time");
+
     instance.errorState = true;
     instance.errorMessage = "Bad datetime";
     await page.waitForChanges();
@@ -467,6 +472,15 @@ describe("tabworthy-times", () => {
     expect(
       page.root?.querySelector(".tabworthy-times__calendar-button")
     ).toBeFalsy();
+  });
+
+  it("does not set aria-label on calendar button when no custom content", async () => {
+    const page = await createPage();
+
+    const calendarButton = page.root?.querySelector(
+      ".tabworthy-times__calendar-button"
+    );
+    expect(calendarButton?.getAttribute("aria-label")).toBeNull();
   });
 
   it("wires modal and calendar event handlers from render", async () => {

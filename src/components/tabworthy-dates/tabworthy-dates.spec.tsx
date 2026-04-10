@@ -634,6 +634,16 @@ describe("tabworthy-dates", () => {
       ".tabworthy-dates__calendar-button"
     );
     expect(calendarButton?.innerHTML).toContain("OPEN");
+    expect(calendarButton?.getAttribute("aria-label")).toBe("Open calendar");
+  });
+
+  it("does not set aria-label on calendar button when no custom content", async () => {
+    const page = await createPage();
+
+    const calendarButton = page.root?.querySelector(
+      ".tabworthy-dates__calendar-button"
+    );
+    expect(calendarButton?.getAttribute("aria-label")).toBeNull();
   });
 
   it("renders year-only mode using the selected value year", async () => {

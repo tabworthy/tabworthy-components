@@ -487,6 +487,50 @@ describe("tabworthy-dates-calendar", () => {
       ".tabworthy-dates-calendar__close-button"
     );
     expect(closeButton?.innerHTML).toContain("X");
+    expect(closeButton?.getAttribute("aria-label")).toBe("Close");
+  });
+
+  it("renders aria-label on today button when custom content is provided", async () => {
+    const page = await createPage(
+      `<tabworthy-dates-calendar today-button-content="<span>T</span>"></tabworthy-dates-calendar>`
+    );
+
+    const todayButton = page.root?.querySelector(
+      ".tabworthy-dates-calendar__today-button"
+    );
+    expect(todayButton?.innerHTML).toContain("T");
+    expect(todayButton?.getAttribute("aria-label")).toBe("Show today");
+  });
+
+  it("renders aria-label on clear button when custom content is provided", async () => {
+    const page = await createPage(
+      `<tabworthy-dates-calendar show-clear-button clear-button-content="<span>CLR</span>"></tabworthy-dates-calendar>`
+    );
+
+    const clearButton = page.root?.querySelector(
+      ".tabworthy-dates-calendar__clear-button"
+    );
+    expect(clearButton?.innerHTML).toContain("CLR");
+    expect(clearButton?.getAttribute("aria-label")).toBe("Clear value");
+  });
+
+  it("does not set aria-label on footer buttons when no custom content", async () => {
+    const page = await createPage(
+      `<tabworthy-dates-calendar show-close-button show-clear-button></tabworthy-dates-calendar>`
+    );
+
+    const todayButton = page.root?.querySelector(
+      ".tabworthy-dates-calendar__today-button"
+    );
+    const clearButton = page.root?.querySelector(
+      ".tabworthy-dates-calendar__clear-button"
+    );
+    const closeButton = page.root?.querySelector(
+      ".tabworthy-dates-calendar__close-button"
+    );
+    expect(todayButton?.getAttribute("aria-label")).toBeNull();
+    expect(clearButton?.getAttribute("aria-label")).toBeNull();
+    expect(closeButton?.getAttribute("aria-label")).toBeNull();
   });
 
   it("renders footer when only showCloseButton is true", async () => {
