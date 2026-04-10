@@ -38,6 +38,15 @@ const meta: Meta<JSX.TabworthyDates> = {
       ?show-keyboard-hint=${args.showKeyboardHint}
       input-should-format=${args.inputShouldFormat}
       calendar-button-content=${ifDefined(args.calendarButtonContent)}
+      next-month-button-content=${ifDefined(args.nextMonthButtonContent)}
+      next-year-button-content=${ifDefined(args.nextYearButtonContent)}
+      previous-month-button-content=${ifDefined(
+        args.previousMonthButtonContent
+      )}
+      previous-year-button-content=${ifDefined(args.previousYearButtonContent)}
+      today-button-content=${ifDefined(args.todayButtonContent)}
+      clear-button-content=${ifDefined(args.clearButtonContent)}
+      close-button-content=${ifDefined(args.closeButtonContent)}
       ?disable-freeform-input=${args.disableFreeformInput}
       input-class=${ifDefined(args.inputClass)}
       @selectDate=${(e: CustomEvent) => args.onSelectDate?.(e.detail)}
@@ -177,5 +186,26 @@ export const YearOnly: Story = {
     label: "Choose a year",
     placeholder: "Select a year from the picker",
     yearOnly: true
+  }
+};
+
+export const CustomButtonContent: Story = {
+  args: {
+    ...Default.args,
+    id: "datepicker-custom-buttons",
+    label: "Custom button content",
+    showYearStepper: true,
+    showMonthStepper: true,
+    showClearButton: true,
+    showTodayButton: true,
+    showCloseButton: true,
+    calendarButtonContent: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
+    nextMonthButtonContent: "→",
+    nextYearButtonContent: "⇒",
+    previousMonthButtonContent: "←",
+    previousYearButtonContent: "⇐",
+    todayButtonContent: "📍",
+    clearButtonContent: "🗑",
+    closeButtonContent: "✕"
   }
 };
