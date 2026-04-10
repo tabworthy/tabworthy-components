@@ -1,3 +1,10 @@
+## [0.12.4](https://github.com/tabworthy/tabworthy-components/compare/v0.12.3...v0.12.4) (2026-04-10)
+
+
+### Bug Fixes
+
+* add aria-label when button content provided ([273ef55](https://github.com/tabworthy/tabworthy-components/commit/273ef552728e0b87578ddb8f8d429efd9c8227d3))
+
 ## [0.12.3](https://github.com/tabworthy/tabworthy-components/compare/v0.12.2...v0.12.3) (2026-04-08)
 
 

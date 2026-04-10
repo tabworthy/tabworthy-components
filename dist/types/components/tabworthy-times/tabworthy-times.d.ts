@@ -31,6 +31,13 @@ export declare class TabworthyTimes {
     showCloseButton: boolean;
     showTodayButton: boolean;
     calendarButtonContent?: string;
+    nextMonthButtonContent?: string;
+    nextYearButtonContent?: string;
+    previousMonthButtonContent?: string;
+    previousYearButtonContent?: string;
+    todayButtonContent?: string;
+    clearButtonContent?: string;
+    closeButtonContent?: string;
     disableDate: (date: Date) => boolean;
     elementClassName?: string;
     firstDayOfWeek?: number;

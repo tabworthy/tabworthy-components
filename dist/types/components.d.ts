@@ -28,6 +28,8 @@ export namespace Components {
          */
         "appendTo"?: string | HTMLElement;
         "calendarButtonContent"?: string;
+        "clearButtonContent"?: string;
+        "closeButtonContent"?: string;
         "datesCalendarLabels"?: DatesCalendarLabels;
         /**
           * @default defaultLabels
@@ -92,6 +94,8 @@ export namespace Components {
           * @default this.range     ? `Try "June 8 to 12"`     : `Try "tomorrow" or "in ten days"`
          */
         "placeholder": string;
+        "previousMonthButtonContent"?: string;
+        "previousYearButtonContent"?: string;
         /**
           * @default this.range     ? ["Monday to Wednesday", "July 5 to 10"]     : ["Yesterday", "Today", "Tomorrow", "In 10 days"]
          */
@@ -268,7 +272,9 @@ export namespace Components {
          */
         "appendTo"?: string | HTMLElement;
         "calendarButtonContent"?: string;
+        "clearButtonContent"?: string;
         "clearValue": () => Promise<void>;
+        "closeButtonContent"?: string;
         "datesCalendarLabels"?: DatesCalendarLabels;
         /**
           * @default () => false
@@ -322,10 +328,14 @@ export namespace Components {
         "locale": string;
         "maxDate"?: string;
         "minDate"?: string;
+        "nextMonthButtonContent"?: string;
+        "nextYearButtonContent"?: string;
         /**
           * @default ""
          */
         "placeholder": string;
+        "previousMonthButtonContent"?: string;
+        "previousYearButtonContent"?: string;
         /**
           * @default false
          */
@@ -367,6 +377,7 @@ export namespace Components {
          */
         "timesLabels": TimesLabels;
         "timesPickerLabels"?: TimesPickerLabels;
+        "todayButtonContent"?: string;
         /**
           * @default true
          */
@@ -543,6 +554,8 @@ declare namespace LocalJSX {
          */
         "appendTo"?: string | HTMLElement;
         "calendarButtonContent"?: string;
+        "clearButtonContent"?: string;
+        "closeButtonContent"?: string;
         "datesCalendarLabels"?: DatesCalendarLabels;
         /**
           * @default defaultLabels
@@ -609,6 +622,8 @@ declare namespace LocalJSX {
           * @default this.range     ? `Try "June 8 to 12"`     : `Try "tomorrow" or "in ten days"`
          */
         "placeholder"?: string;
+        "previousMonthButtonContent"?: string;
+        "previousYearButtonContent"?: string;
         /**
           * @default this.range     ? ["Monday to Wednesday", "July 5 to 10"]     : ["Yesterday", "Today", "Tomorrow", "In 10 days"]
          */
@@ -777,6 +792,8 @@ declare namespace LocalJSX {
          */
         "appendTo"?: string | HTMLElement;
         "calendarButtonContent"?: string;
+        "clearButtonContent"?: string;
+        "closeButtonContent"?: string;
         "datesCalendarLabels"?: DatesCalendarLabels;
         /**
           * @default () => false
@@ -830,6 +847,8 @@ declare namespace LocalJSX {
         "locale"?: string;
         "maxDate"?: string;
         "minDate"?: string;
+        "nextMonthButtonContent"?: string;
+        "nextYearButtonContent"?: string;
         "onChangeYear"?: (event: TabworthyTimesCustomEvent<YearChangedEventDetails>) => void;
         "onComponentReady"?: (event: TabworthyTimesCustomEvent<void>) => void;
         "onSelectDateTime"?: (event: TabworthyTimesCustomEvent<string | string[] | undefined>) => void;
@@ -837,6 +856,8 @@ declare namespace LocalJSX {
           * @default ""
          */
         "placeholder"?: string;
+        "previousMonthButtonContent"?: string;
+        "previousYearButtonContent"?: string;
         /**
           * @default false
          */
@@ -878,6 +899,7 @@ declare namespace LocalJSX {
          */
         "timesLabels"?: TimesLabels;
         "timesPickerLabels"?: TimesPickerLabels;
+        "todayButtonContent"?: string;
         /**
           * @default true
          */
@@ -942,6 +964,8 @@ declare namespace LocalJSX {
         "hasError": boolean;
         "nextMonthButtonContent": string;
         "nextYearButtonContent": string;
+        "previousMonthButtonContent": string;
+        "previousYearButtonContent": string;
         "showYearStepper": boolean;
         "showMonthStepper": boolean;
         "showClearButton": boolean;
@@ -953,6 +977,8 @@ declare namespace LocalJSX {
         "firstDayOfWeek": number;
         "format": string;
         "todayButtonContent": string;
+        "clearButtonContent": string;
+        "closeButtonContent": string;
         "calendarButtonContent": string;
         "showQuickButtons": boolean;
         "disableFreeformInput": boolean;
@@ -1013,6 +1039,13 @@ declare namespace LocalJSX {
         "showCloseButton": boolean;
         "showTodayButton": boolean;
         "calendarButtonContent": string;
+        "nextMonthButtonContent": string;
+        "nextYearButtonContent": string;
+        "previousMonthButtonContent": string;
+        "previousYearButtonContent": string;
+        "todayButtonContent": string;
+        "clearButtonContent": string;
+        "closeButtonContent": string;
         "elementClassName": string;
         "firstDayOfWeek": number;
         "format": string;

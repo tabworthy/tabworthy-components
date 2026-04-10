@@ -271,10 +271,12 @@ export class TabworthyTimes {
     }
     render() {
         var _a;
-        return (h(Host, { key: '671702979dddb6a19cfa78a95df28a958af56df9', class: this.elementClassName, "has-error": this.errorState, disabled: this.disabledState }, h("label", { key: '7b23263f899b3a59d43f3f2922e9c98a0bc62524', htmlFor: `${this.id}-input`, class: this.getClassName("label") }, this.label), h("div", { key: '453d585bee8dd0262aadec8ba816cd22c51cffea', class: this.getClassName("input-container"), ref: (r) => (this.inputContainerRef = r) }, h("input", { key: 'd2ec7de2b31f3c1a6b9acb4f57341530cb8431dc', id: `${this.id}-input`, ref: (r) => (this.inputRef = r), type: "text", class: {
+        return (h(Host, { key: 'e07a561aa76dedbf8f8e28c491b3aac19f45c472', class: this.elementClassName, "has-error": this.errorState, disabled: this.disabledState }, h("label", { key: '24e11901760a8c7f989f3d33df9cd58af899a8dc', htmlFor: `${this.id}-input`, class: this.getClassName("label") }, this.label), h("div", { key: '17c4a53c621b66e62f857d49b4b8f4b52d51183d', class: this.getClassName("input-container"), ref: (r) => (this.inputContainerRef = r) }, h("input", { key: '7dd776e464533c7bb6c842a0332f0d667f52c7cc', id: `${this.id}-input`, ref: (r) => (this.inputRef = r), type: "text", class: {
                 [this.getClassName("input")]: true,
                 [this.inputClass]: !!this.inputClass
-            }, placeholder: this.placeholder, disabled: this.disabledState || this.disableFreeformInput, value: (_a = this.internalValue) === null || _a === void 0 ? void 0 : _a.toString(), onBlur: this.handleInputBlur, onChange: this.handleInputChange, "aria-describedby": this.errorState ? `${this.id}-error` : undefined, "aria-invalid": this.errorState }), !this.inline && (h("button", { key: '77b42f53ad8a5e0d5d70ea41f999f95d61942a83', type: "button", onClick: this.handleCalendarButtonClick, class: this.getClassName("calendar-button"), disabled: this.disabledState }, this.calendarButtonContent ? (h("span", { innerHTML: this.calendarButtonContent })) : (this.timesLabels.openCalendar)))), h("tabworthy-dates-modal", { key: '3633f9e7839b8947da48f83ac3808156bea8515d', label: this.timesLabels.calendar, ref: (el) => (this.modalRef = el), onOpened: () => {
+            }, placeholder: this.placeholder, disabled: this.disabledState || this.disableFreeformInput, value: (_a = this.internalValue) === null || _a === void 0 ? void 0 : _a.toString(), onBlur: this.handleInputBlur, onChange: this.handleInputChange, "aria-describedby": this.errorState ? `${this.id}-error` : undefined, "aria-invalid": this.errorState }), !this.inline && (h("button", { key: '0e84b4e3ae7f5abe1a59e939cccc227bf34ab992', type: "button", onClick: this.handleCalendarButtonClick, class: this.getClassName("calendar-button"), disabled: this.disabledState, "aria-label": this.calendarButtonContent
+                ? this.timesLabels.openCalendar
+                : undefined }, this.calendarButtonContent ? (h("span", { innerHTML: this.calendarButtonContent })) : (this.timesLabels.openCalendar)))), h("tabworthy-dates-modal", { key: 'baebeeeda4200bf13fe8f023bb39e2c13fc58b0b', label: this.timesLabels.calendar, ref: (el) => (this.modalRef = el), onOpened: () => {
                 if (this.pickerRef) {
                     this.pickerRef.modalIsOpen = true;
                 }
@@ -282,7 +284,7 @@ export class TabworthyTimes {
                 if (this.pickerRef) {
                     this.pickerRef.modalIsOpen = false;
                 }
-            }, inline: this.inline, appendTo: this.appendTo }, h("div", { key: '706e2fdcd7e4ecf77f5ee63f4c5ced7951593735', class: this.getClassName("picker-container") }, h("tabworthy-dates-calendar", { key: 'cb027f3fe4d2bf73abea9ec6511fe11305e28aba', range: this.range, locale: this.locale, onSelectDate: (event) => this.handlePickerSelection(event.detail), onChangeMonth: (event) => this.handleChangedMonths(event.detail), onChangeYear: (event) => this.handleYearChange(event.detail), onRequestClose: () => { var _a; return (_a = this.modalRef) === null || _a === void 0 ? void 0 : _a.close(); }, labels: this.datesCalendarLabels, ref: (el) => (this.pickerRef = el), startDate: this.startDate, firstDayOfWeek: this.firstDayOfWeek, showHiddenTitle: true, disabled: this.disabledState, showMonthStepper: this.showMonthStepper, showYearStepper: this.showYearStepper, showClearButton: this.showClearButton, showCloseButton: this.showCloseButton, showTodayButton: this.showTodayButton, disableDate: this.disableDate, minDate: this.minDate, maxDate: this.maxDate, inline: this.inline, value: this.value ? this.toDate(this.value) : undefined }, h("div", { key: '2287a25cdec6fc40c36833c250536f99cabe5cbf', slot: "after-calendar", class: this.getClassName("time-section") }, h("hr", { key: '540cfd69b4ca3618ecd22f9d1ed3d240ed8eeee9', class: this.getClassName("divider") }), h("tabworthy-times-picker", { key: '79e8c05c3ba4af1ef46a78c6d6fcb211dec7abd5', hours: this.selectedHours, minutes: this.selectedMinutes, seconds: this.selectedSeconds, showSeconds: this.showSeconds, useTwelveHourFormat: this.useTwelveHourFormat, disabled: this.disabledState, onTimeChanged: this.handleTimeChange, labels: this.timesPickerLabels }))))), this.errorState && (h("div", { key: '4a568e01f57652308adb7a8c115ab6649fc591fc', class: this.getClassName("input-error"), id: this.id ? `${this.id}-error` : undefined, role: "status" }, this.errorMessage))));
+            }, inline: this.inline, appendTo: this.appendTo }, h("div", { key: '0fc94282af5f36ae9214e967dab2acac911bca14', class: this.getClassName("picker-container") }, h("tabworthy-dates-calendar", { key: '4b0ef9c95058398d759fe913b22a84d5f22bd383', range: this.range, locale: this.locale, onSelectDate: (event) => this.handlePickerSelection(event.detail), onChangeMonth: (event) => this.handleChangedMonths(event.detail), onChangeYear: (event) => this.handleYearChange(event.detail), onRequestClose: () => { var _a; return (_a = this.modalRef) === null || _a === void 0 ? void 0 : _a.close(); }, labels: this.datesCalendarLabels, ref: (el) => (this.pickerRef = el), startDate: this.startDate, firstDayOfWeek: this.firstDayOfWeek, showHiddenTitle: true, disabled: this.disabledState, showMonthStepper: this.showMonthStepper, showYearStepper: this.showYearStepper, showClearButton: this.showClearButton, showCloseButton: this.showCloseButton, showTodayButton: this.showTodayButton, disableDate: this.disableDate, minDate: this.minDate, maxDate: this.maxDate, inline: this.inline, value: this.value ? this.toDate(this.value) : undefined, nextMonthButtonContent: this.nextMonthButtonContent, nextYearButtonContent: this.nextYearButtonContent, previousMonthButtonContent: this.previousMonthButtonContent, previousYearButtonContent: this.previousYearButtonContent, todayButtonContent: this.todayButtonContent, clearButtonContent: this.clearButtonContent, closeButtonContent: this.closeButtonContent }, h("div", { key: 'b766d90c7bb4732c6ae26cadeb610a6e0c10a597', slot: "after-calendar", class: this.getClassName("time-section") }, h("hr", { key: 'f98fc31d11a3bdd999a5dc0cc15bf1921f349b9b', class: this.getClassName("divider") }), h("tabworthy-times-picker", { key: 'cfe86bb9291d1a14d37ab7240ec2f2f7f9bece4d', hours: this.selectedHours, minutes: this.selectedMinutes, seconds: this.selectedSeconds, showSeconds: this.showSeconds, useTwelveHourFormat: this.useTwelveHourFormat, disabled: this.disabledState, onTimeChanged: this.handleTimeChange, labels: this.timesPickerLabels }))))), this.errorState && (h("div", { key: '1c2d4b6469266b894402512612a71721acf28f7e', class: this.getClassName("input-error"), id: this.id ? `${this.id}-error` : undefined, role: "status" }, this.errorMessage))));
     }
     static get is() { return "tabworthy-times"; }
     static get encapsulation() { return "scoped"; }
@@ -774,6 +776,139 @@ export class TabworthyTimes {
                 "setter": false,
                 "reflect": false,
                 "attribute": "calendar-button-content"
+            },
+            "nextMonthButtonContent": {
+                "type": "string",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": true,
+                "docs": {
+                    "tags": [],
+                    "text": ""
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "attribute": "next-month-button-content"
+            },
+            "nextYearButtonContent": {
+                "type": "string",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": true,
+                "docs": {
+                    "tags": [],
+                    "text": ""
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "attribute": "next-year-button-content"
+            },
+            "previousMonthButtonContent": {
+                "type": "string",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": true,
+                "docs": {
+                    "tags": [],
+                    "text": ""
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "attribute": "previous-month-button-content"
+            },
+            "previousYearButtonContent": {
+                "type": "string",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": true,
+                "docs": {
+                    "tags": [],
+                    "text": ""
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "attribute": "previous-year-button-content"
+            },
+            "todayButtonContent": {
+                "type": "string",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": true,
+                "docs": {
+                    "tags": [],
+                    "text": ""
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "attribute": "today-button-content"
+            },
+            "clearButtonContent": {
+                "type": "string",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": true,
+                "docs": {
+                    "tags": [],
+                    "text": ""
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "attribute": "clear-button-content"
+            },
+            "closeButtonContent": {
+                "type": "string",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": true,
+                "docs": {
+                    "tags": [],
+                    "text": ""
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "attribute": "close-button-content"
             },
             "disableDate": {
                 "type": "unknown",

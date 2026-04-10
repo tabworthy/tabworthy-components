@@ -37,6 +37,8 @@ export declare class TabworthyDates {
     hasError: boolean;
     nextMonthButtonContent?: string;
     nextYearButtonContent?: string;
+    previousMonthButtonContent?: string;
+    previousYearButtonContent?: string;
     showYearStepper: boolean;
     showMonthStepper: boolean;
     showClearButton: boolean;
@@ -50,6 +52,8 @@ export declare class TabworthyDates {
     format: string;
     quickButtons: string[];
     todayButtonContent?: string;
+    clearButtonContent?: string;
+    closeButtonContent?: string;
     calendarButtonContent?: string;
     showQuickButtons: boolean;
     disableFreeformInput: boolean;

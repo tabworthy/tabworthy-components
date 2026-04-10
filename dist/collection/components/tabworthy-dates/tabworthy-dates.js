@@ -477,7 +477,9 @@ export class TabworthyDates {
         return (h(Host, null, h("label", { htmlFor: this.id ? `${this.id}-input` : undefined, class: this.getClassName("label") }, this.label), h("br", null), h("div", { class: this.getClassName("input-container"), ref: (r) => (this.inputContainerRef = r) }, h("input", { disabled: this.disabledState || this.disableFreeformInput, id: this.id ? `${this.id}-input` : undefined, type: "text", placeholder: this.placeholder, class: {
                 [this.getClassName("input")]: true,
                 [this.inputClass]: !!this.inputClass
-            }, ref: (r) => (this.inputRef = r), onChange: this.handleChange, onFocus: () => this.formatInput(false), onBlur: () => this.formatInput(true, false), "aria-describedby": this.errorState ? `${this.id}-error` : undefined, "aria-invalid": this.errorState }), !this.inline && (h("button", { type: "button", onClick: this.handleCalendarButtonClick, class: this.getClassName("calendar-button"), disabled: this.disabledState }, this.calendarButtonContent ? (h("span", { innerHTML: this.calendarButtonContent })) : (this.datesLabels.openCalendar)))), h("tabworthy-dates-modal", { label: this.datesLabels.calendar, ref: (el) => (this.modalRef = el), onOpened: () => {
+            }, ref: (r) => (this.inputRef = r), onChange: this.handleChange, onFocus: () => this.formatInput(false), onBlur: () => this.formatInput(true, false), "aria-describedby": this.errorState ? `${this.id}-error` : undefined, "aria-invalid": this.errorState }), !this.inline && (h("button", { type: "button", onClick: this.handleCalendarButtonClick, class: this.getClassName("calendar-button"), disabled: this.disabledState, "aria-label": this.calendarButtonContent
+                ? this.datesLabels.openCalendar
+                : undefined }, this.calendarButtonContent ? (h("span", { innerHTML: this.calendarButtonContent })) : (this.datesLabels.openCalendar)))), h("tabworthy-dates-modal", { label: this.datesLabels.calendar, ref: (el) => (this.modalRef = el), onOpened: () => {
                 if (!this.pickerRef)
                     return;
                 this.pickerRef.modalIsOpen = true;
@@ -485,7 +487,7 @@ export class TabworthyDates {
                 if (!this.pickerRef)
                     return;
                 this.pickerRef.modalIsOpen = false;
-            }, inline: this.inline, appendTo: this.appendTo }, h("tabworthy-dates-calendar", { range: this.range, locale: this.locale, onSelectDate: (event) => this.handlePickerSelection(event.detail), onChangeMonth: (event) => this.handleChangedMonths(event.detail), onChangeYear: (event) => this.handleYearChange(event.detail), onRequestClose: () => { var _a; return (_a = this.modalRef) === null || _a === void 0 ? void 0 : _a.close(); }, labels: this.datesCalendarLabels ? this.datesCalendarLabels : undefined, ref: (el) => (this.pickerRef = el), startDate: this.startDate, firstDayOfWeek: this.firstDayOfWeek, showHiddenTitle: true, disabled: this.disabledState, showMonthStepper: this.showMonthStepper, showYearStepper: this.showYearStepper, showClearButton: this.showClearButton, showCloseButton: this.showCloseButton, showKeyboardHint: this.showKeyboardHint, showTodayButton: this.showTodayButton, disableDate: this.disableDate, minDate: this.minDate, maxDate: this.maxDate, inline: this.inline })), this.showQuickButtons &&
+            }, inline: this.inline, appendTo: this.appendTo }, h("tabworthy-dates-calendar", { range: this.range, locale: this.locale, onSelectDate: (event) => this.handlePickerSelection(event.detail), onChangeMonth: (event) => this.handleChangedMonths(event.detail), onChangeYear: (event) => this.handleYearChange(event.detail), onRequestClose: () => { var _a; return (_a = this.modalRef) === null || _a === void 0 ? void 0 : _a.close(); }, labels: this.datesCalendarLabels ? this.datesCalendarLabels : undefined, ref: (el) => (this.pickerRef = el), startDate: this.startDate, firstDayOfWeek: this.firstDayOfWeek, showHiddenTitle: true, disabled: this.disabledState, showMonthStepper: this.showMonthStepper, showYearStepper: this.showYearStepper, showClearButton: this.showClearButton, showCloseButton: this.showCloseButton, showKeyboardHint: this.showKeyboardHint, showTodayButton: this.showTodayButton, disableDate: this.disableDate, minDate: this.minDate, maxDate: this.maxDate, inline: this.inline, nextMonthButtonContent: this.nextMonthButtonContent, nextYearButtonContent: this.nextYearButtonContent, previousMonthButtonContent: this.previousMonthButtonContent, previousYearButtonContent: this.previousYearButtonContent, todayButtonContent: this.todayButtonContent, clearButtonContent: this.clearButtonContent, closeButtonContent: this.closeButtonContent })), this.showQuickButtons &&
             ((_a = this.quickButtons) === null || _a === void 0 ? void 0 : _a.length) > 0 &&
             this.chronoSupportedLocale && (h("div", { class: this.getClassName("quick-group"), role: "group", "aria-label": this.datesLabels.quickSelection }, this.quickButtons.map((buttonText) => {
             return (h("button", { class: this.getClassName("quick-button"), onClick: this.handleQuickButtonClick, disabled: this.disabledState, type: "button" }, buttonText));
@@ -887,6 +889,44 @@ export class TabworthyDates {
                 "reflect": false,
                 "attribute": "next-year-button-content"
             },
+            "previousMonthButtonContent": {
+                "type": "string",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": true,
+                "docs": {
+                    "tags": [],
+                    "text": ""
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "attribute": "previous-month-button-content"
+            },
+            "previousYearButtonContent": {
+                "type": "string",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": true,
+                "docs": {
+                    "tags": [],
+                    "text": ""
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "attribute": "previous-year-button-content"
+            },
             "showYearStepper": {
                 "type": "boolean",
                 "mutable": false,
@@ -1146,6 +1186,44 @@ export class TabworthyDates {
                 "setter": false,
                 "reflect": false,
                 "attribute": "today-button-content"
+            },
+            "clearButtonContent": {
+                "type": "string",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": true,
+                "docs": {
+                    "tags": [],
+                    "text": ""
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "attribute": "clear-button-content"
+            },
+            "closeButtonContent": {
+                "type": "string",
+                "mutable": false,
+                "complexType": {
+                    "original": "string",
+                    "resolved": "string",
+                    "references": {}
+                },
+                "required": false,
+                "optional": true,
+                "docs": {
+                    "tags": [],
+                    "text": ""
+                },
+                "getter": false,
+                "setter": false,
+                "reflect": false,
+                "attribute": "close-button-content"
             },
             "calendarButtonContent": {
                 "type": "string",
