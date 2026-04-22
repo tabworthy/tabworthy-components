@@ -314,6 +314,13 @@ describe("tabworthy-dates-calendar", () => {
     instance.currentDate = new Date("2024-03-15");
     instance.onYearSelect({ target: { value: "2024" } } as any);
     expect(changeYearSpy).toHaveBeenCalledWith({ year: 2024 });
+
+    // Test year select with out-of-bounds year
+    updateSpy.mockClear();
+    changeYearSpy.mockClear();
+    instance.currentDate = new Date("2025-06-15");
+    instance.onYearSelect({ target: { value: "2025" } } as any);
+    expect(changeYearSpy).not.toHaveBeenCalled();
   });
 
   it("handles keyboard navigation and date selection keys", async () => {

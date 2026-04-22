@@ -430,6 +430,94 @@ describe("tabworthy-dates-modal", () => {
   });
 
   describe("lifecycle", () => {
+    it("cleanupPortal restores element before originalNextSibling", async () => {
+      const page = await newSpecPage({
+        components: [TabworthyDatesModal],
+        html: `<tabworthy-dates-modal label="Test modal"></tabworthy-dates-modal>`
+      });
+
+      const instance = page.rootInstance as any;
+      const parent = document.createElement("div");
+      const sibling = document.createElement("span");
+      parent.appendChild(sibling);
+      const insertSpy = jest.spyOn(parent, "insertBefore");
+
+      instance.originalParent = parent;
+      instance.originalNextSibling = sibling;
+      instance.cleanupPortal();
+
+      expect(insertSpy).toHaveBeenCalledWith(instance.hostElement, sibling);
+      expect(instance.originalParent).toBeNull();
+      expect(instance.originalNextSibling).toBeNull();
+    });
+
+    it("handleClick closes modal when clicking outside all elements", async () => {
+      const page = await newSpecPage({
+        components: [TabworthyDatesModal],
+        html: `<tabworthy-dates-modal label="Test modal"></tabworthy-dates-modal>`
+      });
+
+      const instance = page.rootInstance as any;
+      instance.showing = true;
+      const closeSpy = jest
+        .spyOn(instance, "close")
+        .mockImplementation(() => Promise.resolve());
+
+      const outsideEl = document.createElement("div");
+      document.body.appendChild(outsideEl);
+
+      instance.handleClick({ target: outsideEl } as any);
+      expect(closeSpy).toHaveBeenCalled();
+
+      document.body.removeChild(outsideEl);
+    });
+
+    it("handleClick does not close when clicking on trigger element", async () => {
+      const page = await newSpecPage({
+        components: [TabworthyDatesModal],
+        html: `<tabworthy-dates-modal label="Test modal"></tabworthy-dates-modal>`
+      });
+
+      const instance = page.rootInstance as any;
+      instance.showing = true;
+      const trigger = document.createElement("button");
+      document.body.appendChild(trigger);
+      instance.triggerElement = trigger;
+
+      const closeSpy = jest
+        .spyOn(instance, "close")
+        .mockImplementation(() => Promise.resolve());
+
+      instance.handleClick({ target: trigger } as any);
+      expect(closeSpy).not.toHaveBeenCalled();
+
+      document.body.removeChild(trigger);
+    });
+
+    it("handleClick does not close when clicking inside originalParent", async () => {
+      const page = await newSpecPage({
+        components: [TabworthyDatesModal],
+        html: `<tabworthy-dates-modal label="Test modal"></tabworthy-dates-modal>`
+      });
+
+      const instance = page.rootInstance as any;
+      instance.showing = true;
+      const parent = document.createElement("div");
+      const child = document.createElement("span");
+      parent.appendChild(child);
+      document.body.appendChild(parent);
+      instance.originalParent = parent;
+
+      const closeSpy = jest
+        .spyOn(instance, "close")
+        .mockImplementation(() => Promise.resolve());
+
+      instance.handleClick({ target: child } as any);
+      expect(closeSpy).not.toHaveBeenCalled();
+
+      document.body.removeChild(parent);
+    });
+
     it("skips disconnected cleanup while the portal is moving", async () => {
       const page = await newSpecPage({
         components: [TabworthyDatesModal],

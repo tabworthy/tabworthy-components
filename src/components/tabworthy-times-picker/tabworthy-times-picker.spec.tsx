@@ -714,5 +714,466 @@ describe("tabworthy-times-picker", () => {
       const emitted = emitSpy.mock.calls[0][0] as TimeChangedDetail;
       expect(emitted.seconds).toBe(30);
     });
+
+    it("clamps to maxTime when seconds exceed boundary", async () => {
+      const page = await createPage(
+        '<tabworthy-times-picker hours="17" minutes="45" seconds="50" show-seconds="true"></tabworthy-times-picker>'
+      );
+      const instance = page.rootInstance as any;
+
+      const emitSpy = jest.spyOn(instance.timeChanged, "emit");
+
+      instance.maxTime = { hours: 17, minutes: 45, seconds: 30 };
+      instance.internalHours = 17;
+      instance.internalMinutes = 45;
+      instance.internalSeconds = 50;
+      instance.emitTimeChange();
+
+      const emitted = emitSpy.mock.calls[0][0] as TimeChangedDetail;
+      expect(emitted.seconds).toBe(30);
+    });
+
+    it("disables second decrement button at minTime seconds boundary", async () => {
+      const page = await createPage(
+        '<tabworthy-times-picker hours="10" minutes="30" seconds="30" show-seconds="true"></tabworthy-times-picker>'
+      );
+      const instance = page.rootInstance as any;
+      instance.minTime = { hours: 10, minutes: 30, seconds: 30 };
+      await page.waitForChanges();
+
+      const decrementBtn = page.root?.querySelector(
+        '[aria-label="Decrement seconds"]'
+      ) as HTMLButtonElement;
+      expect(decrementBtn.getAttribute("disabled")).not.toBeNull();
+    });
+
+    it("disables second increment button at maxTime seconds boundary", async () => {
+      const page = await createPage(
+        '<tabworthy-times-picker hours="17" minutes="45" seconds="30" show-seconds="true"></tabworthy-times-picker>'
+      );
+      const instance = page.rootInstance as any;
+      instance.maxTime = { hours: 17, minutes: 45, seconds: 30 };
+      await page.waitForChanges();
+
+      const incrementBtn = page.root?.querySelector(
+        '[aria-label="Increment seconds"]'
+      ) as HTMLButtonElement;
+      expect(incrementBtn.getAttribute("disabled")).not.toBeNull();
+    });
+  });
+
+  it("handlePeriodChange is a no-op when not in 12-hour mode", async () => {
+    const page = await createPage(
+      '<tabworthy-times-picker hours="10" minutes="0"></tabworthy-times-picker>'
+    );
+    const instance = page.rootInstance as any;
+    const emitSpy = jest.spyOn(instance.timeChanged, "emit");
+
+    instance.handlePeriodChange("PM");
+    expect(emitSpy).not.toHaveBeenCalled();
+  });
+
+  it("toggles from 12 AM to 12 PM via period change", async () => {
+    const page = await createPage(
+      '<tabworthy-times-picker hours="0" minutes="0"></tabworthy-times-picker>'
+    );
+    page.rootInstance.useTwelveHourFormat = true;
+    await page.waitForChanges();
+    const handler = jest.fn();
+    page.root?.addEventListener("timeChanged", ((
+      event: CustomEvent<TimeChangedDetail>
+    ) => handler(event.detail)) as EventListener);
+
+    const pmButton = page.root?.querySelector(
+      '[aria-label="PM"]'
+    ) as HTMLButtonElement;
+    pmButton.click();
+    await page.waitForChanges();
+
+    expect(handler.mock.calls.at(-1)?.[0]).toEqual({
+      hours: 12,
+      minutes: 0,
+      period: "PM"
+    });
+  });
+
+  it("toggles from 12 PM to 12 AM via period change", async () => {
+    const page = await createPage(
+      '<tabworthy-times-picker hours="12" minutes="0"></tabworthy-times-picker>'
+    );
+    page.rootInstance.useTwelveHourFormat = true;
+    await page.waitForChanges();
+    const handler = jest.fn();
+    page.root?.addEventListener("timeChanged", ((
+      event: CustomEvent<TimeChangedDetail>
+    ) => handler(event.detail)) as EventListener);
+
+    const amButton = page.root?.querySelector(
+      '[aria-label="AM"]'
+    ) as HTMLButtonElement;
+    amButton.click();
+    await page.waitForChanges();
+
+    expect(handler.mock.calls.at(-1)?.[0]).toEqual({
+      hours: 0,
+      minutes: 0,
+      period: "AM"
+    });
+  });
+
+  it("decrements PM hours from 1 PM to 12 PM in 12-hour mode", async () => {
+    const page = await createPage(
+      '<tabworthy-times-picker hours="13" minutes="0"></tabworthy-times-picker>'
+    );
+    page.rootInstance.useTwelveHourFormat = true;
+    await page.waitForChanges();
+    const handler = jest.fn();
+    page.root?.addEventListener("timeChanged", ((
+      event: CustomEvent<TimeChangedDetail>
+    ) => handler(event.detail)) as EventListener);
+
+    const decrement = page.root?.querySelector(
+      '[aria-label="Decrement hours"]'
+    ) as HTMLButtonElement;
+    decrement.click();
+    await page.waitForChanges();
+
+    expect(handler.mock.calls.at(-1)?.[0]).toEqual({
+      hours: 12,
+      minutes: 0,
+      period: "PM"
+    });
+  });
+
+  it("increments PM hours from 11 PM to 12 PM in 12-hour mode", async () => {
+    const page = await createPage(
+      '<tabworthy-times-picker hours="23" minutes="0"></tabworthy-times-picker>'
+    );
+    page.rootInstance.useTwelveHourFormat = true;
+    await page.waitForChanges();
+    const handler = jest.fn();
+    page.root?.addEventListener("timeChanged", ((
+      event: CustomEvent<TimeChangedDetail>
+    ) => handler(event.detail)) as EventListener);
+
+    const increment = page.root?.querySelector(
+      '[aria-label="Increment hours"]'
+    ) as HTMLButtonElement;
+    increment.click();
+    await page.waitForChanges();
+
+    expect(handler.mock.calls.at(-1)?.[0]).toEqual({
+      hours: 12,
+      minutes: 0,
+      period: "PM"
+    });
+  });
+
+  it("decrements AM hours from 1 AM to 12 AM in 12-hour mode", async () => {
+    const page = await createPage(
+      '<tabworthy-times-picker hours="1" minutes="0"></tabworthy-times-picker>'
+    );
+    page.rootInstance.useTwelveHourFormat = true;
+    await page.waitForChanges();
+    const handler = jest.fn();
+    page.root?.addEventListener("timeChanged", ((
+      event: CustomEvent<TimeChangedDetail>
+    ) => handler(event.detail)) as EventListener);
+
+    const decrement = page.root?.querySelector(
+      '[aria-label="Decrement hours"]'
+    ) as HTMLButtonElement;
+    decrement.click();
+    await page.waitForChanges();
+
+    expect(handler.mock.calls.at(-1)?.[0]).toEqual({
+      hours: 0,
+      minutes: 0,
+      period: "AM"
+    });
+  });
+
+  it("handles hour input of 12 in PM mode", async () => {
+    const page = await createPage(
+      '<tabworthy-times-picker hours="13" minutes="0"></tabworthy-times-picker>'
+    );
+    page.rootInstance.useTwelveHourFormat = true;
+    await page.waitForChanges();
+    const handler = jest.fn();
+    page.root?.addEventListener("timeChanged", ((
+      event: CustomEvent<TimeChangedDetail>
+    ) => handler(event.detail)) as EventListener);
+
+    const hourInput = page.root?.querySelector(
+      "#tabworthy-times-picker-hours"
+    ) as HTMLInputElement;
+
+    hourInput.value = "12";
+    hourInput.dispatchEvent(new Event("input"));
+    await page.waitForChanges();
+
+    expect(handler.mock.calls.at(-1)?.[0]).toEqual({
+      hours: 12,
+      minutes: 0,
+      period: "PM"
+    });
+  });
+
+  it("initializes period to AM when hours < 12", async () => {
+    const page = await createPage(
+      '<tabworthy-times-picker hours="8" minutes="0"></tabworthy-times-picker>'
+    );
+    expect(page.rootInstance.period).toBe("AM");
+  });
+
+  it("ignores NaN input for hours", async () => {
+    const page = await createPage(
+      '<tabworthy-times-picker hours="10" minutes="0"></tabworthy-times-picker>'
+    );
+    const handler = jest.fn();
+    page.root?.addEventListener("timeChanged", ((
+      event: CustomEvent<TimeChangedDetail>
+    ) => handler(event.detail)) as EventListener);
+
+    const hourInput = page.root?.querySelector(
+      "#tabworthy-times-picker-hours"
+    ) as HTMLInputElement;
+    hourInput.value = "abc";
+    hourInput.dispatchEvent(new Event("input"));
+    await page.waitForChanges();
+
+    expect(handler).not.toHaveBeenCalled();
+  });
+
+  it("ignores NaN input for seconds", async () => {
+    const page = await createPage(
+      '<tabworthy-times-picker hours="10" minutes="0" seconds="0" show-seconds="true"></tabworthy-times-picker>'
+    );
+    const handler = jest.fn();
+    page.root?.addEventListener("timeChanged", ((
+      event: CustomEvent<TimeChangedDetail>
+    ) => handler(event.detail)) as EventListener);
+
+    const secondsInput = page.root?.querySelector(
+      "#tabworthy-times-picker-seconds"
+    ) as HTMLInputElement;
+    secondsInput.value = "xyz";
+    secondsInput.dispatchEvent(new Event("input"));
+    await page.waitForChanges();
+
+    expect(handler).not.toHaveBeenCalled();
+  });
+
+  it("decrements PM hours from 3 PM to 2 PM in 12-hour mode", async () => {
+    const page = await createPage(
+      '<tabworthy-times-picker hours="15" minutes="0"></tabworthy-times-picker>'
+    );
+    page.rootInstance.useTwelveHourFormat = true;
+    await page.waitForChanges();
+    const handler = jest.fn();
+    page.root?.addEventListener("timeChanged", ((
+      event: CustomEvent<TimeChangedDetail>
+    ) => handler(event.detail)) as EventListener);
+
+    const decrement = page.root?.querySelector(
+      '[aria-label="Decrement hours"]'
+    ) as HTMLButtonElement;
+    decrement.click();
+    await page.waitForChanges();
+
+    expect(handler.mock.calls.at(-1)?.[0]).toEqual({
+      hours: 14,
+      minutes: 0,
+      period: "PM"
+    });
+  });
+
+  it("increments AM hours from 11 AM to 12 AM in 12-hour mode", async () => {
+    const page = await createPage(
+      '<tabworthy-times-picker hours="11" minutes="0"></tabworthy-times-picker>'
+    );
+    page.rootInstance.useTwelveHourFormat = true;
+    await page.waitForChanges();
+    const handler = jest.fn();
+    page.root?.addEventListener("timeChanged", ((
+      event: CustomEvent<TimeChangedDetail>
+    ) => handler(event.detail)) as EventListener);
+
+    const increment = page.root?.querySelector(
+      '[aria-label="Increment hours"]'
+    ) as HTMLButtonElement;
+    increment.click();
+    await page.waitForChanges();
+
+    expect(handler.mock.calls.at(-1)?.[0]).toEqual({
+      hours: 0,
+      minutes: 0,
+      period: "AM"
+    });
+  });
+
+  it("ignores NaN input for minutes", async () => {
+    const page = await createPage(
+      '<tabworthy-times-picker hours="10" minutes="0"></tabworthy-times-picker>'
+    );
+    const handler = jest.fn();
+    page.root?.addEventListener("timeChanged", ((
+      event: CustomEvent<TimeChangedDetail>
+    ) => handler(event.detail)) as EventListener);
+
+    const minuteInput = page.root?.querySelector(
+      "#tabworthy-times-picker-minutes"
+    ) as HTMLInputElement;
+    minuteInput.value = "abc";
+    minuteInput.dispatchEvent(new Event("input"));
+    await page.waitForChanges();
+
+    expect(handler).not.toHaveBeenCalled();
+  });
+
+  it("handles non-12 hour input in AM mode", async () => {
+    const page = await createPage(
+      '<tabworthy-times-picker hours="10" minutes="0"></tabworthy-times-picker>'
+    );
+    page.rootInstance.useTwelveHourFormat = true;
+    await page.waitForChanges();
+    const handler = jest.fn();
+    page.root?.addEventListener("timeChanged", ((
+      event: CustomEvent<TimeChangedDetail>
+    ) => handler(event.detail)) as EventListener);
+
+    const hourInput = page.root?.querySelector(
+      "#tabworthy-times-picker-hours"
+    ) as HTMLInputElement;
+    hourInput.value = "5";
+    hourInput.dispatchEvent(new Event("input"));
+    await page.waitForChanges();
+
+    expect(handler.mock.calls.at(-1)?.[0]).toEqual({
+      hours: 5,
+      minutes: 0,
+      period: "AM"
+    });
+  });
+
+  it("handles non-12 hour input in PM mode", async () => {
+    const page = await createPage(
+      '<tabworthy-times-picker hours="13" minutes="0"></tabworthy-times-picker>'
+    );
+    page.rootInstance.useTwelveHourFormat = true;
+    await page.waitForChanges();
+    const handler = jest.fn();
+    page.root?.addEventListener("timeChanged", ((
+      event: CustomEvent<TimeChangedDetail>
+    ) => handler(event.detail)) as EventListener);
+
+    const hourInput = page.root?.querySelector(
+      "#tabworthy-times-picker-hours"
+    ) as HTMLInputElement;
+    hourInput.value = "5";
+    hourInput.dispatchEvent(new Event("input"));
+    await page.waitForChanges();
+
+    expect(handler.mock.calls.at(-1)?.[0]).toEqual({
+      hours: 17,
+      minutes: 0,
+      period: "PM"
+    });
+  });
+
+  it("decrements AM hours from 5 AM to 4 AM in 12-hour mode", async () => {
+    const page = await createPage(
+      '<tabworthy-times-picker hours="5" minutes="0"></tabworthy-times-picker>'
+    );
+    page.rootInstance.useTwelveHourFormat = true;
+    await page.waitForChanges();
+    const handler = jest.fn();
+    page.root?.addEventListener("timeChanged", ((
+      event: CustomEvent<TimeChangedDetail>
+    ) => handler(event.detail)) as EventListener);
+
+    const decrement = page.root?.querySelector(
+      '[aria-label="Decrement hours"]'
+    ) as HTMLButtonElement;
+    decrement.click();
+    await page.waitForChanges();
+
+    expect(handler.mock.calls.at(-1)?.[0]).toEqual({
+      hours: 4,
+      minutes: 0,
+      period: "AM"
+    });
+  });
+
+  it("increments AM hours from 5 AM to 6 AM in 12-hour mode", async () => {
+    const page = await createPage(
+      '<tabworthy-times-picker hours="5" minutes="0"></tabworthy-times-picker>'
+    );
+    page.rootInstance.useTwelveHourFormat = true;
+    await page.waitForChanges();
+    const handler = jest.fn();
+    page.root?.addEventListener("timeChanged", ((
+      event: CustomEvent<TimeChangedDetail>
+    ) => handler(event.detail)) as EventListener);
+
+    const increment = page.root?.querySelector(
+      '[aria-label="Increment hours"]'
+    ) as HTMLButtonElement;
+    increment.click();
+    await page.waitForChanges();
+
+    expect(handler.mock.calls.at(-1)?.[0]).toEqual({
+      hours: 6,
+      minutes: 0,
+      period: "AM"
+    });
+  });
+
+  it("increments PM hours from 12 PM to 1 PM in 12-hour mode", async () => {
+    const page = await createPage(
+      '<tabworthy-times-picker hours="12" minutes="0"></tabworthy-times-picker>'
+    );
+    page.rootInstance.useTwelveHourFormat = true;
+    await page.waitForChanges();
+    const handler = jest.fn();
+    page.root?.addEventListener("timeChanged", ((
+      event: CustomEvent<TimeChangedDetail>
+    ) => handler(event.detail)) as EventListener);
+
+    const increment = page.root?.querySelector(
+      '[aria-label="Increment hours"]'
+    ) as HTMLButtonElement;
+    increment.click();
+    await page.waitForChanges();
+
+    expect(handler.mock.calls.at(-1)?.[0]).toEqual({
+      hours: 13,
+      minutes: 0,
+      period: "PM"
+    });
+  });
+
+  it("decrements PM hours from 12 PM to 11 AM in 12-hour mode", async () => {
+    const page = await createPage(
+      '<tabworthy-times-picker hours="12" minutes="0"></tabworthy-times-picker>'
+    );
+    page.rootInstance.useTwelveHourFormat = true;
+    await page.waitForChanges();
+    const handler = jest.fn();
+    page.root?.addEventListener("timeChanged", ((
+      event: CustomEvent<TimeChangedDetail>
+    ) => handler(event.detail)) as EventListener);
+
+    const decrement = page.root?.querySelector(
+      '[aria-label="Decrement hours"]'
+    ) as HTMLButtonElement;
+    decrement.click();
+    await page.waitForChanges();
+
+    expect(handler.mock.calls.at(-1)?.[0]).toEqual({
+      hours: 23,
+      minutes: 0,
+      period: "PM"
+    });
   });
 });

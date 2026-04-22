@@ -371,6 +371,71 @@ describe("tabworthy-dates", () => {
     expect(emitSpy).toHaveBeenCalledWith("2023-06-08");
   });
 
+  it("handlePickerSelection rejects single date before minDate", async () => {
+    const page = await createPage(
+      '<tabworthy-dates id="test" min-date="2024-06-01"></tabworthy-dates>'
+    );
+    const instance = page.rootInstance as any;
+    const errorSpy = jest.spyOn(instance.errorChange, "emit");
+    instance.inputRef = { value: "" } as HTMLInputElement;
+    instance.modalRef = { close: jest.fn() };
+
+    instance.handlePickerSelection("2024-05-15");
+    expect(instance.errorState).toBe(true);
+    expect(errorSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ reason: "minDate" })
+    );
+  });
+
+  it("handlePickerSelection rejects single date after maxDate", async () => {
+    const page = await createPage(
+      '<tabworthy-dates id="test" max-date="2024-06-30"></tabworthy-dates>'
+    );
+    const instance = page.rootInstance as any;
+    const errorSpy = jest.spyOn(instance.errorChange, "emit");
+    instance.inputRef = { value: "" } as HTMLInputElement;
+    instance.modalRef = { close: jest.fn() };
+
+    instance.handlePickerSelection("2024-07-15");
+    expect(instance.errorState).toBe(true);
+    expect(errorSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ reason: "maxDate" })
+    );
+  });
+
+  it("handlePickerSelection rejects single disabled date", async () => {
+    const page = await createPage(
+      '<tabworthy-dates id="test"></tabworthy-dates>'
+    );
+    const instance = page.rootInstance as any;
+    instance.disableDate = () => true;
+    const errorSpy = jest.spyOn(instance.errorChange, "emit");
+    instance.inputRef = { value: "" } as HTMLInputElement;
+    instance.modalRef = { close: jest.fn() };
+
+    instance.handlePickerSelection("2024-06-15");
+    expect(instance.errorState).toBe(true);
+    expect(errorSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ reason: "disabledDate" })
+    );
+  });
+
+  it("handlePickerSelection rejects range date before minDate", async () => {
+    const page = await createPage(
+      '<tabworthy-dates id="test" range min-date="2024-06-01"></tabworthy-dates>'
+    );
+    const instance = page.rootInstance as any;
+    const errorSpy = jest.spyOn(instance.errorChange, "emit");
+    instance.inputRef = { value: "" } as HTMLInputElement;
+    instance.modalRef = { close: jest.fn() };
+
+    instance.handlePickerSelection(["2024-05-15", "2024-06-15"]);
+    expect(instance.errorState).toBe(true);
+    expect(errorSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ reason: "minDate" })
+    );
+  });
+
   it("announceDateChange announces selected content", async () => {
     const page = await createPage();
     const instance = page.rootInstance as any;
