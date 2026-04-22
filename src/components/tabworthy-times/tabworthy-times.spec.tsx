@@ -1329,5 +1329,71 @@ describe("tabworthy-times", () => {
         expect.objectContaining({ reason: "minDate" })
       );
     });
+
+    it("clamps time to minTime when selecting boundary day with earlier time", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" min-date="2026-04-22T16:09:00"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      // Simulate current selection at 14:53 (before min time of 16:09)
+      instance.selectedHours = 14;
+      instance.selectedMinutes = 53;
+      instance.selectedSeconds = 0;
+
+      await instance.handlePickerSelection("2026-04-22");
+
+      // Should clamp to 16:09, not stay at 14:53
+      expect(instance.selectedHours).toBe(16);
+      expect(instance.selectedMinutes).toBe(9);
+    });
+
+    it("clamps time to maxTime when selecting boundary day with later time", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" max-date="2026-04-22T14:00:00"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.selectedHours = 18;
+      instance.selectedMinutes = 30;
+      instance.selectedSeconds = 0;
+
+      await instance.handlePickerSelection("2026-04-22");
+
+      expect(instance.selectedHours).toBe(14);
+      expect(instance.selectedMinutes).toBe(0);
+    });
+
+    it("does not clamp time when selecting non-boundary day", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" min-date="2026-04-20T16:09:00"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.selectedHours = 10;
+      instance.selectedMinutes = 0;
+      instance.selectedSeconds = 0;
+
+      await instance.handlePickerSelection("2026-04-22");
+
+      // Should keep 10:00 since April 22 is not the min boundary day
+      expect(instance.selectedHours).toBe(10);
+      expect(instance.selectedMinutes).toBe(0);
+    });
+
+    it("re-emits when clicking the same date again", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+      const emitSpy = jest.spyOn(instance.selectDateTime, "emit");
+
+      await instance.handlePickerSelection("2026-04-22");
+      expect(emitSpy).toHaveBeenCalledTimes(1);
+
+      // Click the same date again — should still emit
+      await instance.handlePickerSelection("2026-04-22");
+      expect(emitSpy).toHaveBeenCalledTimes(2);
+    });
   });
 });

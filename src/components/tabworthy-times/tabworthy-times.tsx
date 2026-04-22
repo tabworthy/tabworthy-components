@@ -242,6 +242,46 @@ export class TabworthyTimes {
     return false;
   }
 
+  /**
+   * When selecting a date on a boundary day, adjust the time to the first
+   * available time if the current selection falls outside the allowed range.
+   */
+  private clampTimeToBounds(date: Date) {
+    const sel = dayjs(date);
+
+    if (this.minDate) {
+      const min = dayjs(this.minDate);
+      if (min.isValid() && sel.isSame(min, "day")) {
+        const curTotal =
+          this.selectedHours * 3600 +
+          this.selectedMinutes * 60 +
+          this.selectedSeconds;
+        const minTotal = min.hour() * 3600 + min.minute() * 60 + min.second();
+        if (curTotal < minTotal) {
+          this.selectedHours = min.hour();
+          this.selectedMinutes = min.minute();
+          this.selectedSeconds = min.second();
+        }
+      }
+    }
+
+    if (this.maxDate) {
+      const max = dayjs(this.maxDate);
+      if (max.isValid() && sel.isSame(max, "day")) {
+        const curTotal =
+          this.selectedHours * 3600 +
+          this.selectedMinutes * 60 +
+          this.selectedSeconds;
+        const maxTotal = max.hour() * 3600 + max.minute() * 60 + max.second();
+        if (curTotal > maxTotal) {
+          this.selectedHours = max.hour();
+          this.selectedMinutes = max.minute();
+          this.selectedSeconds = max.second();
+        }
+      }
+    }
+  }
+
   private shouldInputFormat() {
     if (typeof this.inputShouldFormat === "string") {
       return this.inputShouldFormat === "true";
@@ -329,7 +369,7 @@ export class TabworthyTimes {
   private isDateValid(date: Date): boolean {
     const parsed = dayjs(date);
     if (!parsed.isValid()) return false;
-    if (this.minDate && parsed.isBefore(dayjs(this.minDate))) {
+    if (this.minDate && parsed.isBefore(dayjs(this.minDate), "day")) {
       this.errorState = true;
       this.errorMessage = `${
         this.timesLabels.minDateError
@@ -337,7 +377,7 @@ export class TabworthyTimes {
       this.emitErrorChange("minDate", this.errorMessage);
       return false;
     }
-    if (this.maxDate && parsed.isAfter(dayjs(this.maxDate))) {
+    if (this.maxDate && parsed.isAfter(dayjs(this.maxDate), "day")) {
       this.errorState = true;
       this.errorMessage = `${
         this.timesLabels.maxDateError
@@ -379,10 +419,14 @@ export class TabworthyTimes {
 
       if (!this.isDateValid(date)) return;
 
+      // Clamp time to boundary constraints when selecting a boundary day
+      this.clampTimeToBounds(date);
+
       this.updateValue(date);
 
-      // Update calendar with selected date
+      // Reset then set calendar value so re-clicking the same date still emits
       if (this.pickerRef) {
+        this.pickerRef.value = undefined;
         this.pickerRef.value = date;
       }
     }
