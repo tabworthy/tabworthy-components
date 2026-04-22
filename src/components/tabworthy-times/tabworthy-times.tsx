@@ -326,6 +326,34 @@ export class TabworthyTimes {
     }
   }
 
+  private isDateValid(date: Date): boolean {
+    const parsed = dayjs(date);
+    if (!parsed.isValid()) return false;
+    if (this.minDate && parsed.isBefore(dayjs(this.minDate))) {
+      this.errorState = true;
+      this.errorMessage = `${
+        this.timesLabels.minDateError
+      } ${this.formatBoundaryDate(this.minDate)}`;
+      this.emitErrorChange("minDate", this.errorMessage);
+      return false;
+    }
+    if (this.maxDate && parsed.isAfter(dayjs(this.maxDate))) {
+      this.errorState = true;
+      this.errorMessage = `${
+        this.timesLabels.maxDateError
+      } ${this.formatBoundaryDate(this.maxDate)}`;
+      this.emitErrorChange("maxDate", this.errorMessage);
+      return false;
+    }
+    if (this.disableDate(date)) {
+      this.errorState = true;
+      this.errorMessage = this.timesLabels.disabledDateError;
+      this.emitErrorChange("disabledDate", this.errorMessage);
+      return false;
+    }
+    return true;
+  }
+
   private handlePickerSelection = async (dateString: string | undefined) => {
     // Handle clear button click (calendar emits undefined)
     if (!dateString) {
@@ -337,6 +365,9 @@ export class TabworthyTimes {
     if (this.range && dates.length === 2) {
       const startDate = removeTimezoneOffset(new Date(dates[0]));
       const endDate = removeTimezoneOffset(new Date(dates[1]));
+
+      if (!this.isDateValid(startDate) || !this.isDateValid(endDate)) return;
+
       this.updateValue([startDate, endDate]);
 
       // Update calendar with selected dates
@@ -345,6 +376,9 @@ export class TabworthyTimes {
       }
     } else {
       const date = removeTimezoneOffset(new Date(dates[0]));
+
+      if (!this.isDateValid(date)) return;
+
       this.updateValue(date);
 
       // Update calendar with selected date

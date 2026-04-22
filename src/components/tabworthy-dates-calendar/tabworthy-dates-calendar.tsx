@@ -30,6 +30,7 @@ import {
   isDateInRange,
   isSameDay,
   monthIsDisabled,
+  parseDateString,
   removeTimezoneOffset,
   subDays
 } from "@shared/utils/utils";
@@ -268,9 +269,9 @@ export class TabworthyDatesCalendar {
     const year = date.getFullYear();
 
     if (!dateIsWithinLowerBounds(date, this.minDate))
-      date = new Date(this.minDate!);
+      date = parseDateString(this.minDate!);
     if (!dateIsWithinUpperBounds(date, this.maxDate))
-      date = new Date(this.maxDate!);
+      date = parseDateString(this.maxDate!);
 
     const monthChanged =
       month !== this.currentDate?.getMonth() ||
@@ -335,19 +336,55 @@ export class TabworthyDatesCalendar {
   }
 
   private nextMonth = () => {
-    this.updateCurrentDate(getNextMonth(this.currentDate));
+    const next = getNextMonth(this.currentDate);
+    if (
+      this.disabled ||
+      monthIsDisabled(
+        next.getMonth(),
+        next.getFullYear(),
+        this.minDate,
+        this.maxDate
+      )
+    )
+      return;
+    this.updateCurrentDate(next);
   };
 
   private nextYear = () => {
-    this.updateCurrentDate(getNextYear(this.currentDate), false, true);
+    const next = getNextYear(this.currentDate);
+    if (
+      this.disabled ||
+      (this.maxDate &&
+        parseDateString(this.maxDate).getFullYear() < next.getFullYear())
+    )
+      return;
+    this.updateCurrentDate(next, false, true);
   };
 
   private previousMonth = () => {
-    this.updateCurrentDate(getPreviousMonth(this.currentDate));
+    const prev = getPreviousMonth(this.currentDate);
+    if (
+      this.disabled ||
+      monthIsDisabled(
+        prev.getMonth(),
+        prev.getFullYear(),
+        this.minDate,
+        this.maxDate
+      )
+    )
+      return;
+    this.updateCurrentDate(prev);
   };
 
   private previousYear = () => {
-    this.updateCurrentDate(getPreviousYear(this.currentDate), false, true);
+    const prev = getPreviousYear(this.currentDate);
+    if (
+      this.disabled ||
+      (this.minDate &&
+        parseDateString(this.minDate).getFullYear() > prev.getFullYear())
+    )
+      return;
+    this.updateCurrentDate(prev, false, true);
   };
 
   private showToday = () => {
@@ -478,12 +515,12 @@ export class TabworthyDatesCalendar {
         prev:
           this.disabled ||
           (!!this.minDate &&
-            new Date(this.minDate).getFullYear() >
+            parseDateString(this.minDate).getFullYear() >
               getPreviousYear(this.currentDate).getFullYear()),
         next:
           this.disabled ||
           (!!this.maxDate &&
-            new Date(this.maxDate).getFullYear() <
+            parseDateString(this.maxDate).getFullYear() <
               getNextYear(this.currentDate).getFullYear())
       },
       month: {

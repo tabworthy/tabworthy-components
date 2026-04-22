@@ -16,7 +16,11 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 
 dayjs.extend(customParseFormat);
 
-import { getISODateString, removeTimezoneOffset } from "@shared/utils/utils";
+import {
+  getISODateString,
+  parseDateString,
+  removeTimezoneOffset
+} from "@shared/utils/utils";
 import {
   DatesCalendarLabels,
   MonthChangedEventDetails,
@@ -421,15 +425,11 @@ export class TabworthyDates {
       let maxDate = undefined;
       let minDate = undefined;
       if (this.maxDate) {
-        maxDate = this.maxDate
-          ? removeTimezoneOffset(new Date(this.maxDate))
-          : undefined;
+        maxDate = this.maxDate ? parseDateString(this.maxDate) : undefined;
         maxDate?.setDate(maxDate.getDate() + 1);
       }
       if (this.minDate) {
-        minDate = this.minDate
-          ? removeTimezoneOffset(new Date(this.minDate))
-          : undefined;
+        minDate = this.minDate ? parseDateString(this.minDate) : undefined;
         minDate?.setDate(minDate.getDate() - 1);
       }
 
@@ -525,8 +525,37 @@ export class TabworthyDates {
     }
   }
 
+  private isPickedDateValid(dateString: string | Date): boolean {
+    const parsed = dayjs(dateString);
+    if (!parsed.isValid()) return false;
+    const isoDate =
+      typeof dateString === "string" ? dateString : parsed.format("YYYY-MM-DD");
+    if (this.minDate && isoDate < this.minDate) {
+      this.errorState = true;
+      this.errorMessage = `${this.datesLabels.minDateError} ${this.minDate}`;
+      this.emitErrorChange("minDate", this.errorMessage);
+      return false;
+    }
+    if (this.maxDate && isoDate > this.maxDate) {
+      this.errorState = true;
+      this.errorMessage = `${this.datesLabels.maxDateError} ${this.maxDate}`;
+      this.emitErrorChange("maxDate", this.errorMessage);
+      return false;
+    }
+    if (this.disableDate(parsed.toDate())) {
+      this.errorState = true;
+      this.errorMessage = this.datesLabels.disabledDateError;
+      this.emitErrorChange("disabledDate", this.errorMessage);
+      return false;
+    }
+    return true;
+  }
+
   private handlePickerSelection(newValue: string | string[] | undefined) {
     if (this.isRangeValue(newValue)) {
+      // Validate each date in the range
+      if (newValue.some((date) => !this.isPickedDateValid(date))) return;
+
       if (newValue.length === 2) this.modalRef?.close();
       // Convert ISO dates to specified format
       this.internalValue = newValue.map((date) =>
@@ -538,6 +567,9 @@ export class TabworthyDates {
       }
       this.announceDateChange(this.internalValue);
     } else {
+      // Validate the single date
+      if (newValue && !this.isPickedDateValid(newValue as string)) return;
+
       this.modalRef?.close();
       // Convert ISO date to specified format
       const formattedDate = newValue

@@ -543,4 +543,98 @@ describe("tabworthy-dates-calendar", () => {
     );
     expect(footer).toBeTruthy();
   });
+
+  describe("navigation button disabled state", () => {
+    it("disables next month button when next month is beyond maxDate", async () => {
+      const page = await createPage(
+        '<tabworthy-dates-calendar start-date="2026-03-15" min-date="2026-03-01" max-date="2026-03-31"></tabworthy-dates-calendar>'
+      );
+      await page.waitForChanges();
+
+      const nextBtn = page.root?.querySelector(
+        ".tabworthy-dates-calendar__next-month-button"
+      );
+      expect(nextBtn?.getAttribute("aria-disabled")).not.toBe("false");
+    });
+
+    it("disables previous month button when previous month is before minDate", async () => {
+      const page = await createPage(
+        '<tabworthy-dates-calendar start-date="2026-03-15" min-date="2026-03-01" max-date="2026-03-31"></tabworthy-dates-calendar>'
+      );
+      await page.waitForChanges();
+
+      const prevBtn = page.root?.querySelector(
+        ".tabworthy-dates-calendar__previous-month-button"
+      );
+      expect(prevBtn?.getAttribute("aria-disabled")).not.toBe("false");
+    });
+
+    it("does not navigate forward when clicking next month button at max boundary", async () => {
+      const page = await createPage(
+        '<tabworthy-dates-calendar start-date="2026-03-15" min-date="2026-03-01" max-date="2026-03-31"></tabworthy-dates-calendar>'
+      );
+      await page.waitForChanges();
+      const instance = page.rootInstance as any;
+      const monthBefore = instance.currentDate.getMonth();
+
+      const nextBtn = page.root?.querySelector(
+        ".tabworthy-dates-calendar__next-month-button"
+      ) as HTMLButtonElement;
+      nextBtn?.click();
+      await page.waitForChanges();
+
+      expect(instance.currentDate.getMonth()).toBe(monthBefore);
+    });
+
+    it("does not navigate backward when clicking previous month button at min boundary", async () => {
+      const page = await createPage(
+        '<tabworthy-dates-calendar start-date="2026-03-15" min-date="2026-03-01" max-date="2026-03-31"></tabworthy-dates-calendar>'
+      );
+      await page.waitForChanges();
+      const instance = page.rootInstance as any;
+      const monthBefore = instance.currentDate.getMonth();
+
+      const prevBtn = page.root?.querySelector(
+        ".tabworthy-dates-calendar__previous-month-button"
+      ) as HTMLButtonElement;
+      prevBtn?.click();
+      await page.waitForChanges();
+
+      expect(instance.currentDate.getMonth()).toBe(monthBefore);
+    });
+
+    it("does not navigate when clicking next year button at max year boundary", async () => {
+      const page = await createPage(
+        '<tabworthy-dates-calendar start-date="2026-03-15" show-year-stepper min-date="2026-01-01" max-date="2026-12-31"></tabworthy-dates-calendar>'
+      );
+      await page.waitForChanges();
+      const instance = page.rootInstance as any;
+      const yearBefore = instance.currentDate.getFullYear();
+
+      const nextYearBtn = page.root?.querySelector(
+        ".tabworthy-dates-calendar__next-year-button"
+      ) as HTMLButtonElement;
+      nextYearBtn?.click();
+      await page.waitForChanges();
+
+      expect(instance.currentDate.getFullYear()).toBe(yearBefore);
+    });
+
+    it("does not navigate when clicking previous year button at min year boundary", async () => {
+      const page = await createPage(
+        '<tabworthy-dates-calendar start-date="2026-03-15" show-year-stepper min-date="2026-01-01" max-date="2026-12-31"></tabworthy-dates-calendar>'
+      );
+      await page.waitForChanges();
+      const instance = page.rootInstance as any;
+      const yearBefore = instance.currentDate.getFullYear();
+
+      const prevYearBtn = page.root?.querySelector(
+        ".tabworthy-dates-calendar__previous-year-button"
+      ) as HTMLButtonElement;
+      prevYearBtn?.click();
+      await page.waitForChanges();
+
+      expect(instance.currentDate.getFullYear()).toBe(yearBefore);
+    });
+  });
 });

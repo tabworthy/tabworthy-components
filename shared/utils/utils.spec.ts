@@ -154,6 +154,17 @@ describe("utils", () => {
     expect(monthIsDisabled(0, 2024, "1999-02-02", "2024-12-12")).toBeFalsy();
   });
 
+  it("disables months outside datetime bounds", () => {
+    // February is disabled when only March is allowed
+    expect(monthIsDisabled(1, 2026, "2026-03-01", "2026-03-31")).toBeTruthy();
+    // April is disabled when only March is allowed
+    expect(monthIsDisabled(3, 2026, "2026-03-01", "2026-03-31")).toBeTruthy();
+    // March is NOT disabled when March is allowed
+    expect(monthIsDisabled(2, 2026, "2026-03-01", "2026-03-31")).toBeFalsy();
+    // Adjacent month to a wide range is not disabled
+    expect(monthIsDisabled(5, 2024, "2024-01-01", "2024-12-31")).toBeFalsy();
+  });
+
   it("validates and extracts ISO dates", () => {
     expect(isValidISODate("2023-01-15")).toBeTruthy();
     expect(isValidISODate("2023-02-31")).toBeTruthy();
