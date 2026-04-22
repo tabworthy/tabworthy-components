@@ -71,6 +71,11 @@ export declare class TabworthyTimes {
     private getEffectiveMinTime;
     private getEffectiveMaxTime;
     private isDateOutOfBounds;
+    /**
+     * When selecting a date on a boundary day, adjust the time to the first
+     * available time if the current selection falls outside the allowed range.
+     */
+    private clampTimeToBounds;
     private shouldInputFormat;
     watchValue(_newValue: string | string[] | undefined): void;
     watchDisabled(newValue: boolean): void;

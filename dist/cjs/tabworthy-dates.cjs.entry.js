@@ -10666,6 +10666,16 @@ const TabworthyDates = class {
                 this.value = this.internalValue;
                 return this.selectDate.emit(this.internalValue);
             }
+            // Try strict format parsing first to avoid DD/MM vs MM/DD ambiguity
+            const strictParsed = customParseFormat.dayjs(value, this.format, true);
+            if (strictParsed.isValid()) {
+                const date = strictParsed.toDate();
+                if (!this.isPickedDateValid(date))
+                    return;
+                this.updateValue(date);
+                this.formatInput(true, false);
+                return;
+            }
             const parsedDate = await chronoParseDate(value, {
                 locale: this.locale.slice(0, 2),
                 minDate: this.minDate,

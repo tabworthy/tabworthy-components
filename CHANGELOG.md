@@ -1,3 +1,12 @@
+## [0.13.1](https://github.com/tabworthy/tabworthy-components/compare/v0.13.0...v0.13.1) (2026-04-22)
+
+
+### Bug Fixes
+
+* **calendar:** cursor style fixes ([f31d8d5](https://github.com/tabworthy/tabworthy-components/commit/f31d8d5ac7bc8c56d46c9077492229a25d9f78df))
+* **dates:** parse via format before offloading to chronos ([1b3948a](https://github.com/tabworthy/tabworthy-components/commit/1b3948a999a787fa32ab3f88572cebbb8b69612f))
+* **times:** clampTimeToBounds ([4a5cc45](https://github.com/tabworthy/tabworthy-components/commit/4a5cc45f291d4374a807a8c95d79383f135c8705))
+
 # [0.13.0](https://github.com/tabworthy/tabworthy-components/compare/v0.12.4...v0.13.0) (2026-04-22)
 
 

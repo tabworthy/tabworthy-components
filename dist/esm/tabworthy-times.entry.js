@@ -114,9 +114,12 @@ const TabworthyTimes = class {
                 const date = removeTimezoneOffset(new Date(dates[0]));
                 if (!this.isDateValid(date))
                     return;
+                // Clamp time to boundary constraints when selecting a boundary day
+                this.clampTimeToBounds(date);
                 this.updateValue(date);
-                // Update calendar with selected date
+                // Reset then set calendar value so re-clicking the same date still emits
                 if (this.pickerRef) {
+                    this.pickerRef.value = undefined;
                     this.pickerRef.value = date;
                 }
             }
@@ -259,6 +262,41 @@ const TabworthyTimes = class {
             return true;
         return false;
     }
+    /**
+     * When selecting a date on a boundary day, adjust the time to the first
+     * available time if the current selection falls outside the allowed range.
+     */
+    clampTimeToBounds(date) {
+        const sel = dayjs(date);
+        if (this.minDate) {
+            const min = dayjs(this.minDate);
+            if (min.isValid() && sel.isSame(min, "day")) {
+                const curTotal = this.selectedHours * 3600 +
+                    this.selectedMinutes * 60 +
+                    this.selectedSeconds;
+                const minTotal = min.hour() * 3600 + min.minute() * 60 + min.second();
+                if (curTotal < minTotal) {
+                    this.selectedHours = min.hour();
+                    this.selectedMinutes = min.minute();
+                    this.selectedSeconds = min.second();
+                }
+            }
+        }
+        if (this.maxDate) {
+            const max = dayjs(this.maxDate);
+            if (max.isValid() && sel.isSame(max, "day")) {
+                const curTotal = this.selectedHours * 3600 +
+                    this.selectedMinutes * 60 +
+                    this.selectedSeconds;
+                const maxTotal = max.hour() * 3600 + max.minute() * 60 + max.second();
+                if (curTotal > maxTotal) {
+                    this.selectedHours = max.hour();
+                    this.selectedMinutes = max.minute();
+                    this.selectedSeconds = max.second();
+                }
+            }
+        }
+    }
     shouldInputFormat() {
         if (typeof this.inputShouldFormat === "string") {
             return this.inputShouldFormat === "true";
@@ -335,13 +373,13 @@ const TabworthyTimes = class {
         const parsed = dayjs(date);
         if (!parsed.isValid())
             return false;
-        if (this.minDate && parsed.isBefore(dayjs(this.minDate))) {
+        if (this.minDate && parsed.isBefore(dayjs(this.minDate), "day")) {
             this.errorState = true;
             this.errorMessage = `${this.timesLabels.minDateError} ${this.formatBoundaryDate(this.minDate)}`;
             this.emitErrorChange("minDate", this.errorMessage);
             return false;
         }
-        if (this.maxDate && parsed.isAfter(dayjs(this.maxDate))) {
+        if (this.maxDate && parsed.isAfter(dayjs(this.maxDate), "day")) {
             this.errorState = true;
             this.errorMessage = `${this.timesLabels.maxDateError} ${this.formatBoundaryDate(this.maxDate)}`;
             this.emitErrorChange("maxDate", this.errorMessage);
@@ -395,12 +433,12 @@ const TabworthyTimes = class {
     }
     render() {
         var _a;
-        return (h(Host, { key: 'd258bd87c60aa773bd178e1e74eeb32934d8f068', class: this.elementClassName, "has-error": this.errorState, disabled: this.disabledState }, h("label", { key: '5e7a53cb36c350794af9fed2371c89823726ee2f', htmlFor: `${this.id}-input`, class: this.getClassName("label") }, this.label), h("div", { key: '986905f117271cfb82a1f8415d55536a590ac2bc', class: this.getClassName("input-container"), ref: (r) => (this.inputContainerRef = r) }, h("input", { key: '9ad436c1e0c8a427c1665db16913cddf93d94fed', id: `${this.id}-input`, ref: (r) => (this.inputRef = r), type: "text", class: {
+        return (h(Host, { key: '6c3049b02eda2e976f14616027cfb3fd1a0b0100', class: this.elementClassName, "has-error": this.errorState, disabled: this.disabledState }, h("label", { key: 'eb9ecc8c81d04338a5935ad414c6cd544a01bb58', htmlFor: `${this.id}-input`, class: this.getClassName("label") }, this.label), h("div", { key: '8906972aec0b8c7b24cc3f2d07212c3f6c2d8f56', class: this.getClassName("input-container"), ref: (r) => (this.inputContainerRef = r) }, h("input", { key: 'bca908ac7aa2710569fa86be5c7c6643d7f73574', id: `${this.id}-input`, ref: (r) => (this.inputRef = r), type: "text", class: {
                 [this.getClassName("input")]: true,
                 [this.inputClass]: !!this.inputClass
-            }, placeholder: this.placeholder, disabled: this.disabledState || this.disableFreeformInput, value: (_a = this.internalValue) === null || _a === void 0 ? void 0 : _a.toString(), onBlur: this.handleInputBlur, onChange: this.handleInputChange, "aria-describedby": this.errorState ? `${this.id}-error` : undefined, "aria-invalid": this.errorState }), !this.inline && (h("button", { key: 'd537e6f3251bada7ad50bbe1ca2c562737205897', type: "button", onClick: this.handleCalendarButtonClick, class: this.getClassName("calendar-button"), disabled: this.disabledState, "aria-label": this.calendarButtonContent
+            }, placeholder: this.placeholder, disabled: this.disabledState || this.disableFreeformInput, value: (_a = this.internalValue) === null || _a === void 0 ? void 0 : _a.toString(), onBlur: this.handleInputBlur, onChange: this.handleInputChange, "aria-describedby": this.errorState ? `${this.id}-error` : undefined, "aria-invalid": this.errorState }), !this.inline && (h("button", { key: 'c0d27ab5207fb62606e017bea14c93bc44daebb9', type: "button", onClick: this.handleCalendarButtonClick, class: this.getClassName("calendar-button"), disabled: this.disabledState, "aria-label": this.calendarButtonContent
                 ? this.timesLabels.openCalendar
-                : undefined }, this.calendarButtonContent ? (h("span", { innerHTML: this.calendarButtonContent })) : (this.timesLabels.openCalendar)))), h("tabworthy-dates-modal", { key: '241700195e1d028f8d8b6b55af7de3aee09163ea', label: this.timesLabels.calendar, ref: (el) => (this.modalRef = el), onOpened: () => {
+                : undefined }, this.calendarButtonContent ? (h("span", { innerHTML: this.calendarButtonContent })) : (this.timesLabels.openCalendar)))), h("tabworthy-dates-modal", { key: '1e6761504cd55a9fd380902861aeec0e7e655d47', label: this.timesLabels.calendar, ref: (el) => (this.modalRef = el), onOpened: () => {
                 if (this.pickerRef) {
                     this.pickerRef.modalIsOpen = true;
                 }
@@ -408,7 +446,7 @@ const TabworthyTimes = class {
                 if (this.pickerRef) {
                     this.pickerRef.modalIsOpen = false;
                 }
-            }, inline: this.inline, appendTo: this.appendTo }, h("div", { key: 'b99aa129e4d1d600971bc4d21b2c6a4316ff64cf', class: this.getClassName("picker-container") }, h("tabworthy-dates-calendar", { key: '6ac11c01936e2155c023d286d912ba87e0ed3415', range: this.range, locale: this.locale, onSelectDate: (event) => this.handlePickerSelection(event.detail), onChangeMonth: (event) => this.handleChangedMonths(event.detail), onChangeYear: (event) => this.handleYearChange(event.detail), onRequestClose: () => { var _a; return (_a = this.modalRef) === null || _a === void 0 ? void 0 : _a.close(); }, labels: this.datesCalendarLabels, ref: (el) => (this.pickerRef = el), startDate: this.startDate, firstDayOfWeek: this.firstDayOfWeek, showHiddenTitle: true, disabled: this.disabledState, showMonthStepper: this.showMonthStepper, showYearStepper: this.showYearStepper, showClearButton: this.showClearButton, showCloseButton: this.showCloseButton, showTodayButton: this.showTodayButton, disableDate: this.disableDate, minDate: this.minDate, maxDate: this.maxDate, inline: this.inline, value: this.value ? this.toDate(this.value) : undefined, nextMonthButtonContent: this.nextMonthButtonContent, nextYearButtonContent: this.nextYearButtonContent, previousMonthButtonContent: this.previousMonthButtonContent, previousYearButtonContent: this.previousYearButtonContent, todayButtonContent: this.todayButtonContent, clearButtonContent: this.clearButtonContent, closeButtonContent: this.closeButtonContent }, h("div", { key: '7eead2c25334abce43fe7371436a52b0970e648b', slot: "after-calendar", class: this.getClassName("time-section") }, h("hr", { key: '06ac45a5eaaaa56d39825f941b0951f99c4b28e9', class: this.getClassName("divider") }), h("tabworthy-times-picker", { key: 'ba4187a2a369cff58ca0ecf3a60abfeff3ba9ca3', hours: this.selectedHours, minutes: this.selectedMinutes, seconds: this.selectedSeconds, showSeconds: this.showSeconds, useTwelveHourFormat: this.useTwelveHourFormat, disabled: this.disabledState || this.isDateOutOfBounds(), onTimeChanged: this.handleTimeChange, labels: this.timesPickerLabels, minTime: this.getEffectiveMinTime(), maxTime: this.getEffectiveMaxTime() }))))), this.errorState && (h("div", { key: 'c187d0bd982a5184aa796ffe8be4ed91c340230d', class: this.getClassName("input-error"), id: this.id ? `${this.id}-error` : undefined, role: "status" }, this.errorMessage))));
+            }, inline: this.inline, appendTo: this.appendTo }, h("div", { key: '14966bd22b73a14fcb54bf118543e6aedf6e291f', class: this.getClassName("picker-container") }, h("tabworthy-dates-calendar", { key: 'aef55f7ee2cb19eb68bf8db51dd3e111e4f0dbff', range: this.range, locale: this.locale, onSelectDate: (event) => this.handlePickerSelection(event.detail), onChangeMonth: (event) => this.handleChangedMonths(event.detail), onChangeYear: (event) => this.handleYearChange(event.detail), onRequestClose: () => { var _a; return (_a = this.modalRef) === null || _a === void 0 ? void 0 : _a.close(); }, labels: this.datesCalendarLabels, ref: (el) => (this.pickerRef = el), startDate: this.startDate, firstDayOfWeek: this.firstDayOfWeek, showHiddenTitle: true, disabled: this.disabledState, showMonthStepper: this.showMonthStepper, showYearStepper: this.showYearStepper, showClearButton: this.showClearButton, showCloseButton: this.showCloseButton, showTodayButton: this.showTodayButton, disableDate: this.disableDate, minDate: this.minDate, maxDate: this.maxDate, inline: this.inline, value: this.value ? this.toDate(this.value) : undefined, nextMonthButtonContent: this.nextMonthButtonContent, nextYearButtonContent: this.nextYearButtonContent, previousMonthButtonContent: this.previousMonthButtonContent, previousYearButtonContent: this.previousYearButtonContent, todayButtonContent: this.todayButtonContent, clearButtonContent: this.clearButtonContent, closeButtonContent: this.closeButtonContent }, h("div", { key: 'f89b6d83e9ef68bd98eb6e08ea3aec00c2b6dd86', slot: "after-calendar", class: this.getClassName("time-section") }, h("hr", { key: '2ae84e5817c25641ab56ff096f164355524abfdf', class: this.getClassName("divider") }), h("tabworthy-times-picker", { key: '55bfe07297efd0c60d47d6049572f502311abf15', hours: this.selectedHours, minutes: this.selectedMinutes, seconds: this.selectedSeconds, showSeconds: this.showSeconds, useTwelveHourFormat: this.useTwelveHourFormat, disabled: this.disabledState || this.isDateOutOfBounds(), onTimeChanged: this.handleTimeChange, labels: this.timesPickerLabels, minTime: this.getEffectiveMinTime(), maxTime: this.getEffectiveMaxTime() }))))), this.errorState && (h("div", { key: '97dbda7bc8725c8964a627e37e9236e9bf699ee0', class: this.getClassName("input-error"), id: this.id ? `${this.id}-error` : undefined, role: "status" }, this.errorMessage))));
     }
     get el() { return getElement(this); }
     static get watchers() { return {
