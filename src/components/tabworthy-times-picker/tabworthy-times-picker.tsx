@@ -134,6 +134,7 @@ export class TabworthyTimesPicker {
 
   private handleHourChange = (e: Event) => {
     const value = parseInt((e.target as HTMLInputElement).value, 10);
+    if (isNaN(value)) return;
 
     if (this.useTwelveHourFormat) {
       // Convert to 24-hour format based on period
@@ -150,7 +151,9 @@ export class TabworthyTimesPicker {
   };
 
   private handleMinuteChange = (e: Event) => {
-    this.internalMinutes = parseInt((e.target as HTMLInputElement).value, 10);
+    const value = parseInt((e.target as HTMLInputElement).value, 10);
+    if (isNaN(value)) return;
+    this.internalMinutes = value;
     this.emitTimeChange();
   };
 
@@ -213,7 +216,9 @@ export class TabworthyTimesPicker {
   };
 
   private handleSecondChange = (e: Event) => {
-    this.internalSeconds = parseInt((e.target as HTMLInputElement).value, 10);
+    const value = parseInt((e.target as HTMLInputElement).value, 10);
+    if (isNaN(value)) return;
+    this.internalSeconds = value;
     this.emitTimeChange();
   };
 
