@@ -1396,4 +1396,56 @@ describe("tabworthy-times", () => {
       expect(emitSpy).toHaveBeenCalledTimes(2);
     });
   });
+
+  describe("revertInput", () => {
+    it("reverts value and syncs internal state", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" value="2026-04-10 14:00"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      // Simulate a user change
+      instance.value = "2026-04-20 16:00";
+      instance.internalValue = "2026-04-20 16:00";
+
+      await instance.revertInput("2026-04-10 14:00");
+
+      expect(instance.value).toBe("2026-04-10 14:00");
+    });
+
+    it("clears error state when clearError is true", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+      instance.errorState = true;
+
+      await instance.revertInput("2026-04-10 14:00", true);
+
+      expect(instance.errorState).toBe(false);
+    });
+
+    it("does not clear error state when clearError is false", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+      instance.errorState = true;
+
+      await instance.revertInput("2026-04-10 14:00", false);
+
+      expect(instance.errorState).toBe(true);
+    });
+
+    it("handles undefined value", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" value="2026-04-10 14:00"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      await instance.revertInput(undefined);
+
+      expect(instance.value).toBeUndefined();
+    });
+  });
 });

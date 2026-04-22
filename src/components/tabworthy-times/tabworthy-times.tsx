@@ -566,6 +566,17 @@ export class TabworthyTimes {
   }
 
   @Method()
+  async revertInput(
+    newValue: string | string[] | undefined,
+    clearError = false
+  ) {
+    if (clearError) this.errorState = false;
+
+    this.value = newValue;
+    this.syncFromValueProp();
+  }
+
+  @Method()
   async clearValue() {
     this.internalValue = null;
     this.value = undefined;

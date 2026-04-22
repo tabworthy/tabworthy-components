@@ -985,4 +985,62 @@ describe("tabworthy-dates", () => {
       expect(errorSpy).not.toHaveBeenCalled();
     });
   });
+
+  describe("revertInput", () => {
+    it("reverts the input to the given value", async () => {
+      const page = await createPage(
+        '<tabworthy-dates id="dates" value="2026-04-10"></tabworthy-dates>'
+      );
+      const instance = page.rootInstance as any;
+      instance.inputRef = { value: "" } as HTMLInputElement;
+
+      // Simulate a user change
+      instance.internalValue = "2026-04-20";
+      instance.value = "2026-04-20";
+
+      await instance.revertInput("2026-04-10");
+
+      expect(instance.value).toBe("2026-04-10");
+      expect(instance.internalValue).toBe("2026-04-10");
+    });
+
+    it("clears error state when clearError is true", async () => {
+      const page = await createPage(
+        '<tabworthy-dates id="dates"></tabworthy-dates>'
+      );
+      const instance = page.rootInstance as any;
+      instance.inputRef = { value: "" } as HTMLInputElement;
+      instance.errorState = true;
+
+      await instance.revertInput("2026-04-10", true);
+
+      expect(instance.errorState).toBe(false);
+    });
+
+    it("does not clear error state when clearError is false", async () => {
+      const page = await createPage(
+        '<tabworthy-dates id="dates"></tabworthy-dates>'
+      );
+      const instance = page.rootInstance as any;
+      instance.inputRef = { value: "" } as HTMLInputElement;
+      instance.errorState = true;
+
+      await instance.revertInput("2026-04-10", false);
+
+      expect(instance.errorState).toBe(true);
+    });
+
+    it("clears input when newValue is undefined", async () => {
+      const page = await createPage(
+        '<tabworthy-dates id="dates" value="2026-04-10"></tabworthy-dates>'
+      );
+      const instance = page.rootInstance as any;
+      instance.inputRef = { value: "2026-04-10" } as HTMLInputElement;
+
+      await instance.revertInput(undefined);
+
+      expect(instance.value).toBeUndefined();
+      expect(instance.inputRef.value).toBe("");
+    });
+  });
 });

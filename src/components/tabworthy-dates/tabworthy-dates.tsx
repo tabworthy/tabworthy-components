@@ -244,6 +244,17 @@ export class TabworthyDates {
     };
   }
 
+  @Method()
+  async revertInput(
+    newValue: string | string[] | undefined,
+    clearError = false
+  ) {
+    if (clearError) this.errorState = false;
+
+    this.value = newValue;
+    this.syncFromValueProp(newValue);
+  }
+
   // @ts-ignore
   private isRangeValue(value?: string | string[]): value is Date[] {
     if (
