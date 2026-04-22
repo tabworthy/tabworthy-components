@@ -12,6 +12,8 @@
 | `hours`               | `hours`                  |             | `number`            | `12`                       |
 | `labels`              | --                       |             | `TimesPickerLabels` | `defaultLabels`            |
 | `labelsSrOnly`        | `labels-sr-only`         |             | `boolean`           | `true`                     |
+| `maxTime`             | --                       |             | `TimeBounds`        | `undefined`                |
+| `minTime`             | --                       |             | `TimeBounds`        | `undefined`                |
 | `minutes`             | `minutes`                |             | `number`            | `0`                        |
 | `seconds`             | `seconds`                |             | `number`            | `0`                        |
 | `showSeconds`         | `show-seconds`           |             | `boolean`           | `false`                    |

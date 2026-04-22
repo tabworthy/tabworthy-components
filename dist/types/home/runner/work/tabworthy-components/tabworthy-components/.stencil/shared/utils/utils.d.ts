@@ -19,6 +19,12 @@ export declare function isDateInRange(date: Date, range: {
 }): boolean;
 export declare function isSameDay(date1?: Date | null, date2?: Date | null): boolean;
 export declare function removeTimezoneOffset(date: Date): Date;
+/**
+ * Parse a date boundary string to a local Date.
+ * Date-only strings ("YYYY-MM-DD") are parsed as UTC by JS, so we apply removeTimezoneOffset.
+ * Datetime strings (containing "T" or space+time) are already parsed as local time.
+ */
+export declare function parseDateString(dateString: string): Date;
 export declare function subDays(date: Date, days: number): Date;
 export declare function dateIsWithinLowerBounds(date: Date, minDate?: string): boolean;
 export declare function dateIsWithinUpperBounds(date: Date, maxDate?: string): boolean;

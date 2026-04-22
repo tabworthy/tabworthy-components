@@ -1,4 +1,9 @@
 import { EventEmitter } from "../../stencil-public-runtime";
+export interface TimeBounds {
+    hours: number;
+    minutes: number;
+    seconds?: number;
+}
 export interface TimeValue {
     hours: number;
     minutes: number;
@@ -30,6 +35,8 @@ export declare class TabworthyTimesPicker {
     labelsSrOnly: boolean;
     disabled: boolean;
     elementClassName: string;
+    minTime?: TimeBounds;
+    maxTime?: TimeBounds;
     internalHours: number;
     internalMinutes: number;
     internalSeconds: number;
@@ -52,6 +59,14 @@ export declare class TabworthyTimesPicker {
     private handleSecondIncrement;
     private handleSecondDecrement;
     private emitTimeChange;
+    private clampToBounds;
+    private setInternal24Hours;
+    private isAtMinHour;
+    private isAtMaxHour;
+    private isAtMinMinute;
+    private isAtMaxMinute;
+    private isAtMinSecond;
+    private isAtMaxSecond;
     private padZero;
     render(): any;
 }

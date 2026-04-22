@@ -1,6 +1,6 @@
 import { EventEmitter } from "../../stencil-public-runtime";
 import { TimesPickerLabels } from "../tabworthy-times-picker/tabworthy-times-picker";
-import { DatesLabels } from "../tabworthy-dates/tabworthy-dates";
+import { DatesLabels, ErrorChangeEventDetails } from "../tabworthy-dates/tabworthy-dates";
 import { DatesCalendarLabels, YearChangedEventDetails } from "../tabworthy-dates-calendar/tabworthy-dates-calendar";
 export interface TimesLabels extends Omit<DatesLabels, "quickSelection" | "yearSelect"> {
     timeLabel: string;
@@ -59,12 +59,18 @@ export declare class TabworthyTimes {
     disabledState: boolean;
     selectDateTime: EventEmitter<string | string[] | undefined>;
     changeYear?: EventEmitter<YearChangedEventDetails>;
+    errorChange: EventEmitter<ErrorChangeEventDetails>;
     componentReady: EventEmitter<void>;
     private modalRef?;
     private inputRef;
     private inputContainerRef?;
     private pickerRef?;
     private errorMessage;
+    private emitErrorChange;
+    private formatBoundaryDate;
+    private getEffectiveMinTime;
+    private getEffectiveMaxTime;
+    private isDateOutOfBounds;
     private shouldInputFormat;
     watchValue(_newValue: string | string[] | undefined): void;
     watchDisabled(newValue: boolean): void;
@@ -72,6 +78,7 @@ export declare class TabworthyTimes {
     componentDidLoad(): void;
     private syncFromValueProp;
     private updateValue;
+    private isDateValid;
     private handlePickerSelection;
     private handleTimeChange;
     private handleCalendarButtonClick;

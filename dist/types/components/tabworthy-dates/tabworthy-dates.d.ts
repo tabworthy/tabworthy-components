@@ -1,6 +1,10 @@
 import { EventEmitter } from "../../stencil-public-runtime";
 import { DatesCalendarLabels, YearChangedEventDetails } from "../tabworthy-dates-calendar/tabworthy-dates-calendar";
 import { ChronoOptions, ChronoParsedDateString } from "../../../shared/utils/chrono-parser/chrono-parser.type";
+export interface ErrorChangeEventDetails {
+    reason?: string;
+    message?: string;
+}
 export interface DatesLabels {
     selected: string;
     openCalendar: string;
@@ -68,6 +72,7 @@ export declare class TabworthyDates {
     disabledState: boolean;
     selectDate: EventEmitter<string | string[] | undefined>;
     changeYear?: EventEmitter<YearChangedEventDetails>;
+    errorChange: EventEmitter<ErrorChangeEventDetails>;
     componentReady: EventEmitter<void>;
     private modalRef?;
     private inputRef;
@@ -82,6 +87,7 @@ export declare class TabworthyDates {
     private updateValue;
     private handleCalendarButtonClick;
     private handleQuickButtonClick;
+    private emitErrorChange;
     private handleChangedMonths;
     private handleYearChange;
     private handleYearInputChange;
@@ -89,6 +95,7 @@ export declare class TabworthyDates {
     private handleSingleDateChange;
     private handleChange;
     private formatInput;
+    private isPickedDateValid;
     private handlePickerSelection;
     private announceDateChange;
     watchDisabled(newValue: boolean): void;

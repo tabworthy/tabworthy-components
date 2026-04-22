@@ -136,6 +136,17 @@ export function removeTimezoneOffset(date) {
     newDate.setMinutes(newDate.getMinutes() + newDate.getTimezoneOffset());
     return newDate;
 }
+/**
+ * Parse a date boundary string to a local Date.
+ * Date-only strings ("YYYY-MM-DD") are parsed as UTC by JS, so we apply removeTimezoneOffset.
+ * Datetime strings (containing "T" or space+time) are already parsed as local time.
+ */
+export function parseDateString(dateString) {
+    const hasTime = dateString.includes("T") ||
+        /\d{4}-\d{2}-\d{2}\s\d{2}:/.test(dateString);
+    const parsed = new Date(dateString);
+    return hasTime ? parsed : removeTimezoneOffset(parsed);
+}
 export function subDays(date, days) {
     const newDate = new Date(date);
     newDate.setDate(newDate.getDate() - days);
@@ -143,7 +154,7 @@ export function subDays(date, days) {
 }
 export function dateIsWithinLowerBounds(date, minDate) {
     if (minDate) {
-        const min = removeTimezoneOffset(new Date(minDate));
+        const min = parseDateString(minDate);
         return date >= min || isSameDay(min, date);
     }
     else
@@ -151,7 +162,7 @@ export function dateIsWithinLowerBounds(date, minDate) {
 }
 export function dateIsWithinUpperBounds(date, maxDate) {
     if (maxDate) {
-        const max = removeTimezoneOffset(new Date(maxDate));
+        const max = parseDateString(maxDate);
         return date <= max || isSameDay(date, max);
     }
     else
@@ -162,12 +173,21 @@ export function dateIsWithinBounds(date, minDate, maxDate) {
         dateIsWithinUpperBounds(date, maxDate));
 }
 export function monthIsDisabled(month, year, minDate, maxDate) {
-    const firstDate = new Date(year, month, 1);
-    firstDate.setDate(firstDate.getDate() - 1);
-    const lastDate = new Date(year, month + 1, 0);
-    lastDate.setDate(firstDate.getDate() + 1);
-    return (!dateIsWithinBounds(firstDate, minDate, maxDate) &&
-        !dateIsWithinBounds(lastDate, minDate, maxDate));
+    if (minDate) {
+        const min = parseDateString(minDate);
+        const minYear = min.getFullYear();
+        const minMonth = min.getMonth();
+        if (year < minYear || (year === minYear && month < minMonth))
+            return true;
+    }
+    if (maxDate) {
+        const max = parseDateString(maxDate);
+        const maxYear = max.getFullYear();
+        const maxMonth = max.getMonth();
+        if (year > maxYear || (year === maxYear && month > maxMonth))
+            return true;
+    }
+    return false;
 }
 export function isValidISODate(dateString) {
     var isoFormat = /^\d{4}-\d{2}-\d{2}$/;

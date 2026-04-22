@@ -2,7 +2,7 @@
 
 var index$1 = require('./index-B1s0tI-Z.js');
 var customParseFormat = require('./customParseFormat-l09KVyWD.js');
-var utils = require('./utils-y5Vtky2t.js');
+var utils = require('./utils-DGbdK8VF.js');
 
 function _mergeNamespaces(n, m) {
     m.forEach(function (e) {
@@ -10488,6 +10488,7 @@ const TabworthyDates = class {
         index$1.registerInstance(this, hostRef);
         this.selectDate = index$1.createEvent(this, "selectDate", 7);
         this.changeYear = index$1.createEvent(this, "changeYear", 7);
+        this.errorChange = index$1.createEvent(this, "errorChange", 7);
         this.componentReady = index$1.createEvent(this, "componentReady", 7);
         // Enable or disable range mode
         this.range = false;
@@ -10652,6 +10653,7 @@ const TabworthyDates = class {
                         maxDate: ""
                     }[parsedRange.reason];
                 }
+                this.emitErrorChange(parsedRange === null || parsedRange === void 0 ? void 0 : parsedRange.reason, this.errorMessage);
             }
         };
         this.handleSingleDateChange = async (value) => {
@@ -10674,6 +10676,7 @@ const TabworthyDates = class {
                 if (this.disableDate(parsedDate.value)) {
                     this.errorState = true;
                     this.errorMessage = this.datesLabels.disabledDateError;
+                    this.emitErrorChange("disabledDate", this.errorMessage);
                 }
                 else {
                     this.updateValue(parsedDate.value);
@@ -10686,30 +10689,31 @@ const TabworthyDates = class {
                 let maxDate = undefined;
                 let minDate = undefined;
                 if (this.maxDate) {
-                    maxDate = this.maxDate
-                        ? utils.removeTimezoneOffset(new Date(this.maxDate))
-                        : undefined;
+                    maxDate = this.maxDate ? utils.parseDateString(this.maxDate) : undefined;
                     maxDate === null || maxDate === void 0 ? void 0 : maxDate.setDate(maxDate.getDate() + 1);
                 }
                 if (this.minDate) {
-                    minDate = this.minDate
-                        ? utils.removeTimezoneOffset(new Date(this.minDate))
-                        : undefined;
+                    minDate = this.minDate ? utils.parseDateString(this.minDate) : undefined;
                     minDate === null || minDate === void 0 ? void 0 : minDate.setDate(minDate.getDate() - 1);
                 }
                 if (!!parsedDate.reason) {
+                    const formatLocalizedDate = (date) => Intl.DateTimeFormat(this.locale, {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric"
+                    }).format(date);
                     this.errorMessage = parsedDate.reason;
                     this.errorMessage = {
-                        // TODO: Add locale date formatting to these messages
                         minDate: minDate
-                            ? `${this.datesLabels.minDateError} ${utils.getISODateString(minDate)}`
+                            ? `${this.datesLabels.minDateError} ${formatLocalizedDate(minDate)}`
                             : "",
                         maxDate: maxDate
-                            ? `${this.datesLabels.maxDateError} ${utils.getISODateString(maxDate)}`
+                            ? `${this.datesLabels.maxDateError} ${formatLocalizedDate(maxDate)}`
                             : "",
                         invalid: this.datesLabels.invalidDateError
                     }[parsedDate.reason];
                 }
+                this.emitErrorChange(parsedDate === null || parsedDate === void 0 ? void 0 : parsedDate.reason, this.errorMessage);
             }
         };
         this.handleChange = async (event) => {
@@ -10778,6 +10782,9 @@ const TabworthyDates = class {
         this.selectDate.emit(this.internalValue);
         this.announceDateChange(this.internalValue);
     }
+    emitErrorChange(reason, message) {
+        this.errorChange.emit({ reason, message });
+    }
     formatInput(enabled, useInputValue = true) {
         if (this.shouldInputFormat() === false || enabled === false) {
             if (this.internalValue) {
@@ -10823,9 +10830,37 @@ const TabworthyDates = class {
             }
         }
     }
+    isPickedDateValid(dateString) {
+        const parsed = customParseFormat.dayjs(dateString);
+        if (!parsed.isValid())
+            return false;
+        const isoDate = typeof dateString === "string" ? dateString : parsed.format("YYYY-MM-DD");
+        if (this.minDate && isoDate < this.minDate) {
+            this.errorState = true;
+            this.errorMessage = `${this.datesLabels.minDateError} ${this.minDate}`;
+            this.emitErrorChange("minDate", this.errorMessage);
+            return false;
+        }
+        if (this.maxDate && isoDate > this.maxDate) {
+            this.errorState = true;
+            this.errorMessage = `${this.datesLabels.maxDateError} ${this.maxDate}`;
+            this.emitErrorChange("maxDate", this.errorMessage);
+            return false;
+        }
+        if (this.disableDate(parsed.toDate())) {
+            this.errorState = true;
+            this.errorMessage = this.datesLabels.disabledDateError;
+            this.emitErrorChange("disabledDate", this.errorMessage);
+            return false;
+        }
+        return true;
+    }
     handlePickerSelection(newValue) {
         var _a, _b;
         if (this.isRangeValue(newValue)) {
+            // Validate each date in the range
+            if (newValue.some((date) => !this.isPickedDateValid(date)))
+                return;
             if (newValue.length === 2)
                 (_a = this.modalRef) === null || _a === void 0 ? void 0 : _a.close();
             // Convert ISO dates to specified format
@@ -10837,6 +10872,9 @@ const TabworthyDates = class {
             this.announceDateChange(this.internalValue);
         }
         else {
+            // Validate the single date
+            if (newValue && !this.isPickedDateValid(newValue))
+                return;
             (_b = this.modalRef) === null || _b === void 0 ? void 0 : _b.close();
             // Convert ISO date to specified format
             const formattedDate = newValue

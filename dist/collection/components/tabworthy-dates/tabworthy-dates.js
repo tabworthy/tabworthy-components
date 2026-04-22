@@ -3,7 +3,7 @@ import { announce } from "@react-aria/live-announcer";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
-import { getISODateString, removeTimezoneOffset } from "../../../../shared/utils/utils";
+import { getISODateString, parseDateString, removeTimezoneOffset } from "../../../../shared/utils/utils";
 import { chronoParseDate, chronoParseRange } from "../../../../shared/utils/chrono-parser/chrono-parser";
 const defaultLabels = {
     selected: "selected",
@@ -184,6 +184,7 @@ export class TabworthyDates {
                         maxDate: ""
                     }[parsedRange.reason];
                 }
+                this.emitErrorChange(parsedRange === null || parsedRange === void 0 ? void 0 : parsedRange.reason, this.errorMessage);
             }
         };
         this.handleSingleDateChange = async (value) => {
@@ -206,6 +207,7 @@ export class TabworthyDates {
                 if (this.disableDate(parsedDate.value)) {
                     this.errorState = true;
                     this.errorMessage = this.datesLabels.disabledDateError;
+                    this.emitErrorChange("disabledDate", this.errorMessage);
                 }
                 else {
                     this.updateValue(parsedDate.value);
@@ -218,30 +220,31 @@ export class TabworthyDates {
                 let maxDate = undefined;
                 let minDate = undefined;
                 if (this.maxDate) {
-                    maxDate = this.maxDate
-                        ? removeTimezoneOffset(new Date(this.maxDate))
-                        : undefined;
+                    maxDate = this.maxDate ? parseDateString(this.maxDate) : undefined;
                     maxDate === null || maxDate === void 0 ? void 0 : maxDate.setDate(maxDate.getDate() + 1);
                 }
                 if (this.minDate) {
-                    minDate = this.minDate
-                        ? removeTimezoneOffset(new Date(this.minDate))
-                        : undefined;
+                    minDate = this.minDate ? parseDateString(this.minDate) : undefined;
                     minDate === null || minDate === void 0 ? void 0 : minDate.setDate(minDate.getDate() - 1);
                 }
                 if (!!parsedDate.reason) {
+                    const formatLocalizedDate = (date) => Intl.DateTimeFormat(this.locale, {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric"
+                    }).format(date);
                     this.errorMessage = parsedDate.reason;
                     this.errorMessage = {
-                        // TODO: Add locale date formatting to these messages
                         minDate: minDate
-                            ? `${this.datesLabels.minDateError} ${getISODateString(minDate)}`
+                            ? `${this.datesLabels.minDateError} ${formatLocalizedDate(minDate)}`
                             : "",
                         maxDate: maxDate
-                            ? `${this.datesLabels.maxDateError} ${getISODateString(maxDate)}`
+                            ? `${this.datesLabels.maxDateError} ${formatLocalizedDate(maxDate)}`
                             : "",
                         invalid: this.datesLabels.invalidDateError
                     }[parsedDate.reason];
                 }
+                this.emitErrorChange(parsedDate === null || parsedDate === void 0 ? void 0 : parsedDate.reason, this.errorMessage);
             }
         };
         this.handleChange = async (event) => {
@@ -310,6 +313,9 @@ export class TabworthyDates {
         this.selectDate.emit(this.internalValue);
         this.announceDateChange(this.internalValue);
     }
+    emitErrorChange(reason, message) {
+        this.errorChange.emit({ reason, message });
+    }
     formatInput(enabled, useInputValue = true) {
         if (this.shouldInputFormat() === false || enabled === false) {
             if (this.internalValue) {
@@ -355,9 +361,37 @@ export class TabworthyDates {
             }
         }
     }
+    isPickedDateValid(dateString) {
+        const parsed = dayjs(dateString);
+        if (!parsed.isValid())
+            return false;
+        const isoDate = typeof dateString === "string" ? dateString : parsed.format("YYYY-MM-DD");
+        if (this.minDate && isoDate < this.minDate) {
+            this.errorState = true;
+            this.errorMessage = `${this.datesLabels.minDateError} ${this.minDate}`;
+            this.emitErrorChange("minDate", this.errorMessage);
+            return false;
+        }
+        if (this.maxDate && isoDate > this.maxDate) {
+            this.errorState = true;
+            this.errorMessage = `${this.datesLabels.maxDateError} ${this.maxDate}`;
+            this.emitErrorChange("maxDate", this.errorMessage);
+            return false;
+        }
+        if (this.disableDate(parsed.toDate())) {
+            this.errorState = true;
+            this.errorMessage = this.datesLabels.disabledDateError;
+            this.emitErrorChange("disabledDate", this.errorMessage);
+            return false;
+        }
+        return true;
+    }
     handlePickerSelection(newValue) {
         var _a, _b;
         if (this.isRangeValue(newValue)) {
+            // Validate each date in the range
+            if (newValue.some((date) => !this.isPickedDateValid(date)))
+                return;
             if (newValue.length === 2)
                 (_a = this.modalRef) === null || _a === void 0 ? void 0 : _a.close();
             // Convert ISO dates to specified format
@@ -369,6 +403,9 @@ export class TabworthyDates {
             this.announceDateChange(this.internalValue);
         }
         else {
+            // Validate the single date
+            if (newValue && !this.isPickedDateValid(newValue))
+                return;
             (_b = this.modalRef) === null || _b === void 0 ? void 0 : _b.close();
             // Convert ISO date to specified format
             const formattedDate = newValue
@@ -1372,6 +1409,27 @@ export class TabworthyDates {
                             "path": "../tabworthy-dates-calendar/tabworthy-dates-calendar",
                             "id": "src/components/tabworthy-dates-calendar/tabworthy-dates-calendar.tsx::YearChangedEventDetails",
                             "referenceLocation": "YearChangedEventDetails"
+                        }
+                    }
+                }
+            }, {
+                "method": "errorChange",
+                "name": "errorChange",
+                "bubbles": true,
+                "cancelable": true,
+                "composed": true,
+                "docs": {
+                    "tags": [],
+                    "text": ""
+                },
+                "complexType": {
+                    "original": "ErrorChangeEventDetails",
+                    "resolved": "ErrorChangeEventDetails",
+                    "references": {
+                        "ErrorChangeEventDetails": {
+                            "location": "local",
+                            "path": "/home/runner/work/tabworthy-components/tabworthy-components/src/components/tabworthy-dates/tabworthy-dates.tsx",
+                            "id": "src/components/tabworthy-dates/tabworthy-dates.tsx::ErrorChangeEventDetails"
                         }
                     }
                 }

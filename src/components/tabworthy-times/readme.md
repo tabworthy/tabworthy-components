@@ -54,6 +54,7 @@
 | ---------------- | ----------- | -------------------------------------- |
 | `changeYear`     |             | `CustomEvent<YearChangedEventDetails>` |
 | `componentReady` |             | `CustomEvent<void>`                    |
+| `errorChange`    |             | `CustomEvent<ErrorChangeEventDetails>` |
 | `selectDateTime` |             | `CustomEvent<string \| string[]>`      |
 
 

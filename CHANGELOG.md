@@ -1,3 +1,17 @@
+# [0.13.0](https://github.com/tabworthy/tabworthy-components/compare/v0.12.4...v0.13.0) (2026-04-22)
+
+
+### Bug Fixes
+
+* **dates,times:** fix disabled appearance ([3bd65aa](https://github.com/tabworthy/tabworthy-components/commit/3bd65aa1a797e150514a5eaf3297233986e754aa))
+* **times:** invalid date on clearing input ([2c70867](https://github.com/tabworthy/tabworthy-components/commit/2c70867d402622afebf0e353178940ed9d999cf8))
+
+
+### Features
+
+* **dates,times:** errorChange ([91eb220](https://github.com/tabworthy/tabworthy-components/commit/91eb2203897b2c167ac6c59396363f7a3fc1e66f))
+* **times:** visual restriction ([50edc65](https://github.com/tabworthy/tabworthy-components/commit/50edc65cddb3f8856b96a27c5cb58de6f5510659))
+
 ## [0.12.4](https://github.com/tabworthy/tabworthy-components/compare/v0.12.3...v0.12.4) (2026-04-10)
 
 

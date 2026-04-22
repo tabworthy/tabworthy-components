@@ -5,22 +5,24 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "./stencil-public-runtime";
-import { DatesLabels } from "./components/tabworthy-dates/tabworthy-dates";
+import { DatesLabels, ErrorChangeEventDetails } from "./components/tabworthy-dates/tabworthy-dates";
 import { DatesCalendarLabels, YearChangedEventDetails } from "./components/tabworthy-dates-calendar/tabworthy-dates-calendar";
 import { ChronoOptions, ChronoParsedDateString } from "../shared/utils/chrono-parser/chrono-parser.type";
 import { DatesCalendarLabels as DatesCalendarLabels1, MonthChangedEventDetails, YearChangedEventDetails as YearChangedEventDetails1 } from "./components/tabworthy-dates-calendar/tabworthy-dates-calendar";
 import { Placement } from "@popperjs/core";
 import { TimesLabels } from "./components/tabworthy-times/tabworthy-times";
 import { TimesPickerLabels } from "./components/tabworthy-times-picker/tabworthy-times-picker";
-import { TimesPickerLabels as TimesPickerLabels1, TimeValue } from "./components/tabworthy-times-picker/tabworthy-times-picker";
-export { DatesLabels } from "./components/tabworthy-dates/tabworthy-dates";
+import { ErrorChangeEventDetails as ErrorChangeEventDetails1 } from "./components/tabworthy-dates/tabworthy-dates";
+import { TimeBounds, TimesPickerLabels as TimesPickerLabels1, TimeValue } from "./components/tabworthy-times-picker/tabworthy-times-picker";
+export { DatesLabels, ErrorChangeEventDetails } from "./components/tabworthy-dates/tabworthy-dates";
 export { DatesCalendarLabels, YearChangedEventDetails } from "./components/tabworthy-dates-calendar/tabworthy-dates-calendar";
 export { ChronoOptions, ChronoParsedDateString } from "../shared/utils/chrono-parser/chrono-parser.type";
 export { DatesCalendarLabels as DatesCalendarLabels1, MonthChangedEventDetails, YearChangedEventDetails as YearChangedEventDetails1 } from "./components/tabworthy-dates-calendar/tabworthy-dates-calendar";
 export { Placement } from "@popperjs/core";
 export { TimesLabels } from "./components/tabworthy-times/tabworthy-times";
 export { TimesPickerLabels } from "./components/tabworthy-times-picker/tabworthy-times-picker";
-export { TimesPickerLabels as TimesPickerLabels1, TimeValue } from "./components/tabworthy-times-picker/tabworthy-times-picker";
+export { ErrorChangeEventDetails as ErrorChangeEventDetails1 } from "./components/tabworthy-dates/tabworthy-dates";
+export { TimeBounds, TimesPickerLabels as TimesPickerLabels1, TimeValue } from "./components/tabworthy-times-picker/tabworthy-times-picker";
 export namespace Components {
     interface TabworthyDates {
         /**
@@ -405,6 +407,8 @@ export namespace Components {
           * @default true
          */
         "labelsSrOnly": boolean;
+        "maxTime"?: TimeBounds;
+        "minTime"?: TimeBounds;
         /**
           * @default 0
          */
@@ -447,6 +451,7 @@ declare global {
     interface HTMLTabworthyDatesElementEventMap {
         "selectDate": string | string[] | undefined;
         "changeYear": YearChangedEventDetails;
+        "errorChange": ErrorChangeEventDetails;
         "componentReady": void;
     }
     interface HTMLTabworthyDatesElement extends Components.TabworthyDates, HTMLStencilElement {
@@ -504,6 +509,7 @@ declare global {
     interface HTMLTabworthyTimesElementEventMap {
         "selectDateTime": string | string[] | undefined;
         "changeYear": YearChangedEventDetails;
+        "errorChange": ErrorChangeEventDetails1;
         "componentReady": void;
     }
     interface HTMLTabworthyTimesElement extends Components.TabworthyTimes, HTMLStencilElement {
@@ -617,6 +623,7 @@ declare namespace LocalJSX {
         "nextYearButtonContent"?: string;
         "onChangeYear"?: (event: TabworthyDatesCustomEvent<YearChangedEventDetails>) => void;
         "onComponentReady"?: (event: TabworthyDatesCustomEvent<void>) => void;
+        "onErrorChange"?: (event: TabworthyDatesCustomEvent<ErrorChangeEventDetails>) => void;
         "onSelectDate"?: (event: TabworthyDatesCustomEvent<string | string[] | undefined>) => void;
         /**
           * @default this.range     ? `Try "June 8 to 12"`     : `Try "tomorrow" or "in ten days"`
@@ -851,6 +858,7 @@ declare namespace LocalJSX {
         "nextYearButtonContent"?: string;
         "onChangeYear"?: (event: TabworthyTimesCustomEvent<YearChangedEventDetails>) => void;
         "onComponentReady"?: (event: TabworthyTimesCustomEvent<void>) => void;
+        "onErrorChange"?: (event: TabworthyTimesCustomEvent<ErrorChangeEventDetails1>) => void;
         "onSelectDateTime"?: (event: TabworthyTimesCustomEvent<string | string[] | undefined>) => void;
         /**
           * @default ""
@@ -927,6 +935,8 @@ declare namespace LocalJSX {
           * @default true
          */
         "labelsSrOnly"?: boolean;
+        "maxTime"?: TimeBounds;
+        "minTime"?: TimeBounds;
         /**
           * @default 0
          */
