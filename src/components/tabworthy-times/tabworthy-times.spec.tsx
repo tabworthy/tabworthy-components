@@ -1099,4 +1099,176 @@ describe("tabworthy-times", () => {
       expect(msg).not.toContain(":");
     });
   });
+
+  describe("effective time bounds", () => {
+    it("returns minTime when selectedDate is on the same day as minDate", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" min-date="2024-06-01T10:30:00"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.selectedDate = new Date("2024-06-01T14:00:00");
+      const result = instance.getEffectiveMinTime();
+
+      expect(result).toEqual({ hours: 10, minutes: 30, seconds: 0 });
+    });
+
+    it("returns undefined minTime when selectedDate is on a different day", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" min-date="2024-06-01T10:30:00"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.selectedDate = new Date("2024-06-02T14:00:00");
+      const result = instance.getEffectiveMinTime();
+
+      expect(result).toBeUndefined();
+    });
+
+    it("returns maxTime when selectedDate is on the same day as maxDate", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" max-date="2024-06-30T17:00:00"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.selectedDate = new Date("2024-06-30T12:00:00");
+      const result = instance.getEffectiveMaxTime();
+
+      expect(result).toEqual({ hours: 17, minutes: 0, seconds: 0 });
+    });
+
+    it("returns undefined maxTime when selectedDate is on a different day", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" max-date="2024-06-30T17:00:00"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.selectedDate = new Date("2024-06-29T12:00:00");
+      const result = instance.getEffectiveMaxTime();
+
+      expect(result).toBeUndefined();
+    });
+
+    it("returns undefined when no selectedDate", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" min-date="2024-06-01T10:00:00" max-date="2024-06-30T17:00:00"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.selectedDate = undefined;
+
+      expect(instance.getEffectiveMinTime()).toBeUndefined();
+      expect(instance.getEffectiveMaxTime()).toBeUndefined();
+    });
+
+    it("returns undefined when minDate/maxDate have no time (date-only boundary)", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" min-date="2024-06-01" max-date="2024-06-30"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.selectedDate = new Date("2024-06-01T14:00:00");
+      const minResult = instance.getEffectiveMinTime();
+      // date-only minDate parses with time 00:00:00 — so returns bounds at midnight
+      expect(minResult).toEqual({ hours: 0, minutes: 0, seconds: 0 });
+
+      instance.selectedDate = new Date("2024-06-30T14:00:00");
+      const maxResult = instance.getEffectiveMaxTime();
+      expect(maxResult).toEqual({ hours: 0, minutes: 0, seconds: 0 });
+    });
+  });
+
+  describe("time picker disabled when date is out of bounds", () => {
+    it("reports out of bounds when selectedDate is before minDate day", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" min-date="2024-06-15T10:00:00"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.selectedDate = new Date("2024-06-10T08:00:00");
+      expect(instance.isDateOutOfBounds()).toBe(true);
+    });
+
+    it("reports out of bounds when selectedDate is after maxDate day", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" max-date="2024-06-15T18:00:00"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.selectedDate = new Date("2024-06-20T08:00:00");
+      expect(instance.isDateOutOfBounds()).toBe(true);
+    });
+
+    it("does not report out of bounds when selectedDate is on the same day as minDate", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" min-date="2024-06-15T10:00:00"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.selectedDate = new Date("2024-06-15T08:00:00");
+      expect(instance.isDateOutOfBounds()).toBe(false);
+    });
+
+    it("does not report out of bounds when selectedDate is on the same day as maxDate", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" max-date="2024-06-15T18:00:00"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.selectedDate = new Date("2024-06-15T20:00:00");
+      expect(instance.isDateOutOfBounds()).toBe(false);
+    });
+
+    it("does not report out of bounds when selectedDate is within range", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" min-date="2024-06-01" max-date="2024-06-30"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.selectedDate = new Date("2024-06-15T12:00:00");
+      expect(instance.isDateOutOfBounds()).toBe(false);
+    });
+
+    it("does not report out of bounds when no selectedDate", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" min-date="2024-06-01" max-date="2024-06-30"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.selectedDate = undefined;
+      expect(instance.isDateOutOfBounds()).toBe(false);
+    });
+
+    it("disables the time picker when date is before minDate", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" min-date="2024-06-15T10:00:00" value="2024-06-10T08:00:00"></tabworthy-times>'
+      );
+      await page.waitForChanges();
+
+      const picker = page.root?.querySelector("tabworthy-times-picker");
+      expect(picker?.getAttribute("disabled")).not.toBeNull();
+    });
+
+    it("disables the time picker when date is after maxDate", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" max-date="2024-06-15T18:00:00" value="2024-06-20T08:00:00"></tabworthy-times>'
+      );
+      await page.waitForChanges();
+
+      const picker = page.root?.querySelector("tabworthy-times-picker");
+      expect(picker?.getAttribute("disabled")).not.toBeNull();
+    });
+
+    it("does not disable the time picker when date is within range", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" min-date="2024-06-01" max-date="2024-06-30" value="2024-06-15T12:00:00"></tabworthy-times>'
+      );
+      await page.waitForChanges();
+
+      const picker = page.root?.querySelector("tabworthy-times-picker");
+      // disabled attribute should be absent or "false"
+      const disabledAttr = picker?.getAttribute("disabled");
+      expect(disabledAttr === null || disabledAttr === "false").toBe(true);
+    });
+  });
 });

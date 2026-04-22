@@ -565,4 +565,154 @@ describe("tabworthy-times-picker", () => {
       expect(decrementBtn.getAttribute("disabled")).not.toBeNull();
     });
   });
+
+  describe("minTime/maxTime bounds", () => {
+    it("clamps time to minTime when set below minimum", async () => {
+      const page = await createPage(
+        '<tabworthy-times-picker hours="10" minutes="30"></tabworthy-times-picker>'
+      );
+      const instance = page.rootInstance as any;
+
+      const emitSpy = jest.spyOn(instance.timeChanged, "emit");
+
+      instance.minTime = { hours: 10, minutes: 30, seconds: 0 };
+      instance.internalHours = 9;
+      instance.internalMinutes = 0;
+      instance.emitTimeChange();
+
+      const emitted = emitSpy.mock.calls[0][0] as TimeChangedDetail;
+      expect(emitted.hours).toBe(10);
+      expect(emitted.minutes).toBe(30);
+    });
+
+    it("clamps time to maxTime when set above maximum", async () => {
+      const page = await createPage(
+        '<tabworthy-times-picker hours="14" minutes="0"></tabworthy-times-picker>'
+      );
+      const instance = page.rootInstance as any;
+
+      const emitSpy = jest.spyOn(instance.timeChanged, "emit");
+
+      instance.maxTime = { hours: 17, minutes: 0, seconds: 0 };
+      instance.internalHours = 18;
+      instance.internalMinutes = 30;
+      instance.emitTimeChange();
+
+      const emitted = emitSpy.mock.calls[0][0] as TimeChangedDetail;
+      expect(emitted.hours).toBe(17);
+      expect(emitted.minutes).toBe(0);
+    });
+
+    it("does not clamp when time is within bounds", async () => {
+      const page = await createPage(
+        '<tabworthy-times-picker hours="12" minutes="0"></tabworthy-times-picker>'
+      );
+      const instance = page.rootInstance as any;
+
+      const emitSpy = jest.spyOn(instance.timeChanged, "emit");
+
+      instance.minTime = { hours: 10, minutes: 0 };
+      instance.maxTime = { hours: 17, minutes: 0 };
+      instance.internalHours = 12;
+      instance.internalMinutes = 30;
+      instance.emitTimeChange();
+
+      const emitted = emitSpy.mock.calls[0][0] as TimeChangedDetail;
+      expect(emitted.hours).toBe(12);
+      expect(emitted.minutes).toBe(30);
+    });
+
+    it("disables hour increment button at maxTime hour", async () => {
+      const page = await createPage(
+        '<tabworthy-times-picker hours="17" minutes="0"></tabworthy-times-picker>'
+      );
+      const instance = page.rootInstance as any;
+      instance.maxTime = { hours: 17, minutes: 0 };
+      await page.waitForChanges();
+
+      const incrementBtn = page.root?.querySelector(
+        '[aria-label="Increment hours"]'
+      ) as HTMLButtonElement;
+      expect(incrementBtn.getAttribute("disabled")).not.toBeNull();
+    });
+
+    it("disables hour decrement button at minTime hour", async () => {
+      const page = await createPage(
+        '<tabworthy-times-picker hours="10" minutes="0"></tabworthy-times-picker>'
+      );
+      const instance = page.rootInstance as any;
+      instance.minTime = { hours: 10, minutes: 0 };
+      await page.waitForChanges();
+
+      const decrementBtn = page.root?.querySelector(
+        '[aria-label="Decrement hours"]'
+      ) as HTMLButtonElement;
+      expect(decrementBtn.getAttribute("disabled")).not.toBeNull();
+    });
+
+    it("disables minute increment at maxTime boundary", async () => {
+      const page = await createPage(
+        '<tabworthy-times-picker hours="17" minutes="30"></tabworthy-times-picker>'
+      );
+      const instance = page.rootInstance as any;
+      instance.maxTime = { hours: 17, minutes: 30 };
+      await page.waitForChanges();
+
+      const incrementBtn = page.root?.querySelectorAll(
+        '[aria-label="Increment minutes"]'
+      )[0] as HTMLButtonElement;
+      expect(incrementBtn.getAttribute("disabled")).not.toBeNull();
+    });
+
+    it("disables minute decrement at minTime boundary", async () => {
+      const page = await createPage(
+        '<tabworthy-times-picker hours="10" minutes="15"></tabworthy-times-picker>'
+      );
+      const instance = page.rootInstance as any;
+      instance.minTime = { hours: 10, minutes: 15 };
+      await page.waitForChanges();
+
+      const decrementBtn = page.root?.querySelectorAll(
+        '[aria-label="Decrement minutes"]'
+      )[0] as HTMLButtonElement;
+      expect(decrementBtn.getAttribute("disabled")).not.toBeNull();
+    });
+
+    it("does not disable minute buttons when hour is not at boundary", async () => {
+      const page = await createPage(
+        '<tabworthy-times-picker hours="12" minutes="30"></tabworthy-times-picker>'
+      );
+      const instance = page.rootInstance as any;
+      instance.minTime = { hours: 10, minutes: 15 };
+      instance.maxTime = { hours: 17, minutes: 45 };
+      await page.waitForChanges();
+
+      const incrementBtn = page.root?.querySelectorAll(
+        '[aria-label="Increment minutes"]'
+      )[0] as HTMLButtonElement;
+      const decrementBtn = page.root?.querySelectorAll(
+        '[aria-label="Decrement minutes"]'
+      )[0] as HTMLButtonElement;
+      expect(incrementBtn.getAttribute("disabled")).toBeNull();
+      expect(decrementBtn.getAttribute("disabled")).toBeNull();
+    });
+
+    it("clamps seconds at minTime boundary", async () => {
+      const page = await createPage(
+        '<tabworthy-times-picker hours="10" minutes="30" seconds="20" show-seconds="true"></tabworthy-times-picker>'
+      );
+      const instance = page.rootInstance as any;
+
+      const emitSpy = jest.spyOn(instance.timeChanged, "emit");
+
+      instance.minTime = { hours: 10, minutes: 30, seconds: 30 };
+      instance.internalHours = 10;
+      instance.internalMinutes = 30;
+      instance.internalSeconds = 20;
+      instance.emitTimeChange();
+
+      const emitted = emitSpy.mock.calls[0][0] as TimeChangedDetail;
+      expect(emitted.seconds).toBe(30);
+    });
+  });
 });

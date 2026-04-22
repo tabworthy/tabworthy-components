@@ -10,6 +10,12 @@ import {
   Watch
 } from "@stencil/core";
 
+export interface TimeBounds {
+  hours: number;
+  minutes: number;
+  seconds?: number;
+}
+
 export interface TimeValue {
   hours: number;
   minutes: number;
@@ -68,6 +74,10 @@ export class TabworthyTimesPicker {
   @Prop() labelsSrOnly: boolean = true;
   @Prop() disabled: boolean = false;
   @Prop() elementClassName: string = "tabworthy-times-picker";
+  // Minimum allowed time (24-hour format). Applied when selected date is on the boundary day.
+  @Prop() minTime?: TimeBounds;
+  // Maximum allowed time (24-hour format). Applied when selected date is on the boundary day.
+  @Prop() maxTime?: TimeBounds;
 
   @State() internalHours: number = this.hours;
   @State() internalMinutes: number = this.minutes;
@@ -219,12 +229,95 @@ export class TabworthyTimesPicker {
   };
 
   private emitTimeChange() {
+    this.clampToBounds();
     this.timeChanged.emit({
       hours: this.get24HourValue(),
       minutes: this.internalMinutes,
       seconds: this.showSeconds ? this.internalSeconds : undefined,
       period: this.useTwelveHourFormat ? this.period : undefined
     });
+  }
+
+  private clampToBounds() {
+    const h = this.get24HourValue();
+    const m = this.internalMinutes;
+    const s = this.internalSeconds;
+
+    if (this.minTime) {
+      const minS = this.minTime.seconds ?? 0;
+      if (
+        h < this.minTime.hours ||
+        (h === this.minTime.hours && m < this.minTime.minutes) ||
+        (h === this.minTime.hours && m === this.minTime.minutes && s < minS)
+      ) {
+        this.setInternal24Hours(this.minTime.hours);
+        this.internalMinutes = this.minTime.minutes;
+        this.internalSeconds = minS;
+      }
+    }
+
+    if (this.maxTime) {
+      const maxS = this.maxTime.seconds ?? 59;
+      const curH = this.get24HourValue();
+      const curM = this.internalMinutes;
+      const curS = this.internalSeconds;
+      if (
+        curH > this.maxTime.hours ||
+        (curH === this.maxTime.hours && curM > this.maxTime.minutes) ||
+        (curH === this.maxTime.hours &&
+          curM === this.maxTime.minutes &&
+          curS > maxS)
+      ) {
+        this.setInternal24Hours(this.maxTime.hours);
+        this.internalMinutes = this.maxTime.minutes;
+        this.internalSeconds = maxS;
+      }
+    }
+  }
+
+  private setInternal24Hours(h24: number) {
+    this.internalHours = h24;
+    this.period = h24 >= 12 ? "PM" : "AM";
+  }
+
+  private isAtMinHour(): boolean {
+    return !!this.minTime && this.get24HourValue() <= this.minTime.hours;
+  }
+
+  private isAtMaxHour(): boolean {
+    return !!this.maxTime && this.get24HourValue() >= this.maxTime.hours;
+  }
+
+  private isAtMinMinute(): boolean {
+    return (
+      this.isAtMinHour() &&
+      !!this.minTime &&
+      this.internalMinutes <= this.minTime.minutes
+    );
+  }
+
+  private isAtMaxMinute(): boolean {
+    return (
+      this.isAtMaxHour() &&
+      !!this.maxTime &&
+      this.internalMinutes >= this.maxTime.minutes
+    );
+  }
+
+  private isAtMinSecond(): boolean {
+    return (
+      this.isAtMinMinute() &&
+      !!this.minTime &&
+      this.internalSeconds <= (this.minTime.seconds ?? 0)
+    );
+  }
+
+  private isAtMaxSecond(): boolean {
+    return (
+      this.isAtMaxMinute() &&
+      !!this.maxTime &&
+      this.internalSeconds >= (this.maxTime.seconds ?? 59)
+    );
   }
 
   private padZero(num: number): string {
@@ -255,7 +348,7 @@ export class TabworthyTimesPicker {
                 type="button"
                 class={`${this.elementClassName}__button ${this.elementClassName}__button--increment`}
                 onClick={this.handleHourIncrement}
-                disabled={this.disabled}
+                disabled={this.disabled || this.isAtMaxHour()}
                 aria-label={this.labels.incrementHours}
               >
                 <svg
@@ -286,7 +379,7 @@ export class TabworthyTimesPicker {
                 type="button"
                 class={`${this.elementClassName}__button ${this.elementClassName}__button--decrement`}
                 onClick={this.handleHourDecrement}
-                disabled={this.disabled}
+                disabled={this.disabled || this.isAtMinHour()}
                 aria-label={this.labels.decrementHours}
               >
                 <svg
@@ -323,7 +416,7 @@ export class TabworthyTimesPicker {
                 type="button"
                 class={`${this.elementClassName}__button ${this.elementClassName}__button--increment`}
                 onClick={this.handleMinuteIncrement}
-                disabled={this.disabled}
+                disabled={this.disabled || this.isAtMaxMinute()}
                 aria-label={this.labels.incrementMinutes}
               >
                 <svg
@@ -354,7 +447,7 @@ export class TabworthyTimesPicker {
                 type="button"
                 class={`${this.elementClassName}__button ${this.elementClassName}__button--decrement`}
                 onClick={this.handleMinuteDecrement}
-                disabled={this.disabled}
+                disabled={this.disabled || this.isAtMinMinute()}
                 aria-label={this.labels.decrementMinutes}
               >
                 <svg
@@ -392,7 +485,7 @@ export class TabworthyTimesPicker {
                   type="button"
                   class={`${this.elementClassName}__button ${this.elementClassName}__button--increment`}
                   onClick={this.handleSecondIncrement}
-                  disabled={this.disabled}
+                  disabled={this.disabled || this.isAtMaxSecond()}
                   aria-label={this.labels.incrementSeconds}
                 >
                   <svg
@@ -423,7 +516,7 @@ export class TabworthyTimesPicker {
                   type="button"
                   class={`${this.elementClassName}__button ${this.elementClassName}__button--decrement`}
                   onClick={this.handleSecondDecrement}
-                  disabled={this.disabled}
+                  disabled={this.disabled || this.isAtMinSecond()}
                   aria-label={this.labels.decrementSeconds}
                 >
                   <svg

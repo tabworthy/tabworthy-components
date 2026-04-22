@@ -17,6 +17,7 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 dayjs.extend(customParseFormat);
 dayjs.extend(localizedFormat);
 import {
+  TimeBounds,
   TimesPickerLabels,
   TimeValue
 } from "../tabworthy-times-picker/tabworthy-times-picker";
@@ -207,6 +208,38 @@ export class TabworthyTimes {
       ...(this.showSeconds ? { second: "numeric" } : {})
     };
     return Intl.DateTimeFormat(this.locale, options).format(parsed.toDate());
+  }
+
+  private getEffectiveMinTime(): TimeBounds | undefined {
+    if (!this.minDate || !this.selectedDate) return undefined;
+    const min = dayjs(this.minDate);
+    const sel = dayjs(this.selectedDate);
+    if (!min.isValid() || !sel.isSame(min, "day")) return undefined;
+    return {
+      hours: min.hour(),
+      minutes: min.minute(),
+      seconds: min.second()
+    };
+  }
+
+  private getEffectiveMaxTime(): TimeBounds | undefined {
+    if (!this.maxDate || !this.selectedDate) return undefined;
+    const max = dayjs(this.maxDate);
+    const sel = dayjs(this.selectedDate);
+    if (!max.isValid() || !sel.isSame(max, "day")) return undefined;
+    return {
+      hours: max.hour(),
+      minutes: max.minute(),
+      seconds: max.second()
+    };
+  }
+
+  private isDateOutOfBounds(): boolean {
+    if (!this.selectedDate) return false;
+    const sel = dayjs(this.selectedDate);
+    if (this.minDate && sel.isBefore(dayjs(this.minDate), "day")) return true;
+    if (this.maxDate && sel.isAfter(dayjs(this.maxDate), "day")) return true;
+    return false;
   }
 
   private shouldInputFormat() {
@@ -588,9 +621,11 @@ export class TabworthyTimes {
                   seconds={this.selectedSeconds}
                   showSeconds={this.showSeconds}
                   useTwelveHourFormat={this.useTwelveHourFormat}
-                  disabled={this.disabledState}
+                  disabled={this.disabledState || this.isDateOutOfBounds()}
                   onTimeChanged={this.handleTimeChange}
                   labels={this.timesPickerLabels}
+                  minTime={this.getEffectiveMinTime()}
+                  maxTime={this.getEffectiveMaxTime()}
                 />
               </div>
             </tabworthy-dates-calendar>
