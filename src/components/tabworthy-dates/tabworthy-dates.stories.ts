@@ -9,7 +9,8 @@ const meta: Meta<JSX.TabworthyDates> = {
   argTypes: {
     onSelectDate: { action: "selectDate" },
     onChangeYear: { action: "changeYear" },
-    onComponentReady: { action: "componentReady" }
+    onComponentReady: { action: "componentReady" },
+    onErrorChange: { action: "errorChange" }
   },
   render: (args) => html`
     <tabworthy-dates
@@ -52,6 +53,7 @@ const meta: Meta<JSX.TabworthyDates> = {
       @selectDate=${(e: CustomEvent) => args.onSelectDate?.(e.detail)}
       @changeYear=${(e: CustomEvent) => args.onChangeYear?.(e.detail)}
       @componentReady=${(e: CustomEvent) => args.onComponentReady?.(e.detail)}
+      @errorChange=${(e: CustomEvent) => args.onErrorChange?.(e.detail)}
     ></tabworthy-dates>
   `
 };
@@ -120,6 +122,16 @@ export const WithConstraints: Story = {
     minDate: "2026-03-01",
     maxDate: "2026-03-31",
     startDate: "2026-03-15"
+  }
+};
+
+export const WithOutOfBoundsDate: Story = {
+  args: {
+    ...Default.args,
+    id: "datepicker-out-of-bounds",
+    minDate: "2026-03-01",
+    maxDate: "2026-03-31",
+    value: "2026-04-15"
   }
 };
 

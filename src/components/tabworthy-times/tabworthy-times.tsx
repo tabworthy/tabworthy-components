@@ -20,7 +20,10 @@ import {
   TimesPickerLabels,
   TimeValue
 } from "../tabworthy-times-picker/tabworthy-times-picker";
-import { DatesLabels } from "../tabworthy-dates/tabworthy-dates";
+import {
+  DatesLabels,
+  ErrorChangeEventDetails
+} from "../tabworthy-dates/tabworthy-dates";
 import {
   DatesCalendarLabels,
   MonthChangedEventDetails,
@@ -169,6 +172,7 @@ export class TabworthyTimes {
 
   @Event() selectDateTime!: EventEmitter<string | string[] | undefined>;
   @Event() changeYear?: EventEmitter<YearChangedEventDetails>;
+  @Event() errorChange!: EventEmitter<ErrorChangeEventDetails>;
   @Event() componentReady!: EventEmitter<void>;
 
   private modalRef?: HTMLTabworthyDatesModalElement;
@@ -176,6 +180,34 @@ export class TabworthyTimes {
   private inputContainerRef?: HTMLDivElement;
   private pickerRef?: HTMLTabworthyDatesCalendarElement;
   private errorMessage = "";
+
+  private emitErrorChange(reason?: string, message?: string) {
+    this.errorChange.emit({ reason, message });
+  }
+
+  private formatBoundaryDate(dateString: string): string {
+    const parsed = dayjs(dateString);
+    if (!parsed.isValid()) return dateString;
+
+    const hasTime = dateString.includes("T") || dateString.includes(" ");
+    if (!hasTime) {
+      return Intl.DateTimeFormat(this.locale, {
+        day: "numeric",
+        month: "short",
+        year: "numeric"
+      }).format(parsed.toDate());
+    }
+
+    const options: Intl.DateTimeFormatOptions = {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      ...(this.showSeconds ? { second: "numeric" } : {})
+    };
+    return Intl.DateTimeFormat(this.locale, options).format(parsed.toDate());
+  }
 
   private shouldInputFormat() {
     if (typeof this.inputShouldFormat === "string") {
@@ -352,6 +384,30 @@ export class TabworthyTimes {
     }
 
     if (parsed.isValid()) {
+      // Check minDate/maxDate bounds (supports both date-only and datetime strings)
+      if (this.minDate && parsed.isBefore(dayjs(this.minDate))) {
+        this.errorState = true;
+        this.errorMessage = `${
+          this.timesLabels.minDateError
+        } ${this.formatBoundaryDate(this.minDate)}`;
+        this.emitErrorChange("minDate", this.errorMessage);
+        return;
+      }
+      if (this.maxDate && parsed.isAfter(dayjs(this.maxDate))) {
+        this.errorState = true;
+        this.errorMessage = `${
+          this.timesLabels.maxDateError
+        } ${this.formatBoundaryDate(this.maxDate)}`;
+        this.emitErrorChange("maxDate", this.errorMessage);
+        return;
+      }
+      if (this.disableDate(parsed.toDate())) {
+        this.errorState = true;
+        this.errorMessage = this.timesLabels.disabledDateError;
+        this.emitErrorChange("disabledDate", this.errorMessage);
+        return;
+      }
+
       this.errorState = false;
       this.selectedHours = parsed.hour();
       this.selectedMinutes = parsed.minute();
@@ -361,6 +417,7 @@ export class TabworthyTimes {
       // Set error state for invalid/garbage input
       this.errorState = true;
       this.errorMessage = this.timesLabels.invalidDateError;
+      this.emitErrorChange("invalid", this.errorMessage);
     }
   };
 

@@ -806,4 +806,297 @@ describe("tabworthy-times", () => {
       expect(instance.internalValue).toBeNull();
     });
   });
+
+  describe("errorChange event", () => {
+    it("emits errorChange with invalid reason for garbage input", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.inputRef = { value: "" } as HTMLInputElement;
+      const errorSpy = jest.spyOn(instance.errorChange, "emit");
+
+      instance.handleInputChange({
+        target: { value: "not a datetime" }
+      } as any);
+
+      expect(errorSpy).toHaveBeenCalledWith({
+        reason: "invalid",
+        message: instance.timesLabels.invalidDateError
+      });
+    });
+
+    it("emits errorChange with minDate reason when date is before minDate", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" min-date="2024-06-01"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.inputRef = { value: "" } as HTMLInputElement;
+      const errorSpy = jest.spyOn(instance.errorChange, "emit");
+
+      instance.handleInputChange({
+        target: { value: "2024-05-15T10:00:00" }
+      } as any);
+
+      expect(instance.errorState).toBe(true);
+      expect(errorSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          reason: "minDate"
+        })
+      );
+      expect(errorSpy.mock.calls[0][0].message).toContain("Jun 1, 2024");
+    });
+
+    it("emits errorChange with maxDate reason when date is after maxDate", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" max-date="2024-06-30"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.inputRef = { value: "" } as HTMLInputElement;
+      const errorSpy = jest.spyOn(instance.errorChange, "emit");
+
+      instance.handleInputChange({
+        target: { value: "2024-07-15T10:00:00" }
+      } as any);
+
+      expect(instance.errorState).toBe(true);
+      expect(errorSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          reason: "maxDate"
+        })
+      );
+      expect(errorSpy.mock.calls[0][0].message).toContain("Jun 30, 2024");
+    });
+
+    it("emits errorChange with disabledDate reason when date is disabled", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.inputRef = { value: "" } as HTMLInputElement;
+      instance.disableDate = () => true;
+      const errorSpy = jest.spyOn(instance.errorChange, "emit");
+
+      instance.handleInputChange({
+        target: { value: "2024-06-15T10:00:00" }
+      } as any);
+
+      expect(instance.errorState).toBe(true);
+      expect(errorSpy).toHaveBeenCalledWith({
+        reason: "disabledDate",
+        message: instance.timesLabels.disabledDateError
+      });
+    });
+
+    it("does not emit errorChange for valid input", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.inputRef = { value: "" } as HTMLInputElement;
+      instance.selectedSeconds = 0;
+      const errorSpy = jest.spyOn(instance.errorChange, "emit");
+
+      instance.handleInputChange({
+        target: { value: "2024-06-15T10:00:00" }
+      } as any);
+
+      expect(instance.errorState).toBe(false);
+      expect(errorSpy).not.toHaveBeenCalled();
+    });
+
+    it("does not emit errorChange when input is cleared", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" value="2024-03-15T10:30:00"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.pickerRef = { value: new Date("2024-03-15") };
+      const errorSpy = jest.spyOn(instance.errorChange, "emit");
+
+      instance.handleInputChange({ target: { value: "" } } as any);
+
+      expect(errorSpy).not.toHaveBeenCalled();
+    });
+
+    it("displays error message for out-of-bounds date in render", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" min-date="2024-06-01"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.inputRef = { value: "" } as HTMLInputElement;
+
+      instance.handleInputChange({
+        target: { value: "2024-05-15T10:00:00" }
+      } as any);
+      await page.waitForChanges();
+
+      const errorEl = page.root?.querySelector(".tabworthy-times__input-error");
+      expect(errorEl).toBeTruthy();
+      expect(errorEl?.textContent).toContain("Please fill in a date after");
+    });
+
+    it("accepts a date within minDate/maxDate bounds without error", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" min-date="2024-01-01" max-date="2024-12-31"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.inputRef = { value: "" } as HTMLInputElement;
+      instance.selectedSeconds = 0;
+
+      instance.handleInputChange({
+        target: { value: "2024-06-15T10:00:00" }
+      } as any);
+
+      expect(instance.errorState).toBe(false);
+      expect(instance.internalValue).toContain("2024-06-15");
+    });
+
+    it("rejects datetime before minDate with time component", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" min-date="2024-06-01T12:00:00"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.inputRef = { value: "" } as HTMLInputElement;
+      const errorSpy = jest.spyOn(instance.errorChange, "emit");
+
+      instance.handleInputChange({
+        target: { value: "2024-06-01T11:00:00" }
+      } as any);
+
+      expect(instance.errorState).toBe(true);
+      expect(errorSpy).toHaveBeenCalledWith(
+        expect.objectContaining({ reason: "minDate" })
+      );
+    });
+
+    it("accepts datetime at exactly the minDate with time component", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" min-date="2024-06-01T12:00:00"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.inputRef = { value: "" } as HTMLInputElement;
+      instance.selectedSeconds = 0;
+
+      instance.handleInputChange({
+        target: { value: "2024-06-01T12:00:00" }
+      } as any);
+
+      expect(instance.errorState).toBe(false);
+    });
+
+    it("rejects datetime after maxDate with time component", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" max-date="2024-06-30T17:00:00"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.inputRef = { value: "" } as HTMLInputElement;
+      const errorSpy = jest.spyOn(instance.errorChange, "emit");
+
+      instance.handleInputChange({
+        target: { value: "2024-06-30T18:00:00" }
+      } as any);
+
+      expect(instance.errorState).toBe(true);
+      expect(errorSpy).toHaveBeenCalledWith(
+        expect.objectContaining({ reason: "maxDate" })
+      );
+    });
+
+    it("accepts datetime at exactly the maxDate with time component", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" max-date="2024-06-30T17:00:00"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.inputRef = { value: "" } as HTMLInputElement;
+      instance.selectedSeconds = 0;
+
+      instance.handleInputChange({
+        target: { value: "2024-06-30T17:00:00" }
+      } as any);
+
+      expect(instance.errorState).toBe(false);
+    });
+
+    it("accepts same-day datetime when only date-only minDate is set", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" min-date="2024-06-01"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.inputRef = { value: "" } as HTMLInputElement;
+      instance.selectedSeconds = 0;
+
+      instance.handleInputChange({
+        target: { value: "2024-06-01T00:00:00" }
+      } as any);
+
+      expect(instance.errorState).toBe(false);
+    });
+
+    it("includes time in error message when minDate has time component", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" min-date="2024-06-01T12:00:00"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.inputRef = { value: "" } as HTMLInputElement;
+      const errorSpy = jest.spyOn(instance.errorChange, "emit");
+
+      instance.handleInputChange({
+        target: { value: "2024-06-01T11:00:00" }
+      } as any);
+
+      const msg = errorSpy.mock.calls[0][0].message;
+      expect(msg).toContain("Jun");
+      expect(msg).toContain("12");
+      expect(msg).not.toMatch(/:\d{2}:\d{2}/);
+    });
+
+    it("includes seconds in error message when showSeconds is true and minDate has time", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" min-date="2024-06-01T12:30:45" show-seconds="true"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.inputRef = { value: "" } as HTMLInputElement;
+      const errorSpy = jest.spyOn(instance.errorChange, "emit");
+
+      instance.handleInputChange({
+        target: { value: "2024-06-01T11:00:00" }
+      } as any);
+
+      const msg = errorSpy.mock.calls[0][0].message;
+      expect(msg).toContain("45");
+    });
+
+    it("shows date-only in error message when minDate has no time component", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" min-date="2024-06-01" show-seconds="true"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.inputRef = { value: "" } as HTMLInputElement;
+      const errorSpy = jest.spyOn(instance.errorChange, "emit");
+
+      instance.handleInputChange({
+        target: { value: "2024-05-15T10:00:00" }
+      } as any);
+
+      const msg = errorSpy.mock.calls[0][0].message;
+      expect(msg).toContain("Jun 1, 2024");
+      expect(msg).not.toContain(":");
+    });
+  });
 });

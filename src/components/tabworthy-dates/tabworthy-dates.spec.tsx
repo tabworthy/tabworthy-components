@@ -207,17 +207,27 @@ describe("tabworthy-dates", () => {
       '<tabworthy-dates id="test" min-date="1988-12-30" max-date="2034-11-02"></tabworthy-dates>'
     );
     const instance = page.rootInstance as any;
+    const formatLocalizedDate = (date: Date) =>
+      Intl.DateTimeFormat(instance.locale, {
+        day: "numeric",
+        month: "short",
+        year: "numeric"
+      }).format(date);
 
     const parseSpy = jest.spyOn(chronoParser, "chronoParseDate");
 
     parseSpy.mockResolvedValueOnce({ value: null, reason: "minDate" } as any);
     await instance.handleChange({ target: { value: "too early" } } as any);
     expect(instance.errorState).toBe(true);
-    expect(instance.errorMessage).toContain("1988-12-29");
+    expect(instance.errorMessage).toContain(
+      formatLocalizedDate(new Date("1988-12-29"))
+    );
 
     parseSpy.mockResolvedValueOnce({ value: null, reason: "maxDate" } as any);
     await instance.handleChange({ target: { value: "too late" } } as any);
-    expect(instance.errorMessage).toContain("2034-11-03");
+    expect(instance.errorMessage).toContain(
+      formatLocalizedDate(new Date("2034-11-03"))
+    );
 
     parseSpy.mockResolvedValueOnce({ value: null, reason: "invalid" } as any);
     await instance.handleChange({ target: { value: "bad input" } } as any);
@@ -750,5 +760,146 @@ describe("tabworthy-dates", () => {
     const instance = page.rootInstance as any;
 
     expect(instance.showCloseButton).toBe(false);
+  });
+
+  describe("errorChange event", () => {
+    it("emits errorChange with reason when single date is invalid", async () => {
+      const page = await createPage(
+        '<tabworthy-dates id="test"></tabworthy-dates>'
+      );
+      const instance = page.rootInstance as any;
+
+      const errorSpy = jest.spyOn(instance.errorChange, "emit");
+      jest
+        .spyOn(chronoParser, "chronoParseDate")
+        .mockResolvedValue({ value: null, reason: "invalid" } as any);
+
+      await instance.handleChange({ target: { value: "garbage" } } as any);
+
+      expect(errorSpy).toHaveBeenCalledWith({
+        reason: "invalid",
+        message: instance.datesLabels.invalidDateError
+      });
+    });
+
+    it("emits errorChange with minDate reason", async () => {
+      const page = await createPage(
+        '<tabworthy-dates id="test" min-date="2024-01-01"></tabworthy-dates>'
+      );
+      const instance = page.rootInstance as any;
+
+      const errorSpy = jest.spyOn(instance.errorChange, "emit");
+      jest
+        .spyOn(chronoParser, "chronoParseDate")
+        .mockResolvedValue({ value: null, reason: "minDate" } as any);
+
+      await instance.handleChange({ target: { value: "too early" } } as any);
+
+      expect(errorSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          reason: "minDate"
+        })
+      );
+      expect(errorSpy.mock.calls[0][0].message).toContain(
+        "Please fill in a date after"
+      );
+    });
+
+    it("emits errorChange with maxDate reason", async () => {
+      const page = await createPage(
+        '<tabworthy-dates id="test" max-date="2024-12-31"></tabworthy-dates>'
+      );
+      const instance = page.rootInstance as any;
+
+      const errorSpy = jest.spyOn(instance.errorChange, "emit");
+      jest
+        .spyOn(chronoParser, "chronoParseDate")
+        .mockResolvedValue({ value: null, reason: "maxDate" } as any);
+
+      await instance.handleChange({ target: { value: "too late" } } as any);
+
+      expect(errorSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          reason: "maxDate"
+        })
+      );
+      expect(errorSpy.mock.calls[0][0].message).toContain(
+        "Please fill in a date before"
+      );
+    });
+
+    it("emits errorChange with disabledDate reason", async () => {
+      const page = await createPage(
+        '<tabworthy-dates id="test"></tabworthy-dates>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.disableDate = () => true;
+      const errorSpy = jest.spyOn(instance.errorChange, "emit");
+      jest
+        .spyOn(chronoParser, "chronoParseDate")
+        .mockResolvedValue({ value: new Date("2024-06-08") } as any);
+
+      await instance.handleChange({ target: { value: "June 8" } } as any);
+
+      expect(errorSpy).toHaveBeenCalledWith({
+        reason: "disabledDate",
+        message: instance.datesLabels.disabledDateError
+      });
+    });
+
+    it("emits errorChange for range errors", async () => {
+      const page = await createPage(
+        '<tabworthy-dates id="test" range></tabworthy-dates>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.inputRef = { value: "" } as HTMLInputElement;
+      const errorSpy = jest.spyOn(instance.errorChange, "emit");
+      jest.spyOn(chronoParser, "chronoParseRange").mockResolvedValue({
+        value: null,
+        reason: "rangeOutOfBounds"
+      } as any);
+
+      await instance.handleChange({ target: { value: "bad range" } } as any);
+
+      expect(errorSpy).toHaveBeenCalledWith({
+        reason: "rangeOutOfBounds",
+        message: instance.datesLabels.rangeOutOfBoundsError
+      });
+    });
+
+    it("does not emit errorChange when input is valid", async () => {
+      const page = await createPage(
+        '<tabworthy-dates id="test"></tabworthy-dates>'
+      );
+      const instance = page.rootInstance as any;
+
+      instance.inputRef = { value: "" } as HTMLInputElement;
+      instance.disableDate = () => false;
+      const errorSpy = jest.spyOn(instance.errorChange, "emit");
+      jest
+        .spyOn(chronoParser, "chronoParseDate")
+        .mockResolvedValue({ value: new Date("2024-06-08") } as any);
+
+      await instance.handleChange({
+        target: { value: "June 8 2024" }
+      } as any);
+
+      expect(errorSpy).not.toHaveBeenCalled();
+    });
+
+    it("does not emit errorChange when input is cleared", async () => {
+      const page = await createPage(
+        '<tabworthy-dates id="test"></tabworthy-dates>'
+      );
+      const instance = page.rootInstance as any;
+
+      const errorSpy = jest.spyOn(instance.errorChange, "emit");
+
+      await instance.handleChange({ target: { value: "" } } as any);
+
+      expect(errorSpy).not.toHaveBeenCalled();
+    });
   });
 });

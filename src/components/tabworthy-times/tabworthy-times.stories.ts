@@ -9,7 +9,8 @@ const meta: Meta<JSX.TabworthyTimes> = {
   argTypes: {
     onSelectDateTime: { action: "selectDateTime" },
     onChangeYear: { action: "changeYear" },
-    onComponentReady: { action: "componentReady" }
+    onComponentReady: { action: "componentReady" },
+    onErrorChange: { action: "errorChange" }
   },
   render: (args) => html`
     <tabworthy-times
@@ -50,6 +51,7 @@ const meta: Meta<JSX.TabworthyTimes> = {
       @selectDateTime=${(e: CustomEvent) => args.onSelectDateTime?.(e.detail)}
       @changeYear=${(e: CustomEvent) => args.onChangeYear?.(e.detail)}
       @componentReady=${(e: CustomEvent) => args.onComponentReady?.(e.detail)}
+      @errorChange=${(e: CustomEvent) => args.onErrorChange?.(e.detail)}
     ></tabworthy-times>
   `
 };
@@ -89,6 +91,16 @@ export const WithConstraints: Story = {
     id: "datetime-constraints",
     minDate: "2024-01-01",
     maxDate: "2024-12-31",
+    value: "2024-06-15T10:00:00"
+  }
+};
+
+export const WithOutOfBoundsDate: Story = {
+  args: {
+    ...Default.args,
+    id: "datetime-out-of-bounds",
+    minDate: "2026-03-01 00:00:00",
+    maxDate: "2026-03-31 15:59:59",
     value: "2024-06-15T10:00:00"
   }
 };

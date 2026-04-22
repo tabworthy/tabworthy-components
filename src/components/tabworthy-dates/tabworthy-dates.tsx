@@ -31,6 +31,11 @@ import {
   chronoParseRange
 } from "@shared/utils/chrono-parser/chrono-parser";
 
+export interface ErrorChangeEventDetails {
+  reason?: string;
+  message?: string;
+}
+
 export interface DatesLabels {
   selected: string;
   openCalendar: string;
@@ -173,6 +178,8 @@ export class TabworthyDates {
 
   @Event() changeYear?: EventEmitter<YearChangedEventDetails>;
 
+  @Event() errorChange!: EventEmitter<ErrorChangeEventDetails>;
+
   @Event() componentReady!: EventEmitter<void>;
 
   private modalRef?: HTMLTabworthyDatesModalElement;
@@ -307,6 +314,10 @@ export class TabworthyDates {
     }
   };
 
+  private emitErrorChange(reason?: string, message?: string) {
+    this.errorChange.emit({ reason, message });
+  }
+
   private handleChangedMonths = (newMonth: MonthChangedEventDetails) => {
     announce(
       `${Intl.DateTimeFormat(this.locale, {
@@ -375,6 +386,7 @@ export class TabworthyDates {
           maxDate: ""
         }[parsedRange.reason];
       }
+      this.emitErrorChange(parsedRange?.reason, this.errorMessage);
     }
   };
 
@@ -398,6 +410,7 @@ export class TabworthyDates {
       if (this.disableDate(parsedDate.value)) {
         this.errorState = true;
         this.errorMessage = this.datesLabels.disabledDateError;
+        this.emitErrorChange("disabledDate", this.errorMessage);
       } else {
         this.updateValue(parsedDate.value);
         this.formatInput(true, false);
@@ -421,18 +434,25 @@ export class TabworthyDates {
       }
 
       if (!!parsedDate.reason) {
+        const formatLocalizedDate = (date: Date) =>
+          Intl.DateTimeFormat(this.locale, {
+            day: "numeric",
+            month: "short",
+            year: "numeric"
+          }).format(date);
+
         this.errorMessage = parsedDate.reason;
         this.errorMessage = {
-          // TODO: Add locale date formatting to these messages
           minDate: minDate
-            ? `${this.datesLabels.minDateError} ${getISODateString(minDate)}`
+            ? `${this.datesLabels.minDateError} ${formatLocalizedDate(minDate)}`
             : "",
           maxDate: maxDate
-            ? `${this.datesLabels.maxDateError} ${getISODateString(maxDate)}`
+            ? `${this.datesLabels.maxDateError} ${formatLocalizedDate(maxDate)}`
             : "",
           invalid: this.datesLabels.invalidDateError
         }[parsedDate.reason];
       }
+      this.emitErrorChange(parsedDate?.reason, this.errorMessage);
     }
   };
 
