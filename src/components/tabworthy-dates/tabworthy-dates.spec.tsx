@@ -646,6 +646,24 @@ describe("tabworthy-dates", () => {
     expect(instance.internalValue).toBe("02/01/2024");
   });
 
+  it("handleChange with DD/MM/YYYY format does not swap day and month", async () => {
+    const page = await createPage(
+      "<tabworthy-dates id='test' format='DD/MM/YYYY'></tabworthy-dates>"
+    );
+    const instance = page.rootInstance as any;
+    instance.inputRef = { value: "" } as HTMLInputElement;
+    const emitSpy = jest.spyOn(instance.selectDate, "emit");
+
+    // Simulate user typing "01/04/2026" (April 1st in DD/MM/YYYY)
+    await instance.handleChange({
+      target: { value: "01/04/2026" }
+    } as any);
+
+    // Should be April 1st, NOT January 4th
+    expect(instance.internalValue).toBe("01/04/2026");
+    expect(emitSpy).toHaveBeenCalledWith("01/04/2026");
+  });
+
   it("disable-freeform-input disables input", async () => {
     const page = await createPage(
       '<tabworthy-dates id="test" disable-freeform-input></tabworthy-dates>'
