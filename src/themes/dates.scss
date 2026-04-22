@@ -154,14 +154,14 @@ tabworthy-dates *:focus-visible {
   color: var(--tw-dates-text-color);
   background-color: var(--tw-dates-bg2-color);
   cursor: pointer;
-  &:hover:not([aria-disabled]) {
+  &:hover:not([aria-disabled="true"]) {
     background-color: var(--tw-dates-hover-color);
   }
   &:focus-visible {
     outline: var(--tw-dates-focus-outline-width) solid
       var(--tw-dates-focus-color);
   }
-  &[aria-disabled] {
+  &[aria-disabled="true"] {
     cursor: not-allowed;
     color: var(--tw-dates-disabled-color);
     @media screen and (forced-colors: active) {
@@ -195,7 +195,7 @@ tabworthy-dates *:focus-visible {
   padding: 0.125em;
   text-align: center;
   cursor: pointer;
-  &[aria-disabled] {
+  &[aria-disabled="true"] {
     cursor: default;
   }
 }
@@ -211,7 +211,10 @@ tabworthy-dates *:focus-visible {
   }
 }
 
-.tabworthy-dates-calendar__date:hover:not([aria-disabled="true"]) > * {
+.tabworthy-dates-calendar__date:hover:not([aria-disabled="true"]):not(
+    .tabworthy-dates-calendar__date--selected
+  ):not(.tabworthy-dates-calendar__date--in-range)
+  > * {
   background-color: var(--tw-dates-hover-color);
 }
 
@@ -243,6 +246,7 @@ tabworthy-dates *:focus-visible {
   background-color: var(--tw-dates-active-color);
   font-weight: 500;
   outline-offset: 0.125em;
+  cursor: default;
   @media screen and (forced-colors: active) {
     background-color: Highlight;
   }
