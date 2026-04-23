@@ -352,11 +352,16 @@ export class TabworthyTimes {
       }
     }
 
-    // Update text input display
-    if (!this.value && this.inputRef) {
+    // Update text input display. Write directly so imperative reverts during
+    // change/blur event handlers are reflected before the next render pass.
+    if (!this.inputRef) return;
+
+    if (!this.value) {
       this.inputRef.value = "";
-    } else if (this.value && this.inputRef && this.shouldInputFormat()) {
+    } else if (this.shouldInputFormat()) {
       this.formatInput();
+    } else {
+      this.inputRef.value = this.internalValue.toString();
     }
   }
 

@@ -1511,6 +1511,26 @@ describe("tabworthy-times", () => {
       expect(instance.inputRef.value).toBeTruthy();
     });
 
+    it("updates visible input when reverting an emitted typed blur without display formatting", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" value="21/04/2026 2:53 PM" format="DD/MM/YYYY h:mm A" input-should-format="false"></tabworthy-times>'
+      );
+      const input = page.root?.querySelector("input") as HTMLInputElement;
+
+      page.root?.addEventListener("selectDateTime", () => {
+        void (page.root as HTMLTabworthyTimesElement).revertInput(
+          "21/04/2026 2:53 PM"
+        );
+      });
+
+      input.value = "20/04/2026 2:53 PM";
+      input.dispatchEvent(new Event("change"));
+      input.dispatchEvent(new Event("blur"));
+      await page.waitForChanges();
+
+      expect(input.value).toBe("21/04/2026 2:53 PM");
+    });
+
     it("resets selectedDate when reverting to undefined", async () => {
       const page = await createPage(
         '<tabworthy-times id="time" value="2026-04-10T14:00:00"></tabworthy-times>'
