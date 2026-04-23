@@ -1447,5 +1447,80 @@ describe("tabworthy-times", () => {
 
       expect(instance.value).toBeUndefined();
     });
+
+    it("updates calendar picker when reverting to a new value", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" value="2026-04-10T14:00:00"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+      instance.pickerRef = { value: null };
+
+      await instance.revertInput("2026-04-20T16:30:00");
+
+      expect(instance.pickerRef.value).toBeInstanceOf(Date);
+      expect(instance.pickerRef.value.getDate()).toBe(20);
+    });
+
+    it("clears calendar picker when reverting to undefined", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" value="2026-04-10T14:00:00"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+      instance.pickerRef = { value: new Date("2026-04-10") };
+
+      await instance.revertInput(undefined);
+
+      expect(instance.pickerRef.value).toBeNull();
+    });
+
+    it("clears input field when reverting to undefined", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" value="2026-04-10T14:00:00"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+      instance.inputRef = { value: "Apr 10, 2026 2:00 PM" } as HTMLInputElement;
+
+      await instance.revertInput(undefined);
+
+      expect(instance.inputRef.value).toBe("");
+    });
+
+    it("updates time state when reverting to a different datetime", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" value="2026-04-10T14:00:00"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+
+      await instance.revertInput("2026-04-20T09:45:30");
+
+      expect(instance.selectedHours).toBe(9);
+      expect(instance.selectedMinutes).toBe(45);
+      expect(instance.selectedSeconds).toBe(30);
+      expect(instance.selectedDate).toBeInstanceOf(Date);
+    });
+
+    it("formats input display when reverting with inputShouldFormat enabled", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" input-should-format="true"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+      instance.inputRef = { value: "" } as HTMLInputElement;
+
+      await instance.revertInput("2026-04-20T16:30:00");
+
+      expect(instance.inputRef.value).toBeTruthy();
+    });
+
+    it("resets selectedDate when reverting to undefined", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" value="2026-04-10T14:00:00"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+      expect(instance.selectedDate).toBeInstanceOf(Date);
+
+      await instance.revertInput(undefined);
+
+      expect(instance.selectedDate).toBeUndefined();
+    });
   });
 });

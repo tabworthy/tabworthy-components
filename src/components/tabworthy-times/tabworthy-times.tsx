@@ -315,9 +315,9 @@ export class TabworthyTimes {
   }
 
   private syncFromValueProp() {
-    if (this.value) {
-      this.internalValue = this.value;
+    this.internalValue = this.value || null;
 
+    if (this.value) {
       // Parse the first datetime value to set time picker
       const firstValue = Array.isArray(this.value) ? this.value[0] : this.value;
       if (firstValue) {
@@ -330,7 +330,33 @@ export class TabworthyTimes {
         }
       }
     } else {
-      this.internalValue = null;
+      this.selectedDate = undefined;
+    }
+
+    // Update calendar picker
+    if (this.pickerRef) {
+      if (Array.isArray(this.value)) {
+        const dates = this.value.reduce((acc: Date[], v) => {
+          const d = dayjs(v, this.format, true);
+          if (d.isValid()) acc.push(d.toDate());
+          return acc;
+        }, [] as Date[]);
+        this.pickerRef.value = dates.length ? dates : null;
+      } else if (this.value) {
+        const parsedDate = dayjs(this.value, this.format, true);
+        if (parsedDate.isValid()) {
+          this.pickerRef.value = parsedDate.toDate();
+        }
+      } else {
+        this.pickerRef.value = null;
+      }
+    }
+
+    // Update text input display
+    if (!this.value && this.inputRef) {
+      this.inputRef.value = "";
+    } else if (this.value && this.inputRef && this.shouldInputFormat()) {
+      this.formatInput();
     }
   }
 
