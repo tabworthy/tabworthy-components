@@ -560,8 +560,9 @@ describe("tabworthy-dates-calendar", () => {
 
       const nextBtn = page.root?.querySelector(
         ".tabworthy-dates-calendar__next-month-button"
-      );
-      expect(nextBtn?.getAttribute("aria-disabled")).not.toBe("false");
+      ) as HTMLButtonElement;
+      expect(nextBtn?.getAttribute("aria-disabled")).toBe("true");
+      expect(nextBtn?.getAttribute("disabled")).not.toBeNull();
     });
 
     it("disables previous month button when previous month is before minDate", async () => {
@@ -572,8 +573,35 @@ describe("tabworthy-dates-calendar", () => {
 
       const prevBtn = page.root?.querySelector(
         ".tabworthy-dates-calendar__previous-month-button"
+      ) as HTMLButtonElement;
+      expect(prevBtn?.getAttribute("aria-disabled")).toBe("true");
+      expect(prevBtn?.getAttribute("disabled")).not.toBeNull();
+    });
+
+    it("disables next year button when next year is beyond maxDate", async () => {
+      const page = await createPage(
+        '<tabworthy-dates-calendar start-date="2026-03-15" show-year-stepper min-date="2026-01-01" max-date="2026-12-31"></tabworthy-dates-calendar>'
       );
-      expect(prevBtn?.getAttribute("aria-disabled")).not.toBe("false");
+      await page.waitForChanges();
+
+      const nextYearBtn = page.root?.querySelector(
+        ".tabworthy-dates-calendar__next-year-button"
+      ) as HTMLButtonElement;
+      expect(nextYearBtn?.getAttribute("aria-disabled")).toBe("true");
+      expect(nextYearBtn?.getAttribute("disabled")).not.toBeNull();
+    });
+
+    it("disables previous year button when previous year is before minDate", async () => {
+      const page = await createPage(
+        '<tabworthy-dates-calendar start-date="2026-03-15" show-year-stepper min-date="2026-01-01" max-date="2026-12-31"></tabworthy-dates-calendar>'
+      );
+      await page.waitForChanges();
+
+      const prevYearBtn = page.root?.querySelector(
+        ".tabworthy-dates-calendar__previous-year-button"
+      ) as HTMLButtonElement;
+      expect(prevYearBtn?.getAttribute("aria-disabled")).toBe("true");
+      expect(prevYearBtn?.getAttribute("disabled")).not.toBeNull();
     });
 
     it("does not navigate forward when clicking next month button at max boundary", async () => {

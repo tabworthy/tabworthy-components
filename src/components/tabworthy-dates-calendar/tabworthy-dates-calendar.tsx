@@ -572,7 +572,8 @@ export class TabworthyDatesCalendar {
                 <button
                   aria-label={this.labels.previousYearButton}
                   class={this.getClassName("previous-year-button")}
-                  aria-disabled={disabled.year.prev}
+                  aria-disabled={String(disabled.year.prev)}
+                  disabled={disabled.year.prev}
                   innerHTML={this.previousYearButtonContent || undefined}
                   onClick={this.previousYear}
                   type="button"
@@ -596,7 +597,8 @@ export class TabworthyDatesCalendar {
                 <button
                   aria-label={this.labels.previousMonthButton}
                   class={this.getClassName("previous-month-button")}
-                  aria-disabled={disabled.month.prev}
+                  aria-disabled={String(disabled.month.prev)}
+                  disabled={disabled.month.prev}
                   innerHTML={this.previousMonthButtonContent || undefined}
                   onClick={this.previousMonth}
                   type="button"
@@ -657,7 +659,8 @@ export class TabworthyDatesCalendar {
                 <button
                   aria-label={this.labels.nextMonthButton}
                   class={this.getClassName("next-month-button")}
-                  aria-disabled={disabled.month.next}
+                  aria-disabled={String(disabled.month.next)}
+                  disabled={disabled.month.next}
                   innerHTML={this.nextMonthButtonContent || undefined}
                   onClick={this.nextMonth}
                   type="button"
@@ -680,7 +683,8 @@ export class TabworthyDatesCalendar {
                 <button
                   aria-label={this.labels.nextYearButton}
                   class={this.getClassName("next-year-button")}
-                  aria-disabled={disabled.year.next}
+                  aria-disabled={String(disabled.year.next)}
+                  disabled={disabled.year.next}
                   innerHTML={this.nextYearButtonContent || undefined}
                   onClick={this.nextYear}
                   type="button"
