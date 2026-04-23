@@ -1,3 +1,10 @@
+## [0.14.3](https://github.com/tabworthy/tabworthy-components/compare/v0.14.2...v0.14.3) (2026-04-23)
+
+
+### Bug Fixes
+
+* **calendar:** disabled state regression ([3dbe559](https://github.com/tabworthy/tabworthy-components/commit/3dbe55927ae740b1b8c3ca0a1c9b37a46d547b9f))
+
 ## [0.14.2](https://github.com/tabworthy/tabworthy-components/compare/v0.14.1...v0.14.2) (2026-04-23)
 
 
