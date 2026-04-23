@@ -94,6 +94,7 @@ export declare class TabworthyTimes {
     private formatInput;
     private getClassName;
     private toDate;
+    revertInput(newValue: string | string[] | undefined, clearError?: boolean): Promise<void>;
     clearValue(): Promise<void>;
     render(): any;
 }

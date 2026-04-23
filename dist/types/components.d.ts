@@ -110,6 +110,7 @@ export namespace Components {
           * @default getISODateString(new Date())
          */
         "referenceDate": string;
+        "revertInput": (newValue: string | string[] | undefined, clearError?: boolean) => Promise<void>;
         /**
           * @default true
          */
@@ -346,6 +347,7 @@ export namespace Components {
           * @default getISODateString(new Date())
          */
         "referenceDate": string;
+        "revertInput": (newValue: string | string[] | undefined, clearError?: boolean) => Promise<void>;
         /**
           * @default true
          */

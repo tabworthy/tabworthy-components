@@ -80,6 +80,23 @@ Type: `Promise<ChronoParsedDateString>`
 
 
 
+### `revertInput(newValue: string | string[] | undefined, clearError?: boolean) => Promise<void>`
+
+
+
+#### Parameters
+
+| Name         | Type                 | Description |
+| ------------ | -------------------- | ----------- |
+| `newValue`   | `string \| string[]` |             |
+| `clearError` | `boolean`            |             |
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
 
 ## Dependencies
 

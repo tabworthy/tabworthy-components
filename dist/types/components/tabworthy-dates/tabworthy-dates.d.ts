@@ -83,6 +83,7 @@ export declare class TabworthyDates {
     private shouldInputFormat;
     componentDidLoad(): void;
     parseDate(text: string, shouldSetValue?: boolean, chronoOptions?: ChronoOptions | undefined): Promise<ChronoParsedDateString>;
+    revertInput(newValue: string | string[] | undefined, clearError?: boolean): Promise<void>;
     private isRangeValue;
     private updateValue;
     private handleCalendarButtonClick;

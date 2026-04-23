@@ -299,6 +299,12 @@ export class TabworthyDates {
             reason: parsedDate && parsedDate.reason ? parsedDate.reason : undefined
         };
     }
+    async revertInput(newValue, clearError = false) {
+        if (clearError)
+            this.errorState = false;
+        this.value = newValue;
+        this.syncFromValueProp(newValue);
+    }
     // @ts-ignore
     isRangeValue(value) {
         if (Array.isArray(value) &&
@@ -1497,6 +1503,31 @@ export class TabworthyDates {
                         }
                     },
                     "return": "Promise<ChronoParsedDateString>"
+                },
+                "docs": {
+                    "text": "",
+                    "tags": []
+                }
+            },
+            "revertInput": {
+                "complexType": {
+                    "signature": "(newValue: string | string[] | undefined, clearError?: boolean) => Promise<void>",
+                    "parameters": [{
+                            "name": "newValue",
+                            "type": "string | string[]",
+                            "docs": ""
+                        }, {
+                            "name": "clearError",
+                            "type": "boolean",
+                            "docs": ""
+                        }],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<void>"
                 },
                 "docs": {
                     "text": "",

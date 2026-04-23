@@ -397,6 +397,12 @@ export class TabworthyTimes {
             : dayjs(dateString, this.format).toDate();
         return date;
     }
+    async revertInput(newValue, clearError = false) {
+        if (clearError)
+            this.errorState = false;
+        this.value = newValue;
+        this.syncFromValueProp();
+    }
     async clearValue() {
         this.internalValue = null;
         this.value = undefined;
@@ -411,12 +417,12 @@ export class TabworthyTimes {
     }
     render() {
         var _a;
-        return (h(Host, { key: '6c3049b02eda2e976f14616027cfb3fd1a0b0100', class: this.elementClassName, "has-error": this.errorState, disabled: this.disabledState }, h("label", { key: 'eb9ecc8c81d04338a5935ad414c6cd544a01bb58', htmlFor: `${this.id}-input`, class: this.getClassName("label") }, this.label), h("div", { key: '8906972aec0b8c7b24cc3f2d07212c3f6c2d8f56', class: this.getClassName("input-container"), ref: (r) => (this.inputContainerRef = r) }, h("input", { key: 'bca908ac7aa2710569fa86be5c7c6643d7f73574', id: `${this.id}-input`, ref: (r) => (this.inputRef = r), type: "text", class: {
+        return (h(Host, { key: '315801393d1528c6e6ba98b9e1c51187e40f62f5', class: this.elementClassName, "has-error": this.errorState, disabled: this.disabledState }, h("label", { key: 'c0ff6094ad4f9a2c12c1f041cd75996a792f2b1c', htmlFor: `${this.id}-input`, class: this.getClassName("label") }, this.label), h("div", { key: 'ede6bcbbd1874acc47360facc5220a0b7fef358c', class: this.getClassName("input-container"), ref: (r) => (this.inputContainerRef = r) }, h("input", { key: '4dcbd71cdd54fca3bb3ae26d4982c49fa32db8d6', id: `${this.id}-input`, ref: (r) => (this.inputRef = r), type: "text", class: {
                 [this.getClassName("input")]: true,
                 [this.inputClass]: !!this.inputClass
-            }, placeholder: this.placeholder, disabled: this.disabledState || this.disableFreeformInput, value: (_a = this.internalValue) === null || _a === void 0 ? void 0 : _a.toString(), onBlur: this.handleInputBlur, onChange: this.handleInputChange, "aria-describedby": this.errorState ? `${this.id}-error` : undefined, "aria-invalid": this.errorState }), !this.inline && (h("button", { key: 'c0d27ab5207fb62606e017bea14c93bc44daebb9', type: "button", onClick: this.handleCalendarButtonClick, class: this.getClassName("calendar-button"), disabled: this.disabledState, "aria-label": this.calendarButtonContent
+            }, placeholder: this.placeholder, disabled: this.disabledState || this.disableFreeformInput, value: (_a = this.internalValue) === null || _a === void 0 ? void 0 : _a.toString(), onBlur: this.handleInputBlur, onChange: this.handleInputChange, "aria-describedby": this.errorState ? `${this.id}-error` : undefined, "aria-invalid": this.errorState }), !this.inline && (h("button", { key: 'f486c98770077cd7ff39d2a56cafaf3d8c80a36c', type: "button", onClick: this.handleCalendarButtonClick, class: this.getClassName("calendar-button"), disabled: this.disabledState, "aria-label": this.calendarButtonContent
                 ? this.timesLabels.openCalendar
-                : undefined }, this.calendarButtonContent ? (h("span", { innerHTML: this.calendarButtonContent })) : (this.timesLabels.openCalendar)))), h("tabworthy-dates-modal", { key: '1e6761504cd55a9fd380902861aeec0e7e655d47', label: this.timesLabels.calendar, ref: (el) => (this.modalRef = el), onOpened: () => {
+                : undefined }, this.calendarButtonContent ? (h("span", { innerHTML: this.calendarButtonContent })) : (this.timesLabels.openCalendar)))), h("tabworthy-dates-modal", { key: 'b1cd3cbcea01f7147fe33abf11d62d35c50cbdb6', label: this.timesLabels.calendar, ref: (el) => (this.modalRef = el), onOpened: () => {
                 if (this.pickerRef) {
                     this.pickerRef.modalIsOpen = true;
                 }
@@ -424,7 +430,7 @@ export class TabworthyTimes {
                 if (this.pickerRef) {
                     this.pickerRef.modalIsOpen = false;
                 }
-            }, inline: this.inline, appendTo: this.appendTo }, h("div", { key: '14966bd22b73a14fcb54bf118543e6aedf6e291f', class: this.getClassName("picker-container") }, h("tabworthy-dates-calendar", { key: 'aef55f7ee2cb19eb68bf8db51dd3e111e4f0dbff', range: this.range, locale: this.locale, onSelectDate: (event) => this.handlePickerSelection(event.detail), onChangeMonth: (event) => this.handleChangedMonths(event.detail), onChangeYear: (event) => this.handleYearChange(event.detail), onRequestClose: () => { var _a; return (_a = this.modalRef) === null || _a === void 0 ? void 0 : _a.close(); }, labels: this.datesCalendarLabels, ref: (el) => (this.pickerRef = el), startDate: this.startDate, firstDayOfWeek: this.firstDayOfWeek, showHiddenTitle: true, disabled: this.disabledState, showMonthStepper: this.showMonthStepper, showYearStepper: this.showYearStepper, showClearButton: this.showClearButton, showCloseButton: this.showCloseButton, showTodayButton: this.showTodayButton, disableDate: this.disableDate, minDate: this.minDate, maxDate: this.maxDate, inline: this.inline, value: this.value ? this.toDate(this.value) : undefined, nextMonthButtonContent: this.nextMonthButtonContent, nextYearButtonContent: this.nextYearButtonContent, previousMonthButtonContent: this.previousMonthButtonContent, previousYearButtonContent: this.previousYearButtonContent, todayButtonContent: this.todayButtonContent, clearButtonContent: this.clearButtonContent, closeButtonContent: this.closeButtonContent }, h("div", { key: 'f89b6d83e9ef68bd98eb6e08ea3aec00c2b6dd86', slot: "after-calendar", class: this.getClassName("time-section") }, h("hr", { key: '2ae84e5817c25641ab56ff096f164355524abfdf', class: this.getClassName("divider") }), h("tabworthy-times-picker", { key: '55bfe07297efd0c60d47d6049572f502311abf15', hours: this.selectedHours, minutes: this.selectedMinutes, seconds: this.selectedSeconds, showSeconds: this.showSeconds, useTwelveHourFormat: this.useTwelveHourFormat, disabled: this.disabledState || this.isDateOutOfBounds(), onTimeChanged: this.handleTimeChange, labels: this.timesPickerLabels, minTime: this.getEffectiveMinTime(), maxTime: this.getEffectiveMaxTime() }))))), this.errorState && (h("div", { key: '97dbda7bc8725c8964a627e37e9236e9bf699ee0', class: this.getClassName("input-error"), id: this.id ? `${this.id}-error` : undefined, role: "status" }, this.errorMessage))));
+            }, inline: this.inline, appendTo: this.appendTo }, h("div", { key: 'cec6685037168dd633037a6d723823572d9db5e5', class: this.getClassName("picker-container") }, h("tabworthy-dates-calendar", { key: '0dec8076bb3aee853979d6de95bd07a7095b717a', range: this.range, locale: this.locale, onSelectDate: (event) => this.handlePickerSelection(event.detail), onChangeMonth: (event) => this.handleChangedMonths(event.detail), onChangeYear: (event) => this.handleYearChange(event.detail), onRequestClose: () => { var _a; return (_a = this.modalRef) === null || _a === void 0 ? void 0 : _a.close(); }, labels: this.datesCalendarLabels, ref: (el) => (this.pickerRef = el), startDate: this.startDate, firstDayOfWeek: this.firstDayOfWeek, showHiddenTitle: true, disabled: this.disabledState, showMonthStepper: this.showMonthStepper, showYearStepper: this.showYearStepper, showClearButton: this.showClearButton, showCloseButton: this.showCloseButton, showTodayButton: this.showTodayButton, disableDate: this.disableDate, minDate: this.minDate, maxDate: this.maxDate, inline: this.inline, value: this.value ? this.toDate(this.value) : undefined, nextMonthButtonContent: this.nextMonthButtonContent, nextYearButtonContent: this.nextYearButtonContent, previousMonthButtonContent: this.previousMonthButtonContent, previousYearButtonContent: this.previousYearButtonContent, todayButtonContent: this.todayButtonContent, clearButtonContent: this.clearButtonContent, closeButtonContent: this.closeButtonContent }, h("div", { key: 'f69a1b84ebceaf5d0c359190bec9ae11189d75e0', slot: "after-calendar", class: this.getClassName("time-section") }, h("hr", { key: '6b9e5ae7c1f5aaa447da7b1b393c9bd75043dac2', class: this.getClassName("divider") }), h("tabworthy-times-picker", { key: '406f5ac12c09d0fddc0ebe3330961b783c2d7366', hours: this.selectedHours, minutes: this.selectedMinutes, seconds: this.selectedSeconds, showSeconds: this.showSeconds, useTwelveHourFormat: this.useTwelveHourFormat, disabled: this.disabledState || this.isDateOutOfBounds(), onTimeChanged: this.handleTimeChange, labels: this.timesPickerLabels, minTime: this.getEffectiveMinTime(), maxTime: this.getEffectiveMaxTime() }))))), this.errorState && (h("div", { key: 'ddc92f2c8d936a3a38f61d841860b17cd9c06283', class: this.getClassName("input-error"), id: this.id ? `${this.id}-error` : undefined, role: "status" }, this.errorMessage))));
     }
     static get is() { return "tabworthy-times"; }
     static get encapsulation() { return "scoped"; }
@@ -1309,6 +1315,31 @@ export class TabworthyTimes {
     }
     static get methods() {
         return {
+            "revertInput": {
+                "complexType": {
+                    "signature": "(newValue: string | string[] | undefined, clearError?: boolean) => Promise<void>",
+                    "parameters": [{
+                            "name": "newValue",
+                            "type": "string | string[]",
+                            "docs": ""
+                        }, {
+                            "name": "clearError",
+                            "type": "boolean",
+                            "docs": ""
+                        }],
+                    "references": {
+                        "Promise": {
+                            "location": "global",
+                            "id": "global::Promise"
+                        }
+                    },
+                    "return": "Promise<void>"
+                },
+                "docs": {
+                    "text": "",
+                    "tags": []
+                }
+            },
             "clearValue": {
                 "complexType": {
                     "signature": "() => Promise<void>",

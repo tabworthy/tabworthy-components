@@ -10768,6 +10768,12 @@ const TabworthyDates = class {
             reason: parsedDate && parsedDate.reason ? parsedDate.reason : undefined
         };
     }
+    async revertInput(newValue, clearError = false) {
+        if (clearError)
+            this.errorState = false;
+        this.value = newValue;
+        this.syncFromValueProp(newValue);
+    }
     // @ts-ignore
     isRangeValue(value) {
         if (Array.isArray(value) &&
