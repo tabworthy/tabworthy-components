@@ -377,6 +377,10 @@ export namespace Components {
          */
         "startDate": string;
         /**
+          * @default false
+         */
+        "timeOnly": boolean;
+        /**
           * @default defaultLabels
          */
         "timesLabels": TimesLabels;
@@ -905,6 +909,10 @@ declare namespace LocalJSX {
          */
         "startDate"?: string;
         /**
+          * @default false
+         */
+        "timeOnly"?: boolean;
+        /**
           * @default defaultLabels
          */
         "timesLabels"?: TimesLabels;
@@ -1033,6 +1041,7 @@ declare namespace LocalJSX {
         "id": string;
         "value": string | string[];
         "range": boolean;
+        "timeOnly": boolean;
         "label": string;
         "placeholder": string;
         "locale": string;

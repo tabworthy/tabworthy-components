@@ -10,6 +10,7 @@ export declare class TabworthyTimes {
     id: string;
     value?: string | string[];
     range?: boolean;
+    timeOnly: boolean;
     label: string;
     placeholder: string;
     locale: string;
@@ -77,6 +78,7 @@ export declare class TabworthyTimes {
      */
     private clampTimeToBounds;
     private shouldInputFormat;
+    private getDateForTimeOnlyValue;
     watchValue(_newValue: string | string[] | undefined): void;
     watchDisabled(newValue: boolean): void;
     watchHasError(newValue: boolean): void;

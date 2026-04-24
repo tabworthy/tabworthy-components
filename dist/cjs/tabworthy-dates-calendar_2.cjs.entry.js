@@ -2859,7 +2859,7 @@ const TabworthyDatesModal = class {
         }
     }
     render() {
-        return (index.h(index.Host, { key: '488fb845bb3a168c45f715b5f7315a80e1857589', showing: this.showing, ref: (r) => r && (this.el = r) }, !this.inline && this.showing && (index.h("div", { key: 'd6263beffa3dbeaa7f0e5e65c1f2627c07164648', part: "body", ref: (r) => {
+        return (index.h(index.Host, { key: '2c9c3ade4eb4964dbb5ba86bd196240851dbb996', showing: this.showing, ref: (r) => r && (this.el = r) }, !this.inline && this.showing && (index.h("div", { key: '961c2d9e34d7ddadb512f8652f14ed4ed4ec6ce5', part: "body", ref: (r) => {
                 if (r) {
                     this.bodyRef = r;
                     // Setup portal and create popper when ref is set
@@ -2876,7 +2876,7 @@ const TabworthyDatesModal = class {
                         });
                     }
                 }
-            }, style: { visibility: this.positioned ? "visible" : "hidden" }, onKeyDown: this.onKeyDown, role: "dialog", tabindex: -1, "aria-hidden": !this.showing, "aria-label": this.label, "aria-modal": this.showing }, index.h("focus-trap", { key: '7ffb9cc684198ab9f3b127a4abe5f60f3241cd49' }, index.h("div", { key: 'c6c7c14220c01969f3a5c92dda882685f4c43268', part: "content" }, index.h("slot", { key: 'a1e6ce7ed152f61b3970e20b40e36bb13ee7580a' }))))), this.inline && (index.h("div", { key: '632750cfce76139771642e03051f5c4a654db56a', part: "content" }, index.h("slot", { key: 'c1aa297a6ffdeee55840a9e05adddb7220e7f954' })))));
+            }, style: { visibility: this.positioned ? "visible" : "hidden" }, onKeyDown: this.onKeyDown, role: "dialog", tabindex: -1, "aria-hidden": !this.showing, "aria-label": this.label, "aria-modal": this.showing }, index.h("focus-trap", { key: '719a3e82aab59326d1aa069b237d158d2311cd62' }, index.h("div", { key: 'b33e1aabdb7477409d97f757bf7121697979d50c', part: "content" }, index.h("slot", { key: 'c7e85552f37b930e298484c0040c138fdccb8ea7' }))))), this.inline && (index.h("div", { key: '59e0333fb0e980c17e0a1da041e6bc492d025bd8', part: "content" }, index.h("slot", { key: 'd52759f124c038fbde4b510ae1df8c3a1bdad25e' })))));
     }
     get hostElement() { return index.getElement(this); }
     static get watchers() { return {
