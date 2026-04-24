@@ -664,6 +664,47 @@ describe("tabworthy-times", () => {
     expect(selectedDate?.getAttribute("data-date")).toBe("2024-03-15");
   });
 
+  it("renders only the time picker when timeOnly is enabled", async () => {
+    const page = await createPage(
+      '<tabworthy-times id="time" time-only format="HH:mm:ss" value="14:30:00"></tabworthy-times>'
+    );
+
+    expect(page.root?.hasAttribute("time-only")).toBe(true);
+    expect(page.root?.querySelector("tabworthy-dates-calendar")).toBeNull();
+    expect(page.root?.querySelector("tabworthy-times-picker")).toBeTruthy();
+  });
+
+  it("emits a time-only value when time is changed without a selected calendar date", async () => {
+    const page = await createPage(
+      '<tabworthy-times id="time" time-only format="HH:mm:ss" input-should-format="false"></tabworthy-times>'
+    );
+    const instance = page.rootInstance as any;
+    instance.inputRef = { value: "" } as HTMLInputElement;
+    const emitSpy = jest.spyOn(instance.selectDateTime, "emit");
+
+    instance.handleTimeChange({
+      detail: { hours: 20, minutes: 15, seconds: 30 }
+    });
+
+    expect(instance.internalValue).toBe("20:15:30");
+    expect(instance.value).toBe("20:15:30");
+    expect(emitSpy).toHaveBeenCalledWith("20:15:30");
+  });
+
+  it("parses time-only input using the configured time format", async () => {
+    const page = await createPage(
+      '<tabworthy-times id="time" time-only format="HH:mm:ss" input-should-format="false"></tabworthy-times>'
+    );
+    const instance = page.rootInstance as any;
+    instance.inputRef = { value: "" } as HTMLInputElement;
+
+    instance.handleInputChange({ target: { value: "08:05:00" } } as any);
+
+    expect(instance.selectedHours).toBe(8);
+    expect(instance.selectedMinutes).toBe(5);
+    expect(instance.internalValue).toBe("08:05:00");
+  });
+
   it("passes showCloseButton prop to calendar component", async () => {
     const page = await createPage(
       '<tabworthy-times id="test" show-close-button="true"></tabworthy-times>'

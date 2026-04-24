@@ -26,6 +26,7 @@ const meta: Meta<JSX.TabworthyTimes> = {
       reference-date=${ifDefined(args.referenceDate)}
       first-day-of-week=${ifDefined(args.firstDayOfWeek)}
       ?range=${args.range}
+      ?time-only=${args.timeOnly}
       ?disabled=${args.disabled}
       ?inline=${args.inline}
       .useTwelveHourFormat=${args.useTwelveHourFormat}
@@ -82,6 +83,19 @@ export const TwentyFourHourFormat: Story = {
     id: "datetime-24h",
     useTwelveHourFormat: false,
     value: "2024-03-15T14:30:00"
+  }
+};
+
+export const TimeOnly: Story = {
+  args: {
+    ...Default.args,
+    id: "time-only",
+    label: "Choose a time",
+    placeholder: "Select a time",
+    timeOnly: true,
+    format: "LT",
+    value: "12:05 AM",
+    useTwelveHourFormat: false
   }
 };
 

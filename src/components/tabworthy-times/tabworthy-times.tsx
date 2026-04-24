@@ -68,6 +68,9 @@ export class TabworthyTimes {
   // Enable or disable range mode
   @Prop() range?: boolean = false;
 
+  // Show only the time picker, without the calendar
+  @Prop() timeOnly: boolean = false;
+
   // A label for the text field
   @Prop() label: string = "Choose a date and time";
 
@@ -289,6 +292,15 @@ export class TabworthyTimes {
     return !!this.inputShouldFormat;
   }
 
+  private getDateForTimeOnlyValue() {
+    if (this.selectedDate) return this.selectedDate;
+
+    const referenceDate = dayjs(this.referenceDate);
+    if (referenceDate.isValid()) return referenceDate.toDate();
+
+    return new Date();
+  }
+
   @Watch("value")
   watchValue(_newValue: string | string[] | undefined) {
     this.syncFromValueProp();
@@ -473,6 +485,8 @@ export class TabworthyTimes {
     // Update the value if we have a selected date
     if (this.selectedDate) {
       this.updateValue(this.selectedDate);
+    } else if (this.timeOnly) {
+      this.updateValue(this.getDateForTimeOnlyValue());
     }
   };
 
@@ -572,6 +586,10 @@ export class TabworthyTimes {
         .map((v) => dayjs(v, this.format).format("lll"))
         .join(` ${this.timesLabels.to} `);
       this.inputRef.value = formatted;
+    } else if (this.timeOnly) {
+      this.inputRef.value = dayjs(this.internalValue, this.format).format(
+        this.showSeconds ? "LTS" : "LT"
+      );
     } else {
       // Format single datetime
       this.inputRef.value = dayjs(this.internalValue, this.format).format(
@@ -629,6 +647,7 @@ export class TabworthyTimes {
         class={this.elementClassName}
         has-error={this.errorState}
         disabled={this.disabledState}
+        time-only={this.timeOnly}
       >
         <label htmlFor={`${this.id}-input`} class={this.getClassName("label")}>
           {this.label}
@@ -691,50 +710,68 @@ export class TabworthyTimes {
           appendTo={this.appendTo}
         >
           <div class={this.getClassName("picker-container")}>
-            <tabworthy-dates-calendar
-              range={this.range}
-              locale={this.locale}
-              onSelectDate={(event) =>
-                this.handlePickerSelection(event.detail as string)
-              }
-              onChangeMonth={(event) =>
-                this.handleChangedMonths(
-                  event.detail as MonthChangedEventDetails
-                )
-              }
-              onChangeYear={(event) =>
-                this.handleYearChange(event.detail as YearChangedEventDetails)
-              }
-              onRequestClose={() => this.modalRef?.close()}
-              labels={this.datesCalendarLabels}
-              ref={(el) => (this.pickerRef = el)}
-              startDate={this.startDate}
-              firstDayOfWeek={this.firstDayOfWeek}
-              showHiddenTitle={true}
-              disabled={this.disabledState}
-              showMonthStepper={this.showMonthStepper}
-              showYearStepper={this.showYearStepper}
-              showClearButton={this.showClearButton}
-              showCloseButton={this.showCloseButton}
-              showTodayButton={this.showTodayButton}
-              disableDate={this.disableDate}
-              minDate={this.minDate}
-              maxDate={this.maxDate}
-              inline={this.inline}
-              value={this.value ? this.toDate(this.value) : undefined}
-              nextMonthButtonContent={this.nextMonthButtonContent}
-              nextYearButtonContent={this.nextYearButtonContent}
-              previousMonthButtonContent={this.previousMonthButtonContent}
-              previousYearButtonContent={this.previousYearButtonContent}
-              todayButtonContent={this.todayButtonContent}
-              clearButtonContent={this.clearButtonContent}
-              closeButtonContent={this.closeButtonContent}
-            >
-              <div
-                slot="after-calendar"
-                class={this.getClassName("time-section")}
+            {!this.timeOnly && (
+              <tabworthy-dates-calendar
+                range={this.range}
+                locale={this.locale}
+                onSelectDate={(event) =>
+                  this.handlePickerSelection(event.detail as string)
+                }
+                onChangeMonth={(event) =>
+                  this.handleChangedMonths(
+                    event.detail as MonthChangedEventDetails
+                  )
+                }
+                onChangeYear={(event) =>
+                  this.handleYearChange(event.detail as YearChangedEventDetails)
+                }
+                onRequestClose={() => this.modalRef?.close()}
+                labels={this.datesCalendarLabels}
+                ref={(el) => (this.pickerRef = el)}
+                startDate={this.startDate}
+                firstDayOfWeek={this.firstDayOfWeek}
+                showHiddenTitle={true}
+                disabled={this.disabledState}
+                showMonthStepper={this.showMonthStepper}
+                showYearStepper={this.showYearStepper}
+                showClearButton={this.showClearButton}
+                showCloseButton={this.showCloseButton}
+                showTodayButton={this.showTodayButton}
+                disableDate={this.disableDate}
+                minDate={this.minDate}
+                maxDate={this.maxDate}
+                inline={this.inline}
+                value={this.value ? this.toDate(this.value) : undefined}
+                nextMonthButtonContent={this.nextMonthButtonContent}
+                nextYearButtonContent={this.nextYearButtonContent}
+                previousMonthButtonContent={this.previousMonthButtonContent}
+                previousYearButtonContent={this.previousYearButtonContent}
+                todayButtonContent={this.todayButtonContent}
+                clearButtonContent={this.clearButtonContent}
+                closeButtonContent={this.closeButtonContent}
               >
-                <hr class={this.getClassName("divider")}></hr>
+                <div
+                  slot="after-calendar"
+                  class={this.getClassName("time-section")}
+                >
+                  <hr class={this.getClassName("divider")}></hr>
+                  <tabworthy-times-picker
+                    hours={this.selectedHours}
+                    minutes={this.selectedMinutes}
+                    seconds={this.selectedSeconds}
+                    showSeconds={this.showSeconds}
+                    useTwelveHourFormat={this.useTwelveHourFormat}
+                    disabled={this.disabledState || this.isDateOutOfBounds()}
+                    onTimeChanged={this.handleTimeChange}
+                    labels={this.timesPickerLabels}
+                    minTime={this.getEffectiveMinTime()}
+                    maxTime={this.getEffectiveMaxTime()}
+                  />
+                </div>
+              </tabworthy-dates-calendar>
+            )}
+            {this.timeOnly && (
+              <div class={this.getClassName("time-section")}>
                 <tabworthy-times-picker
                   hours={this.selectedHours}
                   minutes={this.selectedMinutes}
@@ -748,7 +785,7 @@ export class TabworthyTimes {
                   maxTime={this.getEffectiveMaxTime()}
                 />
               </div>
-            </tabworthy-dates-calendar>
+            )}
           </div>
         </tabworthy-dates-modal>
 
