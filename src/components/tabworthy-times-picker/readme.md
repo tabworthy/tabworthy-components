@@ -15,6 +15,7 @@
 | `maxTime`             | --                       |             | `TimeBounds`        | `undefined`                |
 | `minTime`             | --                       |             | `TimeBounds`        | `undefined`                |
 | `minutes`             | `minutes`                |             | `number`            | `0`                        |
+| `modalIsOpen`         | `modal-is-open`          |             | `boolean`           | `false`                    |
 | `seconds`             | `seconds`                |             | `number`            | `0`                        |
 | `showSeconds`         | `show-seconds`           |             | `boolean`           | `false`                    |
 | `useTwelveHourFormat` | `use-twelve-hour-format` |             | `boolean`           | `false`                    |

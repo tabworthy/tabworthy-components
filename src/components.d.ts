@@ -420,6 +420,10 @@ export namespace Components {
          */
         "minutes": number;
         /**
+          * @default false
+         */
+        "modalIsOpen"?: boolean;
+        /**
           * @default 0
          */
         "seconds": number;
@@ -951,6 +955,10 @@ declare namespace LocalJSX {
           * @default 0
          */
         "minutes"?: number;
+        /**
+          * @default false
+         */
+        "modalIsOpen"?: boolean;
         "onTimeChanged"?: (event: TabworthyTimesPickerCustomEvent<TimeValue>) => void;
         /**
           * @default 0
@@ -1084,6 +1092,7 @@ declare namespace LocalJSX {
         "labelsSrOnly": boolean;
         "disabled": boolean;
         "elementClassName": string;
+        "modalIsOpen": boolean;
     }
 
     interface IntrinsicElements {

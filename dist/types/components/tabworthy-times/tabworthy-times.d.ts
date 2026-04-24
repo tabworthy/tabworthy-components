@@ -66,6 +66,7 @@ export declare class TabworthyTimes {
     private inputRef;
     private inputContainerRef?;
     private pickerRef?;
+    private timePickerRef?;
     private errorMessage;
     private emitErrorChange;
     private formatBoundaryDate;

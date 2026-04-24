@@ -1,3 +1,10 @@
+## [0.15.1](https://github.com/tabworthy/tabworthy-components/compare/v0.15.0...v0.15.1) (2026-04-24)
+
+
+### Bug Fixes
+
+* **times:** should focus on hours input in timeOnly mode ([659bf22](https://github.com/tabworthy/tabworthy-components/commit/659bf2232f5cd9d974f9e9c60e0edb0f0a462c0d))
+
 # [0.15.0](https://github.com/tabworthy/tabworthy-components/compare/v0.14.3...v0.15.0) (2026-04-24)
 
 
