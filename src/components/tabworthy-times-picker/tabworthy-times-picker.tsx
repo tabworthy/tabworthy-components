@@ -78,6 +78,7 @@ export class TabworthyTimesPicker {
   @Prop() minTime?: TimeBounds;
   // Maximum allowed time (24-hour format). Applied when selected date is on the boundary day.
   @Prop() maxTime?: TimeBounds;
+  @Prop() modalIsOpen?: boolean = false;
 
   @State() internalHours: number = this.hours;
   @State() internalMinutes: number = this.minutes;
@@ -85,6 +86,16 @@ export class TabworthyTimesPicker {
   @State() period: "AM" | "PM" = this.hours >= 12 ? "PM" : "AM";
 
   @Event() timeChanged!: EventEmitter<TimeValue>;
+
+  private hoursInputRef?: HTMLInputElement;
+  private moveFocusOnModalOpen?: boolean;
+
+  @Watch("modalIsOpen")
+  watchModalIsOpen() {
+    if (this.modalIsOpen === true) {
+      this.moveFocusOnModalOpen = true;
+    }
+  }
 
   @Watch("hours")
   watchHours(newValue: number) {
@@ -107,6 +118,19 @@ export class TabworthyTimesPicker {
     this.internalMinutes = this.minutes;
     this.internalSeconds = this.seconds;
     this.period = this.hours >= 12 ? "PM" : "AM";
+  }
+
+  componentDidRender() {
+    if (this.moveFocusOnModalOpen) {
+      setTimeout(() => {
+        this.focusHoursInput();
+        this.moveFocusOnModalOpen = false;
+      }, 100);
+    }
+  }
+
+  private focusHoursInput() {
+    this.hoursInputRef?.focus();
   }
 
   private getDisplayHours(): number {
@@ -371,6 +395,7 @@ export class TabworthyTimesPicker {
               </button>
               <input
                 id={`${this.elementClassName}-hours`}
+                ref={(el) => (this.hoursInputRef = el)}
                 type="number"
                 class={`${this.elementClassName}__input`}
                 value={this.padZero(displayHours)}

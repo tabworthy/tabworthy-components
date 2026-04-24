@@ -64,6 +64,22 @@ describe("tabworthy-times-picker", () => {
     ).toBe(true);
   });
 
+  it("focuses the hours input when the modal opens", async () => {
+    const page = await createPage();
+    const instance = page.rootInstance as any;
+    const focus = jest.fn();
+
+    instance.hoursInputRef = { focus };
+    jest.useFakeTimers();
+    instance.modalIsOpen = true;
+    instance.watchModalIsOpen();
+    instance.componentDidRender();
+    jest.runAllTimers();
+
+    expect(focus).toHaveBeenCalled();
+    jest.useRealTimers();
+  });
+
   it("supports custom labels and class name", async () => {
     const page = await createPage(
       `<tabworthy-times-picker element-class-name="custom-picker"></tabworthy-times-picker>`

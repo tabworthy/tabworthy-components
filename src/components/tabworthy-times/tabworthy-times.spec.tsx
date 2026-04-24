@@ -705,6 +705,22 @@ describe("tabworthy-times", () => {
     expect(instance.internalValue).toBe("08:05:00");
   });
 
+  it("wires timeOnly modal open state to the times picker", async () => {
+    const page = await createPage(
+      '<tabworthy-times id="time" time-only format="HH:mm:ss"></tabworthy-times>'
+    );
+    const instance = page.rootInstance as any;
+    instance.timePickerRef = { modalIsOpen: false };
+
+    const modal = page.root?.querySelector(
+      "tabworthy-dates-modal"
+    ) as HTMLElement;
+    modal.dispatchEvent(new CustomEvent("opened"));
+    expect(instance.timePickerRef.modalIsOpen).toBe(true);
+    modal.dispatchEvent(new CustomEvent("closed"));
+    expect(instance.timePickerRef.modalIsOpen).toBe(false);
+  });
+
   it("passes showCloseButton prop to calendar component", async () => {
     const page = await createPage(
       '<tabworthy-times id="test" show-close-button="true"></tabworthy-times>'

@@ -183,6 +183,9 @@ export class TabworthyTimes {
   private inputRef!: HTMLInputElement;
   private inputContainerRef?: HTMLDivElement;
   private pickerRef?: HTMLTabworthyDatesCalendarElement;
+  private timePickerRef?: HTMLTabworthyTimesPickerElement & {
+    modalIsOpen?: boolean;
+  };
   private errorMessage = "";
 
   private emitErrorChange(reason?: string, message?: string) {
@@ -700,10 +703,16 @@ export class TabworthyTimes {
             if (this.pickerRef) {
               this.pickerRef.modalIsOpen = true;
             }
+            if (this.timeOnly && this.timePickerRef) {
+              this.timePickerRef.modalIsOpen = true;
+            }
           }}
           onClosed={() => {
             if (this.pickerRef) {
               this.pickerRef.modalIsOpen = false;
+            }
+            if (this.timePickerRef) {
+              this.timePickerRef.modalIsOpen = false;
             }
           }}
           inline={this.inline}
@@ -766,6 +775,7 @@ export class TabworthyTimes {
                     labels={this.timesPickerLabels}
                     minTime={this.getEffectiveMinTime()}
                     maxTime={this.getEffectiveMaxTime()}
+                    ref={(el) => (this.timePickerRef = el)}
                   />
                 </div>
               </tabworthy-dates-calendar>
@@ -783,6 +793,7 @@ export class TabworthyTimes {
                   labels={this.timesPickerLabels}
                   minTime={this.getEffectiveMinTime()}
                   maxTime={this.getEffectiveMaxTime()}
+                  ref={(el) => (this.timePickerRef = el)}
                 />
               </div>
             )}
