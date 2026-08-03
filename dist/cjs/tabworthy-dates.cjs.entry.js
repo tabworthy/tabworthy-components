@@ -1,7 +1,7 @@
 'use strict';
 
 var index$1 = require('./index-B1s0tI-Z.js');
-var customParseFormat = require('./customParseFormat-l09KVyWD.js');
+var dateError = require('./date-error-CCtoCDtq.js');
 var utils = require('./utils-DGbdK8VF.js');
 
 function _mergeNamespaces(n, m) {
@@ -10312,7 +10312,7 @@ function requireDist () {
 }
 
 var distExports = requireDist();
-var index = /*@__PURE__*/customParseFormat.getDefaultExportFromCjs(distExports);
+var index = /*@__PURE__*/dateError.getDefaultExportFromCjs(distExports);
 
 var chrono = /*#__PURE__*/_mergeNamespaces({
     __proto__: null,
@@ -10468,7 +10468,7 @@ const chronoParseRange = async (dateString, options) => {
 
 const tabworthyDatesCss = () => `.visually-hidden.sc-tabworthy-dates{position:absolute;overflow:hidden;width:1px;height:1px;white-space:nowrap;clip:rect(0 0 0 0);-webkit-clip-path:inset(50%);clip-path:inset(50%)}`;
 
-customParseFormat.dayjs.extend(customParseFormat.customParseFormat);
+dateError.dayjs.extend(dateError.customParseFormat);
 const defaultLabels = {
     selected: "selected",
     openCalendar: "Open calendar",
@@ -10614,7 +10614,7 @@ const TabworthyDates = class {
                 : 9999;
             if (year < minYear || year > maxYear)
                 return;
-            const newValue = customParseFormat.dayjs().year(year).startOf("year").format(this.format);
+            const newValue = dateError.dayjs().year(year).startOf("year").format(this.format);
             this.internalValue = newValue;
             this.value = newValue;
             (_a = this.changeYear) === null || _a === void 0 ? void 0 : _a.emit({ year });
@@ -10667,7 +10667,7 @@ const TabworthyDates = class {
                 return this.selectDate.emit(this.internalValue);
             }
             // Try strict format parsing first to avoid DD/MM vs MM/DD ambiguity
-            const strictParsed = customParseFormat.dayjs(value, this.format, true);
+            const strictParsed = dateError.dayjs(value, this.format, true);
             if (strictParsed.isValid()) {
                 const date = strictParsed.toDate();
                 if (!this.isPickedDateValid(date))
@@ -10707,18 +10707,13 @@ const TabworthyDates = class {
                     minDate === null || minDate === void 0 ? void 0 : minDate.setDate(minDate.getDate() - 1);
                 }
                 if (!!parsedDate.reason) {
-                    const formatLocalizedDate = (date) => Intl.DateTimeFormat(this.locale, {
-                        day: "numeric",
-                        month: "short",
-                        year: "numeric"
-                    }).format(date);
                     this.errorMessage = parsedDate.reason;
                     this.errorMessage = {
                         minDate: minDate
-                            ? `${this.datesLabels.minDateError} ${formatLocalizedDate(minDate)}`
+                            ? dateError.formatDateError(this.datesLabels.minDateError, this.formatBoundaryDate(minDate))
                             : "",
                         maxDate: maxDate
-                            ? `${this.datesLabels.maxDateError} ${formatLocalizedDate(maxDate)}`
+                            ? dateError.formatDateError(this.datesLabels.maxDateError, this.formatBoundaryDate(maxDate))
                             : "",
                         invalid: this.datesLabels.invalidDateError
                     }[parsedDate.reason];
@@ -10763,7 +10758,7 @@ const TabworthyDates = class {
         }
         return {
             value: parsedDate && parsedDate.value instanceof Date
-                ? customParseFormat.dayjs(parsedDate.value).format(this.format)
+                ? dateError.dayjs(parsedDate.value).format(this.format)
                 : undefined,
             reason: parsedDate && parsedDate.reason ? parsedDate.reason : undefined
         };
@@ -10784,11 +10779,11 @@ const TabworthyDates = class {
     updateValue(newValue) {
         // Range
         if (Array.isArray(newValue)) {
-            this.internalValue = newValue.map((date) => customParseFormat.dayjs(date).format(this.format));
+            this.internalValue = newValue.map((date) => dateError.dayjs(date).format(this.format));
         }
         // Single
         else {
-            this.internalValue = customParseFormat.dayjs(newValue).format(this.format);
+            this.internalValue = dateError.dayjs(newValue).format(this.format);
         }
         if (this.pickerRef) {
             this.pickerRef.value = newValue;
@@ -10800,6 +10795,13 @@ const TabworthyDates = class {
     }
     emitErrorChange(reason, message) {
         this.errorChange.emit({ reason, message });
+    }
+    formatBoundaryDate(date) {
+        return Intl.DateTimeFormat(this.locale, {
+            day: "numeric",
+            month: "short",
+            year: "numeric"
+        }).format(date);
     }
     formatInput(enabled, useInputValue = true) {
         if (this.shouldInputFormat() === false || enabled === false) {
@@ -10820,7 +10822,7 @@ const TabworthyDates = class {
                     return; // Range date is invalid, leave the text field as is
                 let output = "";
                 this.internalValue.forEach((value, index) => {
-                    const parsedDate = customParseFormat.dayjs(useInputValue ? this.inputRef.value : value, this.format, true);
+                    const parsedDate = dateError.dayjs(useInputValue ? this.inputRef.value : value, this.format, true);
                     const dateToFormat = parsedDate.isValid()
                         ? parsedDate.toDate()
                         : utils.removeTimezoneOffset(new Date(useInputValue ? this.inputRef.value : value));
@@ -10833,7 +10835,7 @@ const TabworthyDates = class {
                 this.inputRef.value = output;
             }
             else {
-                const parsedDate = customParseFormat.dayjs(useInputValue ? this.inputRef.value : this.internalValue, this.format, true);
+                const parsedDate = dateError.dayjs(useInputValue ? this.inputRef.value : this.internalValue, this.format, true);
                 const dateToFormat = parsedDate.isValid()
                     ? parsedDate.toDate()
                     : utils.removeTimezoneOffset(new Date(useInputValue ? this.inputRef.value : this.internalValue));
@@ -10847,19 +10849,19 @@ const TabworthyDates = class {
         }
     }
     isPickedDateValid(dateString) {
-        const parsed = customParseFormat.dayjs(dateString);
+        const parsed = dateError.dayjs(dateString);
         if (!parsed.isValid())
             return false;
         const isoDate = typeof dateString === "string" ? dateString : parsed.format("YYYY-MM-DD");
         if (this.minDate && isoDate < this.minDate) {
             this.errorState = true;
-            this.errorMessage = `${this.datesLabels.minDateError} ${this.minDate}`;
+            this.errorMessage = dateError.formatDateError(this.datesLabels.minDateError, this.formatBoundaryDate(utils.parseDateString(this.minDate)));
             this.emitErrorChange("minDate", this.errorMessage);
             return false;
         }
         if (this.maxDate && isoDate > this.maxDate) {
             this.errorState = true;
-            this.errorMessage = `${this.datesLabels.maxDateError} ${this.maxDate}`;
+            this.errorMessage = dateError.formatDateError(this.datesLabels.maxDateError, this.formatBoundaryDate(utils.parseDateString(this.maxDate)));
             this.emitErrorChange("maxDate", this.errorMessage);
             return false;
         }
@@ -10880,7 +10882,7 @@ const TabworthyDates = class {
             if (newValue.length === 2)
                 (_a = this.modalRef) === null || _a === void 0 ? void 0 : _a.close();
             // Convert ISO dates to specified format
-            this.internalValue = newValue.map((date) => customParseFormat.dayjs(date).format(this.format));
+            this.internalValue = newValue.map((date) => dateError.dayjs(date).format(this.format));
             this.errorState = false;
             if (document.activeElement !== this.inputRef) {
                 this.formatInput(true, false);
@@ -10894,7 +10896,7 @@ const TabworthyDates = class {
             (_b = this.modalRef) === null || _b === void 0 ? void 0 : _b.close();
             // Convert ISO date to specified format
             const formattedDate = newValue
-                ? customParseFormat.dayjs(newValue).format(this.format)
+                ? dateError.dayjs(newValue).format(this.format)
                 : "";
             this.inputRef.value = formattedDate;
             this.internalValue = formattedDate;
@@ -10912,8 +10914,8 @@ const TabworthyDates = class {
             return;
         }
         const newValueInIsoFormat = Array.isArray(newValue)
-            ? newValue.map((date) => customParseFormat.dayjs(date, this.format).toISOString())
-            : customParseFormat.dayjs(newValue, this.format).toISOString();
+            ? newValue.map((date) => dateError.dayjs(date, this.format).toISOString())
+            : dateError.dayjs(newValue, this.format).toISOString();
         let content = "";
         if (Array.isArray(newValueInIsoFormat)) {
             if (newValueInIsoFormat.length === 1) {
@@ -10956,7 +10958,7 @@ const TabworthyDates = class {
         if (this.pickerRef) {
             if (Array.isArray(value)) {
                 const dates = value.reduce((acc, v) => {
-                    const d = customParseFormat.dayjs(v, this.format, true);
+                    const d = dateError.dayjs(v, this.format, true);
                     if (d.isValid())
                         acc.push(d.toDate());
                     return acc;
@@ -10965,7 +10967,7 @@ const TabworthyDates = class {
             }
             else {
                 if (value) {
-                    const parsedDate = customParseFormat.dayjs(value, this.format, true);
+                    const parsedDate = dateError.dayjs(value, this.format, true);
                     if (parsedDate.isValid()) {
                         this.pickerRef.value = parsedDate.toDate();
                     }

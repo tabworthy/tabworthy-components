@@ -1,7 +1,7 @@
 'use strict';
 
 var index = require('./index-B1s0tI-Z.js');
-var customParseFormat = require('./customParseFormat-l09KVyWD.js');
+var dateError = require('./date-error-CCtoCDtq.js');
 var utils = require('./utils-DGbdK8VF.js');
 
 var localizedFormat$2 = {exports: {}};
@@ -20,10 +20,10 @@ function requireLocalizedFormat () {
 }
 
 var localizedFormatExports = requireLocalizedFormat();
-var localizedFormat = /*@__PURE__*/customParseFormat.getDefaultExportFromCjs(localizedFormatExports);
+var localizedFormat = /*@__PURE__*/dateError.getDefaultExportFromCjs(localizedFormatExports);
 
-customParseFormat.dayjs.extend(customParseFormat.customParseFormat);
-customParseFormat.dayjs.extend(localizedFormat);
+dateError.dayjs.extend(dateError.customParseFormat);
+dateError.dayjs.extend(localizedFormat);
 const defaultLabels = {
     selected: "selected",
     openCalendar: "Choose time",
@@ -176,22 +176,22 @@ const TabworthyTimes = class {
             }
             // Try to parse the input value using the component's format first (strict mode)
             // This prevents dayjs from misinterpreting date formats (e.g., DD/MM/YYYY as MM/DD/YYYY)
-            let parsed = customParseFormat.dayjs(value, this.format, true);
+            let parsed = dateError.dayjs(value, this.format, true);
             // Fall back to loose parsing if strict format doesn't match
             if (!parsed.isValid()) {
-                parsed = customParseFormat.dayjs(value);
+                parsed = dateError.dayjs(value);
             }
             if (parsed.isValid()) {
                 // Check minDate/maxDate bounds (supports both date-only and datetime strings)
-                if (this.minDate && parsed.isBefore(customParseFormat.dayjs(this.minDate))) {
+                if (this.minDate && parsed.isBefore(dateError.dayjs(this.minDate))) {
                     this.errorState = true;
-                    this.errorMessage = `${this.timesLabels.minDateError} ${this.formatBoundaryDate(this.minDate)}`;
+                    this.errorMessage = dateError.formatDateError(this.timesLabels.minDateError, this.formatBoundaryDate(this.minDate));
                     this.emitErrorChange("minDate", this.errorMessage);
                     return;
                 }
-                if (this.maxDate && parsed.isAfter(customParseFormat.dayjs(this.maxDate))) {
+                if (this.maxDate && parsed.isAfter(dateError.dayjs(this.maxDate))) {
                     this.errorState = true;
-                    this.errorMessage = `${this.timesLabels.maxDateError} ${this.formatBoundaryDate(this.maxDate)}`;
+                    this.errorMessage = dateError.formatDateError(this.timesLabels.maxDateError, this.formatBoundaryDate(this.maxDate));
                     this.emitErrorChange("maxDate", this.errorMessage);
                     return;
                 }
@@ -219,7 +219,7 @@ const TabworthyTimes = class {
         this.errorChange.emit({ reason, message });
     }
     formatBoundaryDate(dateString) {
-        const parsed = customParseFormat.dayjs(dateString);
+        const parsed = dateError.dayjs(dateString);
         if (!parsed.isValid())
             return dateString;
         const hasTime = dateString.includes("T") || dateString.includes(" ");
@@ -236,8 +236,8 @@ const TabworthyTimes = class {
     getEffectiveMinTime() {
         if (!this.minDate || !this.selectedDate)
             return undefined;
-        const min = customParseFormat.dayjs(this.minDate);
-        const sel = customParseFormat.dayjs(this.selectedDate);
+        const min = dateError.dayjs(this.minDate);
+        const sel = dateError.dayjs(this.selectedDate);
         if (!min.isValid() || !sel.isSame(min, "day"))
             return undefined;
         return {
@@ -249,8 +249,8 @@ const TabworthyTimes = class {
     getEffectiveMaxTime() {
         if (!this.maxDate || !this.selectedDate)
             return undefined;
-        const max = customParseFormat.dayjs(this.maxDate);
-        const sel = customParseFormat.dayjs(this.selectedDate);
+        const max = dateError.dayjs(this.maxDate);
+        const sel = dateError.dayjs(this.selectedDate);
         if (!max.isValid() || !sel.isSame(max, "day"))
             return undefined;
         return {
@@ -262,10 +262,10 @@ const TabworthyTimes = class {
     isDateOutOfBounds() {
         if (!this.selectedDate)
             return false;
-        const sel = customParseFormat.dayjs(this.selectedDate);
-        if (this.minDate && sel.isBefore(customParseFormat.dayjs(this.minDate), "day"))
+        const sel = dateError.dayjs(this.selectedDate);
+        if (this.minDate && sel.isBefore(dateError.dayjs(this.minDate), "day"))
             return true;
-        if (this.maxDate && sel.isAfter(customParseFormat.dayjs(this.maxDate), "day"))
+        if (this.maxDate && sel.isAfter(dateError.dayjs(this.maxDate), "day"))
             return true;
         return false;
     }
@@ -274,9 +274,9 @@ const TabworthyTimes = class {
      * available time if the current selection falls outside the allowed range.
      */
     clampTimeToBounds(date) {
-        const sel = customParseFormat.dayjs(date);
+        const sel = dateError.dayjs(date);
         if (this.minDate) {
-            const min = customParseFormat.dayjs(this.minDate);
+            const min = dateError.dayjs(this.minDate);
             if (min.isValid() && sel.isSame(min, "day")) {
                 const curTotal = this.selectedHours * 3600 +
                     this.selectedMinutes * 60 +
@@ -290,7 +290,7 @@ const TabworthyTimes = class {
             }
         }
         if (this.maxDate) {
-            const max = customParseFormat.dayjs(this.maxDate);
+            const max = dateError.dayjs(this.maxDate);
             if (max.isValid() && sel.isSame(max, "day")) {
                 const curTotal = this.selectedHours * 3600 +
                     this.selectedMinutes * 60 +
@@ -313,7 +313,7 @@ const TabworthyTimes = class {
     getDateForTimeOnlyValue() {
         if (this.selectedDate)
             return this.selectedDate;
-        const referenceDate = customParseFormat.dayjs(this.referenceDate);
+        const referenceDate = dateError.dayjs(this.referenceDate);
         if (referenceDate.isValid())
             return referenceDate.toDate();
         return new Date();
@@ -340,7 +340,7 @@ const TabworthyTimes = class {
             // Parse the first datetime value to set time picker
             const firstValue = Array.isArray(this.value) ? this.value[0] : this.value;
             if (firstValue) {
-                const parsed = customParseFormat.dayjs(firstValue, this.format);
+                const parsed = dateError.dayjs(firstValue, this.format);
                 if (parsed.isValid()) {
                     this.selectedDate = parsed.toDate();
                     this.selectedHours = parsed.hour();
@@ -356,7 +356,7 @@ const TabworthyTimes = class {
         if (this.pickerRef) {
             if (Array.isArray(this.value)) {
                 const dates = this.value.reduce((acc, v) => {
-                    const d = customParseFormat.dayjs(v, this.format, true);
+                    const d = dateError.dayjs(v, this.format, true);
                     if (d.isValid())
                         acc.push(d.toDate());
                     return acc;
@@ -364,7 +364,7 @@ const TabworthyTimes = class {
                 this.pickerRef.value = dates.length ? dates : null;
             }
             else if (this.value) {
-                const parsedDate = customParseFormat.dayjs(this.value, this.format, true);
+                const parsedDate = dateError.dayjs(this.value, this.format, true);
                 if (parsedDate.isValid()) {
                     this.pickerRef.value = parsedDate.toDate();
                 }
@@ -391,7 +391,7 @@ const TabworthyTimes = class {
         if (Array.isArray(date)) {
             // Range mode
             const formattedDates = date.map((d) => {
-                const m = customParseFormat.dayjs(d)
+                const m = dateError.dayjs(d)
                     .hour(this.selectedHours)
                     .minute(this.selectedMinutes)
                     .second(this.selectedSeconds);
@@ -403,7 +403,7 @@ const TabworthyTimes = class {
         }
         else {
             // Single date mode
-            const m = customParseFormat.dayjs(date)
+            const m = dateError.dayjs(date)
                 .hour(this.selectedHours)
                 .minute(this.selectedMinutes)
                 .second(this.selectedSeconds);
@@ -419,18 +419,18 @@ const TabworthyTimes = class {
         }
     }
     isDateValid(date) {
-        const parsed = customParseFormat.dayjs(date);
+        const parsed = dateError.dayjs(date);
         if (!parsed.isValid())
             return false;
-        if (this.minDate && parsed.isBefore(customParseFormat.dayjs(this.minDate), "day")) {
+        if (this.minDate && parsed.isBefore(dateError.dayjs(this.minDate), "day")) {
             this.errorState = true;
-            this.errorMessage = `${this.timesLabels.minDateError} ${this.formatBoundaryDate(this.minDate)}`;
+            this.errorMessage = dateError.formatDateError(this.timesLabels.minDateError, this.formatBoundaryDate(this.minDate));
             this.emitErrorChange("minDate", this.errorMessage);
             return false;
         }
-        if (this.maxDate && parsed.isAfter(customParseFormat.dayjs(this.maxDate), "day")) {
+        if (this.maxDate && parsed.isAfter(dateError.dayjs(this.maxDate), "day")) {
             this.errorState = true;
-            this.errorMessage = `${this.timesLabels.maxDateError} ${this.formatBoundaryDate(this.maxDate)}`;
+            this.errorMessage = dateError.formatDateError(this.timesLabels.maxDateError, this.formatBoundaryDate(this.maxDate));
             this.emitErrorChange("maxDate", this.errorMessage);
             return false;
         }
@@ -448,16 +448,16 @@ const TabworthyTimes = class {
         if (Array.isArray(this.internalValue)) {
             // Format range
             const formatted = this.internalValue
-                .map((v) => customParseFormat.dayjs(v, this.format).format("lll"))
+                .map((v) => dateError.dayjs(v, this.format).format("lll"))
                 .join(` ${this.timesLabels.to} `);
             this.inputRef.value = formatted;
         }
         else if (this.timeOnly) {
-            this.inputRef.value = customParseFormat.dayjs(this.internalValue, this.format).format(this.showSeconds ? "LTS" : "LT");
+            this.inputRef.value = dateError.dayjs(this.internalValue, this.format).format(this.showSeconds ? "LTS" : "LT");
         }
         else {
             // Format single datetime
-            this.inputRef.value = customParseFormat.dayjs(this.internalValue, this.format).format("lll");
+            this.inputRef.value = dateError.dayjs(this.internalValue, this.format).format("lll");
         }
     }
     getClassName(suffix) {
@@ -467,8 +467,8 @@ const TabworthyTimes = class {
         if (!dateString)
             return null;
         const date = Array.isArray(dateString)
-            ? dateString.map((d) => customParseFormat.dayjs(d, this.format).toDate())
-            : customParseFormat.dayjs(dateString, this.format).toDate();
+            ? dateString.map((d) => dateError.dayjs(d, this.format).toDate())
+            : dateError.dayjs(dateString, this.format).toDate();
         return date;
     }
     async revertInput(newValue, clearError = false) {
@@ -491,12 +491,12 @@ const TabworthyTimes = class {
     }
     render() {
         var _a;
-        return (index.h(index.Host, { key: 'ab639b86fb2e2afe854a1253a2caab53a82f9cc0', class: this.elementClassName, "has-error": this.errorState, disabled: this.disabledState, "time-only": this.timeOnly }, index.h("label", { key: '55dd4b279bc847151a5f3cb50f98bddb62c2965c', htmlFor: `${this.id}-input`, class: this.getClassName("label") }, this.label), index.h("div", { key: '5aa75daa3ee2d7de8f8385d5871dd732ce6c5d3c', class: this.getClassName("input-container"), ref: (r) => (this.inputContainerRef = r) }, index.h("input", { key: '49912db4c96619e20e818b494d553aad293920a8', id: `${this.id}-input`, ref: (r) => (this.inputRef = r), type: "text", class: {
+        return (index.h(index.Host, { key: '40aebf1f077c4766cbbb9bd3929f5d8d959b60a4', class: this.elementClassName, "has-error": this.errorState, disabled: this.disabledState, "time-only": this.timeOnly }, index.h("label", { key: 'cbf04161329d320ebc9ae5b3a0fede08e3157afb', htmlFor: `${this.id}-input`, class: this.getClassName("label") }, this.label), index.h("div", { key: '2e7e46172b8d46b2f88047d93f9e4d35e5c841f3', class: this.getClassName("input-container"), ref: (r) => (this.inputContainerRef = r) }, index.h("input", { key: '0fcf906d8bad7fe78e003bf881a6d22dcb42f4e8', id: `${this.id}-input`, ref: (r) => (this.inputRef = r), type: "text", class: {
                 [this.getClassName("input")]: true,
                 [this.inputClass]: !!this.inputClass
-            }, placeholder: this.placeholder, disabled: this.disabledState || this.disableFreeformInput, value: (_a = this.internalValue) === null || _a === void 0 ? void 0 : _a.toString(), onBlur: this.handleInputBlur, onChange: this.handleInputChange, "aria-describedby": this.errorState ? `${this.id}-error` : undefined, "aria-invalid": this.errorState }), !this.inline && (index.h("button", { key: 'f22378a0ad106f560ed0d1e02e3b22b43e725289', type: "button", onClick: this.handleCalendarButtonClick, class: this.getClassName("calendar-button"), disabled: this.disabledState, "aria-label": this.calendarButtonContent
+            }, placeholder: this.placeholder, disabled: this.disabledState || this.disableFreeformInput, value: (_a = this.internalValue) === null || _a === void 0 ? void 0 : _a.toString(), onBlur: this.handleInputBlur, onChange: this.handleInputChange, "aria-describedby": this.errorState ? `${this.id}-error` : undefined, "aria-invalid": this.errorState }), !this.inline && (index.h("button", { key: '7d63c31494474844633f64faf0aba4851574dce6', type: "button", onClick: this.handleCalendarButtonClick, class: this.getClassName("calendar-button"), disabled: this.disabledState, "aria-label": this.calendarButtonContent
                 ? this.timesLabels.openCalendar
-                : undefined }, this.calendarButtonContent ? (index.h("span", { innerHTML: this.calendarButtonContent })) : (this.timesLabels.openCalendar)))), index.h("tabworthy-dates-modal", { key: 'c0f14cf67c2da5a3c4917b388949458e410009e8', label: this.timesLabels.calendar, ref: (el) => (this.modalRef = el), onOpened: () => {
+                : undefined }, this.calendarButtonContent ? (index.h("span", { innerHTML: this.calendarButtonContent })) : (this.timesLabels.openCalendar)))), index.h("tabworthy-dates-modal", { key: '802a7f839dd33d19885918819ae4a3fa9f6cb838', label: this.timesLabels.calendar, ref: (el) => (this.modalRef = el), onOpened: () => {
                 if (this.pickerRef) {
                     this.pickerRef.modalIsOpen = true;
                 }
@@ -510,7 +510,7 @@ const TabworthyTimes = class {
                 if (this.timePickerRef) {
                     this.timePickerRef.modalIsOpen = false;
                 }
-            }, inline: this.inline, appendTo: this.appendTo }, index.h("div", { key: 'c7051d360cfba74d9e0b3a8702683da2f79c013c', class: this.getClassName("picker-container") }, !this.timeOnly && (index.h("tabworthy-dates-calendar", { key: 'c9c72c072116568cd6ca0ce99de136940876e3b0', range: this.range, locale: this.locale, onSelectDate: (event) => this.handlePickerSelection(event.detail), onChangeMonth: (event) => this.handleChangedMonths(event.detail), onChangeYear: (event) => this.handleYearChange(event.detail), onRequestClose: () => { var _a; return (_a = this.modalRef) === null || _a === void 0 ? void 0 : _a.close(); }, labels: this.datesCalendarLabels, ref: (el) => (this.pickerRef = el), startDate: this.startDate, firstDayOfWeek: this.firstDayOfWeek, showHiddenTitle: true, disabled: this.disabledState, showMonthStepper: this.showMonthStepper, showYearStepper: this.showYearStepper, showClearButton: this.showClearButton, showCloseButton: this.showCloseButton, showTodayButton: this.showTodayButton, disableDate: this.disableDate, minDate: this.minDate, maxDate: this.maxDate, inline: this.inline, value: this.value ? this.toDate(this.value) : undefined, nextMonthButtonContent: this.nextMonthButtonContent, nextYearButtonContent: this.nextYearButtonContent, previousMonthButtonContent: this.previousMonthButtonContent, previousYearButtonContent: this.previousYearButtonContent, todayButtonContent: this.todayButtonContent, clearButtonContent: this.clearButtonContent, closeButtonContent: this.closeButtonContent }, index.h("div", { key: '325945a90d36cb39ef23db27f99fd6224984b735', slot: "after-calendar", class: this.getClassName("time-section") }, index.h("hr", { key: 'ff305cef7f526fb05dd3f193ea4093f0064fc813', class: this.getClassName("divider") }), index.h("tabworthy-times-picker", { key: 'ad163d7fa0c3282312b848a758bfcc8b08a663ad', hours: this.selectedHours, minutes: this.selectedMinutes, seconds: this.selectedSeconds, showSeconds: this.showSeconds, useTwelveHourFormat: this.useTwelveHourFormat, disabled: this.disabledState || this.isDateOutOfBounds(), onTimeChanged: this.handleTimeChange, labels: this.timesPickerLabels, minTime: this.getEffectiveMinTime(), maxTime: this.getEffectiveMaxTime(), ref: (el) => (this.timePickerRef = el) })))), this.timeOnly && (index.h("div", { key: 'c19252f05b91934af956c5ed9453185e591c4f71', class: this.getClassName("time-section") }, index.h("tabworthy-times-picker", { key: 'd8456d201c430625d2181a7da76f0ec5a471aec4', hours: this.selectedHours, minutes: this.selectedMinutes, seconds: this.selectedSeconds, showSeconds: this.showSeconds, useTwelveHourFormat: this.useTwelveHourFormat, disabled: this.disabledState || this.isDateOutOfBounds(), onTimeChanged: this.handleTimeChange, labels: this.timesPickerLabels, minTime: this.getEffectiveMinTime(), maxTime: this.getEffectiveMaxTime(), ref: (el) => (this.timePickerRef = el) }))))), this.errorState && (index.h("div", { key: '0968907cbf6971aa00a486184394fe7d342ee237', class: this.getClassName("input-error"), id: this.id ? `${this.id}-error` : undefined, role: "status" }, this.errorMessage))));
+            }, inline: this.inline, appendTo: this.appendTo }, index.h("div", { key: '2ff172c30561b5962400dc2fa052162e01013c7a', class: this.getClassName("picker-container") }, !this.timeOnly && (index.h("tabworthy-dates-calendar", { key: '6456181b374cae4d91c01b9b7873c91bb08a8778', range: this.range, locale: this.locale, onSelectDate: (event) => this.handlePickerSelection(event.detail), onChangeMonth: (event) => this.handleChangedMonths(event.detail), onChangeYear: (event) => this.handleYearChange(event.detail), onRequestClose: () => { var _a; return (_a = this.modalRef) === null || _a === void 0 ? void 0 : _a.close(); }, labels: this.datesCalendarLabels, ref: (el) => (this.pickerRef = el), startDate: this.startDate, firstDayOfWeek: this.firstDayOfWeek, showHiddenTitle: true, disabled: this.disabledState, showMonthStepper: this.showMonthStepper, showYearStepper: this.showYearStepper, showClearButton: this.showClearButton, showCloseButton: this.showCloseButton, showTodayButton: this.showTodayButton, disableDate: this.disableDate, minDate: this.minDate, maxDate: this.maxDate, inline: this.inline, value: this.value ? this.toDate(this.value) : undefined, nextMonthButtonContent: this.nextMonthButtonContent, nextYearButtonContent: this.nextYearButtonContent, previousMonthButtonContent: this.previousMonthButtonContent, previousYearButtonContent: this.previousYearButtonContent, todayButtonContent: this.todayButtonContent, clearButtonContent: this.clearButtonContent, closeButtonContent: this.closeButtonContent }, index.h("div", { key: '4a89d517cfcf22cffccecddca841102cb913a8fb', slot: "after-calendar", class: this.getClassName("time-section") }, index.h("hr", { key: '72d37f7058959877afa16b8336f834cc0e5aceba', class: this.getClassName("divider") }), index.h("tabworthy-times-picker", { key: 'bdba34da5c2a2a0af681e40516b0d48e8833e276', hours: this.selectedHours, minutes: this.selectedMinutes, seconds: this.selectedSeconds, showSeconds: this.showSeconds, useTwelveHourFormat: this.useTwelveHourFormat, disabled: this.disabledState || this.isDateOutOfBounds(), onTimeChanged: this.handleTimeChange, labels: this.timesPickerLabels, minTime: this.getEffectiveMinTime(), maxTime: this.getEffectiveMaxTime(), ref: (el) => (this.timePickerRef = el) })))), this.timeOnly && (index.h("div", { key: '50a2866b8e7a408f72d37ee540ecba546103d4f4', class: this.getClassName("time-section") }, index.h("tabworthy-times-picker", { key: 'de317aaa6579be60679cba468e5b28be8654aa5d', hours: this.selectedHours, minutes: this.selectedMinutes, seconds: this.selectedSeconds, showSeconds: this.showSeconds, useTwelveHourFormat: this.useTwelveHourFormat, disabled: this.disabledState || this.isDateOutOfBounds(), onTimeChanged: this.handleTimeChange, labels: this.timesPickerLabels, minTime: this.getEffectiveMinTime(), maxTime: this.getEffectiveMaxTime(), ref: (el) => (this.timePickerRef = el) }))))), this.errorState && (index.h("div", { key: '7617cfa25799dbbb8056abcba161284745022f44', class: this.getClassName("input-error"), id: this.id ? `${this.id}-error` : undefined, role: "status" }, this.errorMessage))));
     }
     get el() { return index.getElement(this); }
     static get watchers() { return {

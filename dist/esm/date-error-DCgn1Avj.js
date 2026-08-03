@@ -38,4 +38,6 @@ function requireCustomParseFormat () {
 var customParseFormatExports = requireCustomParseFormat();
 var customParseFormat = /*@__PURE__*/getDefaultExportFromCjs(customParseFormatExports);
 
-export { customParseFormat as c, dayjs as d, getDefaultExportFromCjs as g };
+const formatDateError = (label, date) => typeof label === "function" ? label(date) : `${label} ${date}`;
+
+export { customParseFormat as c, dayjs as d, formatDateError as f, getDefaultExportFromCjs as g };

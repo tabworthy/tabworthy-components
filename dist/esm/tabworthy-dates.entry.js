@@ -1,5 +1,5 @@
 import { r as registerInstance, c as createEvent, h, H as Host, g as getElement } from './index-CwtZ_Lud.js';
-import { g as getDefaultExportFromCjs, d as dayjs$1, c as customParseFormat } from './customParseFormat-DkyM-7xr.js';
+import { g as getDefaultExportFromCjs, d as dayjs$1, c as customParseFormat, f as formatDateError } from './date-error-DCgn1Avj.js';
 import { r as removeTimezoneOffset, y as extractDates, z as isValidISODate, e as dateIsWithinBounds, o as dateIsWithinLowerBounds, q as dateIsWithinUpperBounds, g as getISODateString, p as parseDateString } from './utils-CoFOnMSw.js';
 
 function _mergeNamespaces(n, m) {
@@ -10705,18 +10705,13 @@ const TabworthyDates = class {
                     minDate === null || minDate === void 0 ? void 0 : minDate.setDate(minDate.getDate() - 1);
                 }
                 if (!!parsedDate.reason) {
-                    const formatLocalizedDate = (date) => Intl.DateTimeFormat(this.locale, {
-                        day: "numeric",
-                        month: "short",
-                        year: "numeric"
-                    }).format(date);
                     this.errorMessage = parsedDate.reason;
                     this.errorMessage = {
                         minDate: minDate
-                            ? `${this.datesLabels.minDateError} ${formatLocalizedDate(minDate)}`
+                            ? formatDateError(this.datesLabels.minDateError, this.formatBoundaryDate(minDate))
                             : "",
                         maxDate: maxDate
-                            ? `${this.datesLabels.maxDateError} ${formatLocalizedDate(maxDate)}`
+                            ? formatDateError(this.datesLabels.maxDateError, this.formatBoundaryDate(maxDate))
                             : "",
                         invalid: this.datesLabels.invalidDateError
                     }[parsedDate.reason];
@@ -10799,6 +10794,13 @@ const TabworthyDates = class {
     emitErrorChange(reason, message) {
         this.errorChange.emit({ reason, message });
     }
+    formatBoundaryDate(date) {
+        return Intl.DateTimeFormat(this.locale, {
+            day: "numeric",
+            month: "short",
+            year: "numeric"
+        }).format(date);
+    }
     formatInput(enabled, useInputValue = true) {
         if (this.shouldInputFormat() === false || enabled === false) {
             if (this.internalValue) {
@@ -10851,13 +10853,13 @@ const TabworthyDates = class {
         const isoDate = typeof dateString === "string" ? dateString : parsed.format("YYYY-MM-DD");
         if (this.minDate && isoDate < this.minDate) {
             this.errorState = true;
-            this.errorMessage = `${this.datesLabels.minDateError} ${this.minDate}`;
+            this.errorMessage = formatDateError(this.datesLabels.minDateError, this.formatBoundaryDate(parseDateString(this.minDate)));
             this.emitErrorChange("minDate", this.errorMessage);
             return false;
         }
         if (this.maxDate && isoDate > this.maxDate) {
             this.errorState = true;
-            this.errorMessage = `${this.datesLabels.maxDateError} ${this.maxDate}`;
+            this.errorMessage = formatDateError(this.datesLabels.maxDateError, this.formatBoundaryDate(parseDateString(this.maxDate)));
             this.emitErrorChange("maxDate", this.errorMessage);
             return false;
         }

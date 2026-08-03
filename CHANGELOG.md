@@ -1,3 +1,10 @@
+# [0.16.0](https://github.com/tabworthy/tabworthy-components/compare/v0.15.1...v0.16.0) (2026-08-03)
+
+
+### Features
+
+* **dates,times:** support for i18n labels ([c0ca65f](https://github.com/tabworthy/tabworthy-components/commit/c0ca65f48fbceb99ed0eb3fffe78ff8c6ce2d3e3))
+
 ## [0.15.1](https://github.com/tabworthy/tabworthy-components/compare/v0.15.0...v0.15.1) (2026-04-24)
 
 

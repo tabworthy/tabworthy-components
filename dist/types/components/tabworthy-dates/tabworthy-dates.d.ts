@@ -1,6 +1,7 @@
 import { EventEmitter } from "../../stencil-public-runtime";
 import { DatesCalendarLabels, YearChangedEventDetails } from "../tabworthy-dates-calendar/tabworthy-dates-calendar";
 import { ChronoOptions, ChronoParsedDateString } from "../../../shared/utils/chrono-parser/chrono-parser.type";
+import { DateErrorLabel } from "../../utils/date-error";
 export interface ErrorChangeEventDetails {
     reason?: string;
     message?: string;
@@ -11,8 +12,8 @@ export interface DatesLabels {
     calendar: string;
     errorMessage?: string;
     invalidDateError: string;
-    maxDateError: string;
-    minDateError: string;
+    maxDateError: DateErrorLabel;
+    minDateError: DateErrorLabel;
     rangeOutOfBoundsError: string;
     disabledDateError: string;
     to: string;
@@ -89,6 +90,7 @@ export declare class TabworthyDates {
     private handleCalendarButtonClick;
     private handleQuickButtonClick;
     private emitErrorChange;
+    private formatBoundaryDate;
     private handleChangedMonths;
     private handleYearChange;
     private handleYearInputChange;
