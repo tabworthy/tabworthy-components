@@ -1,7 +1,6 @@
 name: Publish
 
 on:
-  # Manual trigger - go to Actions tab → "Publish" → "Run workflow"
   workflow_dispatch:
     inputs:
       dry-run:
@@ -15,23 +14,24 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   release:
     name: Build and publish
+    environment: npm-release
     runs-on: ubuntu-latest
-    # Required for npm provenance (OIDC trusted publishing)
     permissions:
-      contents: write      # to push release commits and tags
-      issues: write        # to comment on issues
-      pull-requests: write # to comment on PRs
-      id-token: write      # required for npm provenance
+      contents: write
+      issues: write
+      pull-requests: write
+      id-token: write
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: false
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
-          node-version: 20
+          node-version: 24
           registry-url: 'https://registry.npmjs.org'
+          package-manager-cache: false
 
       - name: Install dependencies
         run: yarn install --immutable
@@ -45,11 +45,9 @@ jobs:
       - name: Semantic Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_CONFIG_PROVENANCE: true
         run: |
           if [ "${{ inputs.dry-run }}" == "true" ]; then
-            npx semantic-release@24 --dry-run
+            npx semantic-release@25 --dry-run
           else
-            npx semantic-release@24
+            npx semantic-release@25
           fi
