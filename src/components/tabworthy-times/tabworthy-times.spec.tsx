@@ -1,9 +1,21 @@
 import { newSpecPage } from "@stencil/core/testing";
 import { TabworthyTimes } from "./tabworthy-times";
+import type { TimesLabels } from "./tabworthy-times";
 import { TabworthyDatesCalendar } from "../tabworthy-dates-calendar/tabworthy-dates-calendar";
 
 describe("tabworthy-times", () => {
   const originalError = console.error;
+  const formatBoundaryDate = (
+    locale: string,
+    date: Date,
+    includeTime = false
+  ) =>
+    Intl.DateTimeFormat(locale, {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      ...(includeTime ? { hour: "numeric", minute: "numeric" } : {})
+    }).format(date);
 
   beforeEach(() => {
     jest.restoreAllMocks();
@@ -928,6 +940,51 @@ describe("tabworthy-times", () => {
       expect(errorSpy.mock.calls[0][0].message).toContain("Jun 30, 2024");
     });
 
+    it("uses function-valued min/max labels for typed input errors", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" locale="de-DE" min-date="2024-06-01T12:30:00" max-date="2024-06-30T17:45:00"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+      const minDateError = jest.fn((date: string) => `MIN(${date})`);
+      const maxDateError = jest.fn((date: string) => `MAX(${date})`);
+      const labels: TimesLabels = {
+        ...(instance.timesLabels as TimesLabels),
+        minDateError,
+        maxDateError
+      };
+      page.root!.timesLabels = labels;
+      await page.waitForChanges();
+      const errorSpy = jest.spyOn(instance.errorChange, "emit");
+
+      instance.handleInputChange({
+        target: { value: "2024-06-01T11:00:00" }
+      } as any);
+      const localizedMin = formatBoundaryDate(
+        "de-DE",
+        new Date(2024, 5, 1, 12, 30),
+        true
+      );
+      expect(minDateError).toHaveBeenCalledWith(localizedMin);
+      expect(errorSpy).toHaveBeenLastCalledWith({
+        reason: "minDate",
+        message: `MIN(${localizedMin})`
+      });
+
+      instance.handleInputChange({
+        target: { value: "2024-06-30T18:00:00" }
+      } as any);
+      const localizedMax = formatBoundaryDate(
+        "de-DE",
+        new Date(2024, 5, 30, 17, 45),
+        true
+      );
+      expect(maxDateError).toHaveBeenCalledWith(localizedMax);
+      expect(errorSpy).toHaveBeenLastCalledWith({
+        reason: "maxDate",
+        message: `MAX(${localizedMax})`
+      });
+    });
+
     it("emits errorChange with disabledDate reason when date is disabled", async () => {
       const page = await createPage(
         '<tabworthy-times id="time"></tabworthy-times>'
@@ -1356,6 +1413,39 @@ describe("tabworthy-times", () => {
       expect(errorSpy).toHaveBeenCalledWith(
         expect.objectContaining({ reason: "maxDate" })
       );
+    });
+
+    it("uses function-valued min/max labels for picker errors", async () => {
+      const page = await createPage(
+        '<tabworthy-times id="time" locale="de-DE" min-date="2024-06-01" max-date="2024-06-30"></tabworthy-times>'
+      );
+      const instance = page.rootInstance as any;
+      const minDateError = jest.fn((date: string) => `MIN(${date})`);
+      const maxDateError = jest.fn((date: string) => `MAX(${date})`);
+      const labels: TimesLabels = {
+        ...(instance.timesLabels as TimesLabels),
+        minDateError,
+        maxDateError
+      };
+      page.root!.timesLabels = labels;
+      await page.waitForChanges();
+      const errorSpy = jest.spyOn(instance.errorChange, "emit");
+
+      await instance.handlePickerSelection("2024-05-15");
+      const localizedMin = formatBoundaryDate("de-DE", new Date(2024, 5, 1));
+      expect(minDateError).toHaveBeenCalledWith(localizedMin);
+      expect(errorSpy).toHaveBeenLastCalledWith({
+        reason: "minDate",
+        message: `MIN(${localizedMin})`
+      });
+
+      await instance.handlePickerSelection("2024-07-15");
+      const localizedMax = formatBoundaryDate("de-DE", new Date(2024, 5, 30));
+      expect(maxDateError).toHaveBeenCalledWith(localizedMax);
+      expect(errorSpy).toHaveBeenLastCalledWith({
+        reason: "maxDate",
+        message: `MAX(${localizedMax})`
+      });
     });
 
     it("rejects picker selection of disabled date", async () => {

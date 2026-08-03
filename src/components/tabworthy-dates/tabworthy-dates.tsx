@@ -34,6 +34,7 @@ import {
   chronoParseDate,
   chronoParseRange
 } from "@shared/utils/chrono-parser/chrono-parser";
+import { DateErrorLabel, formatDateError } from "../../utils/date-error";
 
 export interface ErrorChangeEventDetails {
   reason?: string;
@@ -46,8 +47,8 @@ export interface DatesLabels {
   calendar: string;
   errorMessage?: string;
   invalidDateError: string;
-  maxDateError: string;
-  minDateError: string;
+  maxDateError: DateErrorLabel;
+  minDateError: DateErrorLabel;
   rangeOutOfBoundsError: string;
   disabledDateError: string;
   to: string;
@@ -333,6 +334,14 @@ export class TabworthyDates {
     this.errorChange.emit({ reason, message });
   }
 
+  private formatBoundaryDate(date: Date): string {
+    return Intl.DateTimeFormat(this.locale, {
+      day: "numeric",
+      month: "short",
+      year: "numeric"
+    }).format(date);
+  }
+
   private handleChangedMonths = (newMonth: MonthChangedEventDetails) => {
     announce(
       `${Intl.DateTimeFormat(this.locale, {
@@ -456,20 +465,19 @@ export class TabworthyDates {
       }
 
       if (!!parsedDate.reason) {
-        const formatLocalizedDate = (date: Date) =>
-          Intl.DateTimeFormat(this.locale, {
-            day: "numeric",
-            month: "short",
-            year: "numeric"
-          }).format(date);
-
         this.errorMessage = parsedDate.reason;
         this.errorMessage = {
           minDate: minDate
-            ? `${this.datesLabels.minDateError} ${formatLocalizedDate(minDate)}`
+            ? formatDateError(
+                this.datesLabels.minDateError,
+                this.formatBoundaryDate(minDate)
+              )
             : "",
           maxDate: maxDate
-            ? `${this.datesLabels.maxDateError} ${formatLocalizedDate(maxDate)}`
+            ? formatDateError(
+                this.datesLabels.maxDateError,
+                this.formatBoundaryDate(maxDate)
+              )
             : "",
           invalid: this.datesLabels.invalidDateError
         }[parsedDate.reason];
@@ -554,13 +562,19 @@ export class TabworthyDates {
       typeof dateString === "string" ? dateString : parsed.format("YYYY-MM-DD");
     if (this.minDate && isoDate < this.minDate) {
       this.errorState = true;
-      this.errorMessage = `${this.datesLabels.minDateError} ${this.minDate}`;
+      this.errorMessage = formatDateError(
+        this.datesLabels.minDateError,
+        this.formatBoundaryDate(parseDateString(this.minDate))
+      );
       this.emitErrorChange("minDate", this.errorMessage);
       return false;
     }
     if (this.maxDate && isoDate > this.maxDate) {
       this.errorState = true;
-      this.errorMessage = `${this.datesLabels.maxDateError} ${this.maxDate}`;
+      this.errorMessage = formatDateError(
+        this.datesLabels.maxDateError,
+        this.formatBoundaryDate(parseDateString(this.maxDate))
+      );
       this.emitErrorChange("maxDate", this.errorMessage);
       return false;
     }

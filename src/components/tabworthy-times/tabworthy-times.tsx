@@ -31,6 +31,7 @@ import {
   YearChangedEventDetails
 } from "../tabworthy-dates-calendar/tabworthy-dates-calendar";
 import { getISODateString, removeTimezoneOffset } from "@shared/utils/utils";
+import { formatDateError } from "../../utils/date-error";
 
 export interface TimesLabels
   extends Omit<DatesLabels, "quickSelection" | "yearSelect"> {
@@ -417,17 +418,19 @@ export class TabworthyTimes {
     if (!parsed.isValid()) return false;
     if (this.minDate && parsed.isBefore(dayjs(this.minDate), "day")) {
       this.errorState = true;
-      this.errorMessage = `${
-        this.timesLabels.minDateError
-      } ${this.formatBoundaryDate(this.minDate)}`;
+      this.errorMessage = formatDateError(
+        this.timesLabels.minDateError,
+        this.formatBoundaryDate(this.minDate)
+      );
       this.emitErrorChange("minDate", this.errorMessage);
       return false;
     }
     if (this.maxDate && parsed.isAfter(dayjs(this.maxDate), "day")) {
       this.errorState = true;
-      this.errorMessage = `${
-        this.timesLabels.maxDateError
-      } ${this.formatBoundaryDate(this.maxDate)}`;
+      this.errorMessage = formatDateError(
+        this.timesLabels.maxDateError,
+        this.formatBoundaryDate(this.maxDate)
+      );
       this.emitErrorChange("maxDate", this.errorMessage);
       return false;
     }
@@ -546,17 +549,19 @@ export class TabworthyTimes {
       // Check minDate/maxDate bounds (supports both date-only and datetime strings)
       if (this.minDate && parsed.isBefore(dayjs(this.minDate))) {
         this.errorState = true;
-        this.errorMessage = `${
-          this.timesLabels.minDateError
-        } ${this.formatBoundaryDate(this.minDate)}`;
+        this.errorMessage = formatDateError(
+          this.timesLabels.minDateError,
+          this.formatBoundaryDate(this.minDate)
+        );
         this.emitErrorChange("minDate", this.errorMessage);
         return;
       }
       if (this.maxDate && parsed.isAfter(dayjs(this.maxDate))) {
         this.errorState = true;
-        this.errorMessage = `${
-          this.timesLabels.maxDateError
-        } ${this.formatBoundaryDate(this.maxDate)}`;
+        this.errorMessage = formatDateError(
+          this.timesLabels.maxDateError,
+          this.formatBoundaryDate(this.maxDate)
+        );
         this.emitErrorChange("maxDate", this.errorMessage);
         return;
       }

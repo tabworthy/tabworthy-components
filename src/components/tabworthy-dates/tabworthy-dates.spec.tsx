@@ -1,6 +1,8 @@
 import { newSpecPage } from "@stencil/core/testing";
 import * as chronoParser from "@shared/utils/chrono-parser/chrono-parser";
+import { formatDateError } from "../../utils/date-error";
 import { TabworthyDates } from "./tabworthy-dates";
+import type { DatesLabels } from "./tabworthy-dates";
 
 jest.mock("@react-aria/live-announcer", () => ({
   announce: jest.fn()
@@ -9,6 +11,12 @@ jest.mock("@react-aria/live-announcer", () => ({
 describe("tabworthy-dates", () => {
   const originalWarn = console.warn;
   const originalError = console.error;
+  const formatBoundaryDate = (locale: string, date: Date) =>
+    Intl.DateTimeFormat(locale, {
+      day: "numeric",
+      month: "short",
+      year: "numeric"
+    }).format(date);
 
   beforeEach(() => {
     jest.restoreAllMocks();
@@ -34,6 +42,12 @@ describe("tabworthy-dates", () => {
     await createPage("<tabworthy-dates></tabworthy-dates>");
     expect(console.error).toHaveBeenCalledWith(
       'tabworthy-dates: The "id" prop is required for accessibility'
+    );
+  });
+
+  it("preserves legacy string date-error labels", () => {
+    expect(formatDateError("Choose a date after", "1 Jun 2024")).toBe(
+      "Choose a date after 1 Jun 2024"
     );
   });
 
@@ -234,6 +248,44 @@ describe("tabworthy-dates", () => {
     expect(instance.errorMessage).toBe(instance.datesLabels.invalidDateError);
   });
 
+  it("uses function-valued min/max labels for parsed input errors", async () => {
+    const page = await createPage(
+      '<tabworthy-dates id="test" locale="de-DE" min-date="2024-06-01" max-date="2024-06-30"></tabworthy-dates>'
+    );
+    const instance = page.rootInstance as any;
+    const minDateError = jest.fn((date: string) => `MIN(${date})`);
+    const maxDateError = jest.fn((date: string) => `MAX(${date})`);
+    const labels: DatesLabels = {
+      ...(instance.datesLabels as DatesLabels),
+      minDateError,
+      maxDateError
+    };
+    page.root!.datesLabels = labels;
+    await page.waitForChanges();
+    const errorSpy = jest.spyOn(instance.errorChange, "emit");
+    const parseSpy = jest.spyOn(chronoParser, "chronoParseDate");
+
+    const localizedMin = formatBoundaryDate("de-DE", new Date(2024, 4, 31));
+    parseSpy.mockResolvedValueOnce({ value: null, reason: "minDate" } as any);
+    await instance.handleChange({ target: { value: "too early" } } as any);
+
+    expect(minDateError).toHaveBeenCalledWith(localizedMin);
+    expect(errorSpy).toHaveBeenLastCalledWith({
+      reason: "minDate",
+      message: `MIN(${localizedMin})`
+    });
+
+    const localizedMax = formatBoundaryDate("de-DE", new Date(2024, 6, 1));
+    parseSpy.mockResolvedValueOnce({ value: null, reason: "maxDate" } as any);
+    await instance.handleChange({ target: { value: "too late" } } as any);
+
+    expect(maxDateError).toHaveBeenCalledWith(localizedMax);
+    expect(errorSpy).toHaveBeenLastCalledWith({
+      reason: "maxDate",
+      message: `MAX(${localizedMax})`
+    });
+  });
+
   it("handleChange sets empty error message when minDate/maxDate reason but no min/max prop", async () => {
     const page = await createPage(
       '<tabworthy-dates id="test"></tabworthy-dates>'
@@ -401,6 +453,39 @@ describe("tabworthy-dates", () => {
     expect(errorSpy).toHaveBeenCalledWith(
       expect.objectContaining({ reason: "maxDate" })
     );
+  });
+
+  it("passes localized picker bounds to function-valued min/max labels", async () => {
+    const page = await createPage(
+      '<tabworthy-dates id="test" locale="de-DE" min-date="2024-06-01" max-date="2024-06-30"></tabworthy-dates>'
+    );
+    const instance = page.rootInstance as any;
+    const minDateError = jest.fn((date: string) => `MIN(${date})`);
+    const maxDateError = jest.fn((date: string) => `MAX(${date})`);
+    const labels: DatesLabels = {
+      ...(instance.datesLabels as DatesLabels),
+      minDateError,
+      maxDateError
+    };
+    page.root!.datesLabels = labels;
+    await page.waitForChanges();
+    const errorSpy = jest.spyOn(instance.errorChange, "emit");
+
+    instance.handlePickerSelection("2024-05-15");
+    const localizedMin = formatBoundaryDate("de-DE", new Date(2024, 5, 1));
+    expect(minDateError).toHaveBeenCalledWith(localizedMin);
+    expect(errorSpy).toHaveBeenLastCalledWith({
+      reason: "minDate",
+      message: `MIN(${localizedMin})`
+    });
+
+    instance.handlePickerSelection("2024-07-15");
+    const localizedMax = formatBoundaryDate("de-DE", new Date(2024, 5, 30));
+    expect(maxDateError).toHaveBeenCalledWith(localizedMax);
+    expect(errorSpy).toHaveBeenLastCalledWith({
+      reason: "maxDate",
+      message: `MAX(${localizedMax})`
+    });
   });
 
   it("handlePickerSelection rejects single disabled date", async () => {
