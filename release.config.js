@@ -2,8 +2,8 @@ export default {
   branches: ["main"],
   tagFormat: "v${version}",
   plugins: [
-    "@semantic-release/commit-analyzer",
-    "@semantic-release/release-notes-generator",
+    ["@semantic-release/commit-analyzer", { preset: "conventionalcommits" }],
+    ["@semantic-release/release-notes-generator", { preset: "conventionalcommits" }],
 
     // 1) write CHANGELOG.md from the release notes
     ["@semantic-release/changelog", { changelogFile: "CHANGELOG.md" }],

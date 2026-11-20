@@ -95,6 +95,7 @@
     "@vitest/coverage-v8": "4.0.18",
     "autoprefixer": "^10.4.12",
     "concurrently": "^7.5.0",
+    "conventional-changelog-conventionalcommits": "^10.4.1",
     "copyfiles": "^2.4.1",
     "glob": "^8.0.3",
     "happy-dom": "^20.6.1",
