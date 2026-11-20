@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { html } from "lit-html";
 import { ifDefined } from "lit/directives/if-defined.js";
+import { expect, userEvent, waitFor, within } from "@storybook/test";
 import type { JSX } from "../../components";
 
 const meta: Meta<JSX.TabworthyTimes> = {
@@ -193,5 +194,82 @@ export const CustomButtonContent: Story = {
     todayButtonContent: "📍",
     clearButtonContent: "🗑",
     closeButtonContent: "✕"
+  }
+};
+
+const focusArgs = {
+  ...Default.args,
+  showCloseButton: true
+};
+
+const openPickerWithKeyboard = async (pickerButton: HTMLElement) => {
+  pickerButton.focus();
+  await userEvent.keyboard("{Enter}");
+  await waitFor(() =>
+    expect(document.activeElement).toHaveAttribute("role", "gridcell")
+  );
+};
+
+export const FocusReturnsAfterEscape: Story = {
+  args: { ...focusArgs, id: "datetime-focus-escape" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const pickerButton = await canvas.findByRole("button", {
+      name: /choose time/i
+    });
+    const input = canvas.getByRole("textbox", {
+      name: /choose a date and time/i
+    });
+    const valueBeforeOpening = (input as HTMLInputElement).value;
+    await openPickerWithKeyboard(pickerButton);
+
+    const today = (document.activeElement as HTMLElement).dataset.date;
+    const nextWeek = new Date(`${today}T00:00:00Z`);
+    nextWeek.setUTCDate(nextWeek.getUTCDate() + 7);
+    await userEvent.keyboard("{ArrowDown}");
+    await expect(document.activeElement).toHaveAttribute(
+      "data-date",
+      nextWeek.toISOString().slice(0, 10)
+    );
+
+    await userEvent.keyboard("{Escape}");
+
+    await waitFor(() => expect(document.activeElement).toBe(pickerButton));
+    await expect(input).toHaveValue(valueBeforeOpening);
+  }
+};
+
+export const FocusReturnsAfterCloseButtonKeyboard: Story = {
+  args: { ...focusArgs, id: "datetime-focus-close-keyboard" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const pickerButton = await canvas.findByRole("button", {
+      name: /choose time/i
+    });
+    await openPickerWithKeyboard(pickerButton);
+
+    canvas.getByRole("button", { name: "Close" }).focus();
+    await userEvent.keyboard("{Enter}");
+
+    await waitFor(() => expect(document.activeElement).toBe(pickerButton));
+  }
+};
+
+export const FocusReturnsAfterCloseButtonClick: Story = {
+  args: { ...focusArgs, id: "datetime-focus-close-click" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const pickerButton = await canvas.findByRole("button", {
+      name: /choose time/i
+    });
+    await userEvent.click(pickerButton);
+    await waitFor(() =>
+      expect(document.activeElement).toHaveAttribute("role", "gridcell")
+    );
+    const closeButton = canvas.getByRole("button", { name: "Close" });
+
+    await userEvent.click(closeButton);
+
+    await waitFor(() => expect(document.activeElement).toBe(pickerButton));
   }
 };
