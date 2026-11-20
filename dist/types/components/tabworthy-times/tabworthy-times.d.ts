@@ -65,6 +65,7 @@ export declare class TabworthyTimes {
     private modalRef?;
     private inputRef;
     private inputContainerRef?;
+    private calendarButtonRef?;
     private pickerRef?;
     private timePickerRef?;
     private errorMessage;

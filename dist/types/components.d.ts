@@ -263,7 +263,7 @@ export namespace Components {
           * @default "bottom-start"
          */
         "placement": Placement;
-        "setTriggerElement": (element: HTMLElement) => Promise<void>;
+        "setTriggerElement": (element: HTMLElement, focusElement?: HTMLElement) => Promise<void>;
         /**
           * Force update the popper position
          */

@@ -148,14 +148,18 @@ export class TabworthyDatesModal {
      * Close the dialog.
      */
     async close() {
-        var _a;
+        var _a, _b;
         if (this.inline)
             return;
+        const activeElement = document.activeElement;
+        const focusMovedOutside = !!activeElement &&
+            activeElement !== document.body &&
+            !this.hostElement.contains(activeElement);
         this.showing = false;
         this.closed.emit(undefined);
         (_a = this.undo) === null || _a === void 0 ? void 0 : _a.call(this);
-        if (this.triggerElement)
-            this.triggerElement.focus();
+        if (!focusMovedOutside)
+            (_b = this.focusReturnElement) === null || _b === void 0 ? void 0 : _b.focus();
     }
     disconnectedCallback() {
         // Skip cleanup if we're in the middle of portal operations
@@ -167,8 +171,9 @@ export class TabworthyDatesModal {
     async getState() {
         return this.showing;
     }
-    async setTriggerElement(element) {
+    async setTriggerElement(element, focusElement = element) {
         this.triggerElement = element;
+        this.focusReturnElement = focusElement;
     }
     /** Force update the popper position */
     async updatePosition() {
@@ -190,7 +195,7 @@ export class TabworthyDatesModal {
         }
     }
     render() {
-        return (h(Host, { key: '2c9c3ade4eb4964dbb5ba86bd196240851dbb996', showing: this.showing, ref: (r) => r && (this.el = r) }, !this.inline && this.showing && (h("div", { key: '961c2d9e34d7ddadb512f8652f14ed4ed4ec6ce5', part: "body", ref: (r) => {
+        return (h(Host, { key: '8f2128e3b9ed31547aaa4a1eb1f9fe1c2c554834', showing: this.showing, ref: (r) => r && (this.el = r) }, !this.inline && this.showing && (h("div", { key: 'd3c8a2b9d11bdd1147ded6256417c0bdda9274b5', part: "body", ref: (r) => {
                 if (r) {
                     this.bodyRef = r;
                     // Setup portal and create popper when ref is set
@@ -207,7 +212,7 @@ export class TabworthyDatesModal {
                         });
                     }
                 }
-            }, style: { visibility: this.positioned ? "visible" : "hidden" }, onKeyDown: this.onKeyDown, role: "dialog", tabindex: -1, "aria-hidden": !this.showing, "aria-label": this.label, "aria-modal": this.showing }, h("focus-trap", { key: '719a3e82aab59326d1aa069b237d158d2311cd62' }, h("div", { key: 'b33e1aabdb7477409d97f757bf7121697979d50c', part: "content" }, h("slot", { key: 'c7e85552f37b930e298484c0040c138fdccb8ea7' }))))), this.inline && (h("div", { key: '59e0333fb0e980c17e0a1da041e6bc492d025bd8', part: "content" }, h("slot", { key: 'd52759f124c038fbde4b510ae1df8c3a1bdad25e' })))));
+            }, style: { visibility: this.positioned ? "visible" : "hidden" }, onKeyDown: this.onKeyDown, role: "dialog", tabindex: -1, "aria-hidden": !this.showing, "aria-label": this.label, "aria-modal": this.showing }, h("focus-trap", { key: '3c36e0e81b87ef9364ff8288e200c4462626bfea' }, h("div", { key: '111ba3d8fea2f0f4afdb63506fa43d1b8467c14d', part: "content" }, h("slot", { key: '6ec34c827f3c4cf1a5f30d9e571826f73cc66157' }))))), this.inline && (h("div", { key: '49970743a4f726fd02b18ba485ba0753acc4d0ec', part: "content" }, h("slot", { key: '6d0e2cd6bdc51f63fbab138c93f9c99cc3b1291d' })))));
     }
     static get is() { return "tabworthy-dates-modal"; }
     static get encapsulation() { return "shadow"; }
@@ -428,9 +433,13 @@ export class TabworthyDatesModal {
             },
             "setTriggerElement": {
                 "complexType": {
-                    "signature": "(element: HTMLElement) => Promise<void>",
+                    "signature": "(element: HTMLElement, focusElement?: HTMLElement) => Promise<void>",
                     "parameters": [{
                             "name": "element",
+                            "type": "HTMLElement",
+                            "docs": ""
+                        }, {
+                            "name": "focusElement",
                             "type": "HTMLElement",
                             "docs": ""
                         }],

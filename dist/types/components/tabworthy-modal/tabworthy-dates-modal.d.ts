@@ -24,6 +24,7 @@ export declare class TabworthyDatesModal {
     closed: EventEmitter;
     hostElement: HTMLElement;
     private triggerElement;
+    private focusReturnElement?;
     private el;
     private bodyRef;
     private originalParent;
@@ -47,7 +48,7 @@ export declare class TabworthyDatesModal {
     close(): Promise<void>;
     disconnectedCallback(): void;
     getState(): Promise<boolean>;
-    setTriggerElement(element: HTMLElement): Promise<void>;
+    setTriggerElement(element: HTMLElement, focusElement?: HTMLElement): Promise<void>;
     /** Force update the popper position */
     updatePosition(): Promise<void>;
     onKeyDown: (event: KeyboardEvent) => void;

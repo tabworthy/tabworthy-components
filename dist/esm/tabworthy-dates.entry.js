@@ -10555,7 +10555,7 @@ const TabworthyDates = class {
             await customElements.whenDefined("tabworthy-dates-modal");
             // Use input container as trigger for proper dropdown alignment
             this.inputContainerRef &&
-                (await ((_a = this.modalRef) === null || _a === void 0 ? void 0 : _a.setTriggerElement(this.inputContainerRef)));
+                (await ((_a = this.modalRef) === null || _a === void 0 ? void 0 : _a.setTriggerElement(this.inputContainerRef, this.calendarButtonRef)));
             if ((await ((_b = this.modalRef) === null || _b === void 0 ? void 0 : _b.getState())) === false)
                 await ((_c = this.modalRef) === null || _c === void 0 ? void 0 : _c.open());
             else if ((await ((_d = this.modalRef) === null || _d === void 0 ? void 0 : _d.getState())) === true)
@@ -10999,7 +10999,7 @@ const TabworthyDates = class {
         return (h(Host, null, h("label", { htmlFor: this.id ? `${this.id}-input` : undefined, class: this.getClassName("label") }, this.label), h("br", null), h("div", { class: this.getClassName("input-container"), ref: (r) => (this.inputContainerRef = r) }, h("input", { disabled: this.disabledState || this.disableFreeformInput, id: this.id ? `${this.id}-input` : undefined, type: "text", placeholder: this.placeholder, class: {
                 [this.getClassName("input")]: true,
                 [this.inputClass]: !!this.inputClass
-            }, ref: (r) => (this.inputRef = r), onChange: this.handleChange, onFocus: () => this.formatInput(false), onBlur: () => this.formatInput(true, false), "aria-describedby": this.errorState ? `${this.id}-error` : undefined, "aria-invalid": this.errorState }), !this.inline && (h("button", { type: "button", onClick: this.handleCalendarButtonClick, class: this.getClassName("calendar-button"), disabled: this.disabledState, "aria-label": this.calendarButtonContent
+            }, ref: (r) => (this.inputRef = r), onChange: this.handleChange, onFocus: () => this.formatInput(false), onBlur: () => this.formatInput(true, false), "aria-describedby": this.errorState ? `${this.id}-error` : undefined, "aria-invalid": this.errorState }), !this.inline && (h("button", { type: "button", ref: (r) => (this.calendarButtonRef = r), onClick: this.handleCalendarButtonClick, class: this.getClassName("calendar-button"), disabled: this.disabledState, "aria-label": this.calendarButtonContent
                 ? this.datesLabels.openCalendar
                 : undefined }, this.calendarButtonContent ? (h("span", { innerHTML: this.calendarButtonContent })) : (this.datesLabels.openCalendar)))), h("tabworthy-dates-modal", { label: this.datesLabels.calendar, ref: (el) => (this.modalRef = el), onOpened: () => {
                 if (!this.pickerRef)

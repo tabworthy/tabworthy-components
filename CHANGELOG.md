@@ -1,3 +1,13 @@
+## [1.0.0](https://github.com/tabworthy/tabworthy-components/compare/v0.16.0...v1.0.0) (2026-11-20)
+
+### ⚠ BREAKING CHANGES
+
+* **dates,times:** focusElement
+
+### Features
+
+* **dates,times:** focusElement ([0253a2d](https://github.com/tabworthy/tabworthy-components/commit/0253a2d2e9113bb47d179dd7387d6730a25529cb))
+
 # [0.16.0](https://github.com/tabworthy/tabworthy-components/compare/v0.15.1...v0.16.0) (2026-08-03)
 
 

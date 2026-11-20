@@ -78,6 +78,7 @@ export declare class TabworthyDates {
     private modalRef?;
     private inputRef;
     private inputContainerRef?;
+    private calendarButtonRef?;
     private pickerRef?;
     private chronoSupportedLocale;
     private errorMessage;
