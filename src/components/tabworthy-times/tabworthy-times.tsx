@@ -183,6 +183,7 @@ export class TabworthyTimes {
   private modalRef?: HTMLTabworthyDatesModalElement;
   private inputRef!: HTMLInputElement;
   private inputContainerRef?: HTMLDivElement;
+  private calendarButtonRef?: HTMLButtonElement;
   private pickerRef?: HTMLTabworthyDatesCalendarElement;
   private timePickerRef?: HTMLTabworthyTimesPickerElement & {
     modalIsOpen?: boolean;
@@ -500,7 +501,8 @@ export class TabworthyTimes {
     if (this.modalRef) {
       // Use input container as trigger for proper dropdown alignment
       await this.modalRef.setTriggerElement(
-        this.inputContainerRef as HTMLElement
+        this.inputContainerRef as HTMLElement,
+        this.calendarButtonRef
       );
       await this.modalRef.open();
     }
@@ -683,6 +685,7 @@ export class TabworthyTimes {
           {!this.inline && (
             <button
               type="button"
+              ref={(r) => (this.calendarButtonRef = r)}
               onClick={this.handleCalendarButtonClick}
               class={this.getClassName("calendar-button")}
               disabled={this.disabledState}

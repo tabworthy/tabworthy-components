@@ -52,6 +52,7 @@ export class TabworthyDatesModal {
   @Element() hostElement!: HTMLElement;
 
   private triggerElement!: HTMLElement;
+  private focusReturnElement?: HTMLElement;
   private el!: HTMLElement;
   private bodyRef!: HTMLDivElement;
   private originalParent: HTMLElement | null = null;
@@ -199,10 +200,15 @@ export class TabworthyDatesModal {
   @Method()
   async close() {
     if (this.inline) return;
+    const activeElement = document.activeElement;
+    const focusMovedOutside =
+      !!activeElement &&
+      activeElement !== document.body &&
+      !this.hostElement.contains(activeElement);
     this.showing = false;
     this.closed.emit(undefined);
     this.undo?.();
-    if (this.triggerElement) this.triggerElement.focus();
+    if (!focusMovedOutside) this.focusReturnElement?.focus();
   }
 
   disconnectedCallback() {
@@ -218,8 +224,12 @@ export class TabworthyDatesModal {
   }
 
   @Method()
-  async setTriggerElement(element: HTMLElement) {
+  async setTriggerElement(
+    element: HTMLElement,
+    focusElement: HTMLElement = element
+  ) {
     this.triggerElement = element;
+    this.focusReturnElement = focusElement;
   }
 
   /** Force update the popper position */

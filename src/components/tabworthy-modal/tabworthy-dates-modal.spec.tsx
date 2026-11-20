@@ -8,6 +8,13 @@ import { newSpecPage } from "@stencil/core/testing";
 import { TabworthyDatesModal } from "./tabworthy-dates-modal";
 import { hideOthers } from "aria-hidden";
 
+const setActiveElement = (element: Element) => {
+  Object.defineProperty(document, "activeElement", {
+    configurable: true,
+    get: () => element
+  });
+};
+
 const setAppendTo = (
   modal: TabworthyDatesModal,
   value: string | HTMLElement
@@ -114,6 +121,47 @@ describe("tabworthy-dates-modal", () => {
     await page.rootInstance.close();
 
     expect(trigger.focus).toHaveBeenCalled();
+  });
+
+  it("returns focus to the focus element instead of the trigger when closing", async () => {
+    const page = await newSpecPage({
+      components: [TabworthyDatesModal],
+      html: `<tabworthy-dates-modal label="Test modal"><button class="inside"></button></tabworthy-dates-modal>`
+    });
+
+    const trigger = document.createElement("div");
+    trigger.focus = jest.fn();
+    const calendarButton = document.createElement("button");
+    calendarButton.focus = jest.fn();
+
+    await page.rootInstance.setTriggerElement(trigger, calendarButton);
+    await page.rootInstance.open();
+    await page.waitForChanges();
+    setActiveElement(page.root!.querySelector(".inside")!);
+    await page.rootInstance.close();
+
+    expect(calendarButton.focus).toHaveBeenCalled();
+    expect(trigger.focus).not.toHaveBeenCalled();
+  });
+
+  it("does not take focus back when the user has focused another element outside", async () => {
+    const page = await newSpecPage({
+      components: [TabworthyDatesModal],
+      html: `<input class="other-field" /><tabworthy-dates-modal label="Test modal"></tabworthy-dates-modal>`
+    });
+
+    const calendarButton = document.createElement("button");
+    calendarButton.focus = jest.fn();
+
+    await page.rootInstance.setTriggerElement(
+      document.createElement("div"),
+      calendarButton
+    );
+    await page.rootInstance.open();
+    setActiveElement(page.body.querySelector(".other-field")!);
+    await page.rootInstance.close();
+
+    expect(calendarButton.focus).not.toHaveBeenCalled();
   });
 
   it("closes on escape key and outside click", async () => {

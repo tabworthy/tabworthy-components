@@ -179,7 +179,10 @@ describe("tabworthy-times", () => {
 
     await instance.handleCalendarButtonClick();
 
-    expect(setTriggerElement).toHaveBeenCalled();
+    expect(setTriggerElement).toHaveBeenCalledWith(
+      instance.inputContainerRef,
+      instance.calendarButtonRef
+    );
     expect(open).toHaveBeenCalled();
   });
 

@@ -142,7 +142,10 @@ describe("tabworthy-dates", () => {
     await instance.handleCalendarButtonClick();
     await instance.handleCalendarButtonClick();
 
-    expect(setTriggerElement).toHaveBeenCalled();
+    expect(setTriggerElement).toHaveBeenCalledWith(
+      instance.inputContainerRef,
+      instance.calendarButtonRef
+    );
     expect(open).toHaveBeenCalledTimes(1);
     expect(close).toHaveBeenCalledTimes(1);
   });
